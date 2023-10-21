@@ -11,13 +11,19 @@ import { MatAccordion } from '@angular/material/expansion';
 import { getDataLS, getDataSS } from 'src/app/protected/Storage';
 import { CookieService } from 'ngx-cookie-service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ViewProjectComponent } from 'src/app/protected/messages/view-project/view-project/view-project.component';
 
 @Component({
   selector: 'app-customer',
   templateUrl: './customer.component.html',
   styleUrls: ['./customer.component.scss']
 })
+
+
+
 export class CustomerComponent implements OnInit, OnDestroy{
+
+
 
  
   @HostListener('window:scroll') onScroll(e: Event): void {
@@ -35,8 +41,10 @@ export class CustomerComponent implements OnInit, OnDestroy{
   @Output() onEnter   : EventEmitter<string> = new EventEmitter();
   debouncer: Subject<string> = new Subject();
 
-  displayedColumns: string[] = ['action','name','address','phone', 'email'];
-  dataTableActive : any = new MatTableDataSource<any>();
+
+  displayedColumns: string[] = ['name', 'industry','email', 'projects','action'];
+  dataTableActive : any ;
+  
   myForm! : FormGroup;
   noMatches : boolean = false;
 
@@ -143,16 +151,37 @@ export class CustomerComponent implements OnInit, OnDestroy{
 }
 
 
-loadInfiniteScroll(){
-  this.pageIndex++;
-  this.authService.getCustomersPaginator(this.pageIndex, this.pageSize).subscribe(
-    ({customers, pagination})=>{
-      this.customers = [...this.customers, ...customers];
-      this.dataTableActive = customers;
-      this.isLoading = false;
-      this.length = pagination.total_reg;
-    })
+visibility(){
+  this.toogle = !this.toogle
 }
+
+viewProject( project:any){
+  console.log(project);
+  if(screen.width >= 800) {
+    this.width = "600px";
+    this.height = "510px";
+  }
+
+    this.dialog.open(ViewProjectComponent, {
+      data:  project,
+      width: `${this.width}`|| "",
+      height:`${this.height}`|| "",
+      panelClass:"custom-modalbox-edit",
+    });
+}
+
+
+loadInfiniteScroll(){
+  // this.pageIndex++;
+  // this.authService.getCustomersPaginator(this.pageIndex, this.pageSize).subscribe(
+  //   ({customers, pagination})=>{
+  //     this.customers = [...this.customers, ...customers];
+  //     this.dataTableActive = customers;
+  //     this.isLoading = false;
+  //     this.length = pagination.total_reg;
+  //   })
+}
+
 handlePageEvent(e: PageEvent) {
 
 
@@ -175,7 +204,7 @@ handlePageEvent(e: PageEvent) {
       })
 }
 
-deletecustomer(customer : any){
+deleteCustomer(customer : any){
 
   if(screen.width >= 800) {
     this.width = "600px";
@@ -201,7 +230,7 @@ deletecustomer(customer : any){
   
 }
 
-editcustomer(customer: any){
+editCustomer(customer: any){
 
   if(screen.width >= 800) {
     this.width = "600px";

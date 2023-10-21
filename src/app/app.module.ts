@@ -50,6 +50,7 @@ import localeEs from '@angular/common/locales/es-AR'; //nombre inventado el AR e
 import { registerLocaleData } from '@angular/common';
 import { environment } from 'src/environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { ViewProjectComponent } from './protected/messages/view-project/view-project/view-project.component';
 
 registerLocaleData( localeEs );
 
@@ -77,6 +78,7 @@ registerLocaleData( localeEs );
     NoPermissionMessageComponent,
     SettingsComponent,
     CustomerComponent,
+    ViewProjectComponent,
   ],
   imports: [
     BrowserModule,
