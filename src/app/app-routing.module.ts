@@ -4,7 +4,7 @@ import { DashboardComponent } from './protected/pages/dashboard/dashboard.compon
 import { LoginComponent } from './protected/pages/login/login/login.component';
 import { RoleGuard } from './protected/guards/role.guard';
 import { SettingsComponent } from './protected/pages/setting/settings.component';
-import { CustomerComponent } from './protected/pages/customer/customer/customer.component';
+import { ClientComponent } from './protected/pages/client/client/client.component';
 
 
 const routes: Routes = [
@@ -16,7 +16,7 @@ const routes: Routes = [
     path: 'settings',  component: SettingsComponent
   },
   {
-    path: 'customer-list',  component: CustomerComponent,
+    path: 'client-list',  component: ClientComponent,
     // canActivate: [RoleGuard ],
     // canLoad: [ RoleGuard],
   },

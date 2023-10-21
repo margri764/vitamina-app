@@ -40,9 +40,6 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
                private cdRef: ChangeDetectorRef,
                private router : Router,
                private orderService : OrderService
-              //  private authService : AuthService,
-              // private dialog : MatDialog,
-              // private cookieService : CookieService
   ) { 
         
           
@@ -75,8 +72,8 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
 
  updateLabelHeader( url : string){
   switch (url) {
-    case '/listado-pedidos':
-          this.labelHeader = "Pedidos";
+    case '/client-list':
+          this.labelHeader = "Clients";
       break;
     case '/listado-articulos':
             this.labelHeader = "Artículos";

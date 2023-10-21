@@ -11,6 +11,7 @@ import { ErrorService } from '../error/error.service';
 import { Router } from '@angular/router';
 import { LocalStorageService } from '../localStorage/local-storage.service';
 import { getDataLS } from '../../Storage';
+import { query } from '@angular/animations';
 
 @Injectable({
   providedIn: 'root'
@@ -74,7 +75,6 @@ login(userName: string, password : string){
 }
 
 
-
 getToken(){
   return this.token
 }
@@ -83,76 +83,73 @@ getCookieToken() {
   return this.cookieService.get('token');
 }
 
-getAllCustomers( ){
+getAllClients( ){
 
 
   return this.http.get<any>(`${this.baseUrl}api/agenda`)
 .pipe(
   map( res =>{ 
-        console.log('desde service getAllCustomers', res)
+        console.log('desde service getAllClients', res)
           return res} )
   );
 }
 
-getCustomersPaginator(from : any, to : any){
+getClientsPaginator(from : any, to : any){
 
-
-  console.log(from,to);
-
-    return this.http.get<any>(`${this.baseUrl}api/customer/getAllCustomers?p=${from}&r=${to}`)
+    return this.http.get<any>(`${this.baseUrl}api/client/getAllClients?p=${from}&r=${to}`)
 .pipe(
   map( res =>{ 
-        console.log('desde service getCustomersPaginator', res)
+        console.log('desde service getClientsPaginator', res)
           return res} )
   );
 
 }
 
-updateCustomerById( body : any, id:any){
+updateClientById( body : any, id:any){
                                         
-  return this.http.put<any>(`${this.baseUrl}api/agenda/${id}`, body)
+  return this.http.put<any>(`${this.baseUrl}api/client/${id}`, body)
 .pipe(
   map( res =>{ 
-        console.log('desde service updateCustomerById', res)
+        console.log('desde service updateClientById', res)
           return res} )
   );
 }
 
-deleteCustomerById( id:any){
+deleteClientById( id:any){
                    id = "2737";                   
-  return this.http.delete<any>(`${this.baseUrl}api/delete/${id}`)
+  return this.http.delete<any>(`${this.baseUrl}api/client(delete/${id}`)
 .pipe(
   map( res =>{ 
-        console.log('desde service deleteCustomerById', res)
+        console.log('desde service deleteCulientById', res)
           return res} )
   );
 }
 
-addNewCustomer( body : User){
+addNewClient( body : User){
 
 
-return this.http.post<any>(`${this.baseUrl}api/agenda`, body)
+return this.http.post<any>(`${this.baseUrl}api/client`, body)
 .pipe(
   map( res =>{ 
-         console.log('desde service addNewCustomer', res)
+         console.log('desde service addNewClient', res)
   return res} )
   );
 }
 
-searchCustomerByName( query :  string ){
-  return this.http.get<any>(`${this.baseUrl}api/agenda/busqueda/${query}`)
+searchClientByName( query :  string ){
+  return this.http.get<any>(`${this.baseUrl}api/client/searchClient?querySearch=${query}`)
 .pipe(
   map( res =>{ 
-        console.log('desde service searchCustomerByName', res)
+        console.log('desde service searchClientByName', res)
           return res} )
   );
 }
 
-getCustomerById( id : any ){
-  return this.http.get<any>(`${this.baseUrl}api/agenda/${id}`)
+getClientById( id : any ){
+  return this.http.get<any>(`${this.baseUrl}api/client/getClient${id}`)
 .pipe(
   map( res =>{ 
-        console.log('desde service getCustomerById', res)
+        console.log('desde service getClientById', res)
           return res} )
   );
 }

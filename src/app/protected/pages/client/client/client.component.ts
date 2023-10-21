@@ -1,31 +1,24 @@
-import { Component, EventEmitter, HostListener, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, HostListener, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/protected/services/auth/auth.service';
 import { Subject, Subscription, debounceTime, take } from 'rxjs';
 import { ErrorService } from 'src/app/protected/services/error/error.service';
-import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent } from '@angular/material/paginator';
 import { AppState } from 'src/app/app.reducer';
 import { Store } from '@ngrx/store';
 import { MatAccordion } from '@angular/material/expansion';
-import { getDataLS, getDataSS } from 'src/app/protected/Storage';
 import { CookieService } from 'ngx-cookie-service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ViewProjectComponent } from 'src/app/protected/messages/view-project/view-project/view-project.component';
 
 @Component({
-  selector: 'app-customer',
-  templateUrl: './customer.component.html',
-  styleUrls: ['./customer.component.scss']
+  selector: 'app-client',
+  templateUrl: './client.component.html',
+  styleUrls: ['./client.component.scss']
 })
 
+export class ClientComponent implements OnInit {
 
-
-export class CustomerComponent implements OnInit, OnDestroy{
-
-
-
- 
   @HostListener('window:scroll') onScroll(e: Event): void {
     const scrollPosition = window.innerHeight + window.scrollY;
     const contentHeight = document.body.offsetHeight;
@@ -58,11 +51,11 @@ export class CustomerComponent implements OnInit, OnDestroy{
   product  : any[] = [];
 // end search
 
-  customers : any []=[];
+  clients : any []=[];
   isLoading : boolean = false;
-  arrCustomer : any []=[];
-  customerFounded : any = {};
-  isCustomerFounded : boolean = false;
+  arrClient : any []=[];
+  clientFounded : any = {company_name: "Jeronimo Martins", industry_type: "Retail and Supermarkets", email: "testEmail1@gmail.com" };
+  isClientFounded : boolean = false;
   labelNoFinded : boolean = false;
   phone : boolean = false;
 
@@ -116,9 +109,10 @@ export class CustomerComponent implements OnInit, OnDestroy{
 
 
   ngOnInit(): void {
-    this.errorService.closeIsLoading$.subscribe( (emmited)=>{ this.isLoading = false});
-    this.authService.updateEditingUser$.subscribe( (emmited)=>{ if(emmited){this.isLoading = true; this.getInitialcustomers()} })
-    this.getInitialcustomers();
+    this.errorService.closeIsLoading$.subscribe( (emmited)=>{ if(emmited){this.isLoading = false}});
+    this.authService.updateEditingUser$.subscribe( (emmited)=>{ if(emmited){this.isLoading = true; this.getInitialClients()} })
+    
+    this.getInitialClients();
 
         //para las busquedas
         this.myForm.get('itemSearch')?.valueChanges.subscribe(newValue => {
@@ -138,13 +132,13 @@ export class CustomerComponent implements OnInit, OnDestroy{
         });
   }
 
- getInitialcustomers(){
+ getInitialClients(){
   this.isLoading = true;
 
-  this.authService.getCustomersPaginator(this.pageIndex, this.pageSize).subscribe(
-    ({customers, pagination})=>{
-      this.customers = customers;
-      this.dataTableActive = customers;
+  this.authService.getClientsPaginator(this.pageIndex, this.pageSize).subscribe(
+    ({clients, pagination})=>{
+      this.clients = clients;
+      this.dataTableActive = clients;
       this.isLoading = false;
       this.length = pagination.total_reg;
     })
@@ -173,10 +167,10 @@ viewProject( project:any){
 
 loadInfiniteScroll(){
   // this.pageIndex++;
-  // this.authService.getCustomersPaginator(this.pageIndex, this.pageSize).subscribe(
-  //   ({customers, pagination})=>{
-  //     this.customers = [...this.customers, ...customers];
-  //     this.dataTableActive = customers;
+  // this.authService.getClientsPaginator(this.pageIndex, this.pageSize).subscribe(
+  //   ({lients, pagination})=>{
+  //     this.lients = [...this.lients, ...lients];
+  //     this.dataTableActive = lients;
   //     this.isLoading = false;
   //     this.length = pagination.total_reg;
   //   })
@@ -196,15 +190,15 @@ handlePageEvent(e: PageEvent) {
       return
     }
 
-    this.authService.getCustomersPaginator(this.pageIndex, this.pageSize,).subscribe(
-      ({customers})=>{
-        this.customers = customers;
-        this.dataTableActive = customers;
+    this.authService.getClientsPaginator(this.pageIndex, this.pageSize,).subscribe(
+      ({clients})=>{
+        this.clients = clients;
+        this.dataTableActive = clients;
         this.isLoading = false
       })
 }
 
-deleteCustomer(customer : any){
+deleteClient(client : any){
 
   if(screen.width >= 800) {
     this.width = "600px";
@@ -230,7 +224,7 @@ deleteCustomer(customer : any){
   
 }
 
-editCustomer(customer: any){
+editClient(client: any){
 
   if(screen.width >= 800) {
     this.width = "600px";
@@ -246,7 +240,9 @@ editCustomer(customer: any){
 
 }
 
-addCustomer(){
+
+
+addClient(){
 
   if(screen.width >= 800) {
     this.width = "600px";
@@ -266,7 +262,7 @@ close(){
   this.itemSearch = '';
   this.suggested = [];
   this.spinner= false;
-  this.isCustomerFounded = false;
+  this.isClientFounded = false;
   this.myForm.get('itemSearch')?.setValue('');
   this.noMatches = false;
 }
@@ -283,11 +279,11 @@ sugerencias(value : string){
     this.itemSearch = value;
     this.mostrarSugerencias = true;  
     const valueSearch = value.toUpperCase();
-    this.authService.searchCustomerByName(valueSearch)
-    .subscribe ( ({customers} )=>{
-      if(customers.length !== 0){
+    this.authService.searchClientByName(valueSearch)
+    .subscribe ( ({client} )=>{
+      if(client.length !== 0){
         // this.arrArticlesSugested = articulos;
-        this.suggested = customers.splice(0,10);
+        this.suggested = client.splice(0,10);
         console.log(this.suggested);
           this.spinner = false;
         }else{
@@ -304,9 +300,9 @@ Search( item: any ){
     this.spinner = false;
     this.fade = false;
     console.log(item);
-    this.customerFounded = item;
+    this.clientFounded = item;
     this.close();
-    this.isCustomerFounded = true;
+    this.isClientFounded = true;
 }
   // search
 

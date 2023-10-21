@@ -25,7 +25,6 @@ import { GenericMessageComponent } from './protected/messages/generic-message/ge
 import { MantainMessageComponent } from './protected/messages/maintain-message/mantain-message/mantain-message.component';
 import { NoPermissionMessageComponent } from './protected/messages/no-permission-message/no-permission-message/no-permission-message.component';
 import { SettingsComponent } from './protected/pages/setting/settings.component';
-import { CustomerComponent } from './protected/pages/customer/customer/customer.component';
 
 
 // services
@@ -51,6 +50,7 @@ import { registerLocaleData } from '@angular/common';
 import { environment } from 'src/environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { ViewProjectComponent } from './protected/messages/view-project/view-project/view-project.component';
+import { ClientComponent } from './protected/pages/client/client/client.component';
 
 registerLocaleData( localeEs );
 
@@ -77,8 +77,8 @@ registerLocaleData( localeEs );
     MantainMessageComponent,
     NoPermissionMessageComponent,
     SettingsComponent,
-    CustomerComponent,
     ViewProjectComponent,
+    ClientComponent,
   ],
   imports: [
     BrowserModule,
