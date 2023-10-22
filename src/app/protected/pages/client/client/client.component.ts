@@ -54,8 +54,8 @@ export class ClientComponent implements OnInit {
   clients : any []=[];
   isLoading : boolean = false;
   arrClient : any []=[];
-  clientFounded : any = {company_name: "Jeronimo Martins", industry_type: "Retail and Supermarkets", email: "testEmail1@gmail.com" };
-  isClientFounded : boolean = false;
+  clientFound : any = null;
+  isClientFound : boolean = false;
   labelNoFinded : boolean = false;
   phone : boolean = false;
 
@@ -153,7 +153,7 @@ viewProject( project:any){
   console.log(project);
   if(screen.width >= 800) {
     this.width = "600px";
-    this.height = "510px";
+    this.height = "650px";
   }
 
     this.dialog.open(ViewProjectComponent, {
@@ -262,10 +262,13 @@ close(){
   this.itemSearch = '';
   this.suggested = [];
   this.spinner= false;
-  this.isClientFounded = false;
   this.myForm.get('itemSearch')?.setValue('');
   this.noMatches = false;
+  this.clientFound= null;
+  this.isClientFound = false;
 }
+
+
 
 
 teclaPresionada(){
@@ -296,16 +299,23 @@ sugerencias(value : string){
 }
   
 Search( item: any ){
+  setTimeout(()=>{
     this.mostrarSugerencias = true;
     this.spinner = false;
     this.fade = false;
-    console.log(item);
-    this.clientFounded = item;
-    this.close();
-    this.isClientFounded = true;
+    this.clientFound = item;
+    this.isClientFound = true;
+    this.myForm.get('itemSearch')?.setValue('');
+    this.suggested = [];
+    this.noMatches = false;
+  },500)
 }
   // search
 
+
+  closeNoMatch(){
+    this.noMatches = false;
+  }
 
 
 ngOnDestroy(): void {

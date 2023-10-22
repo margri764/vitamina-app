@@ -1,9 +1,51 @@
 
 
-<div fxLayout="row wrap" fxLayoutAlign="center center" fxFlex="100" >
+<div fxLayout="row wrap" fxLayoutAlign="center center"  style="background-color: rgb(233, 233, 233); padding: 20px;"   >
 
-        <span class="font" fxFlex="100" > Name: {{project.project_scope.name}}</span>
-        <span class="font" fxFlex="100" >Description: {{project.project_scope.description}}</span>
-        <span class="font" fxFlex="100" >Main Features. {{project.project_scope.main_features}}</span>
+        <div fxLayout="row wrap" fxLayoutAlign="end center" fxFlex="100"  style="margin-top: 60px;">
+            <span class="material-symbols-outlined notranslate cursor" style="color: rgb(37, 150, 190);" (click)="close()"> close </span>
+        </div>
 
+        <span class="font" fxFlex="100" > <b style="font-size: 1.3em; margin-top: 80px;">{{project.project_scope.name}}</b></span>
+
+        <div  fxLayout="row wrap"  fxLayoutAlign="center start" style="margin-top: 38px; " >
+
+            <div fxLayout="row wrap"  fxLayoutAlign="space-between center" style="" fxFlex="100"  >
+    
+
+                        <div fxLayout="row wrap"  fxLayoutAlign="start start"  fxFlex="100" class="whiteframe" style="background-color: white; padding: 15px;" >
+                                <span class="material-symbols-outlined notranslate" style=" transform: scale(1.5); color: rgb(37, 150, 190); "> description </span> &nbsp; &nbsp;&nbsp;
+                                <span class="font" fxFlex="80" >Description: {{project.project_scope.description | capitalizeFirstLetter}}</span>
+                        </div>
+
+                        <div fxLayout="row wrap"  fxLayoutAlign="start start"  fxFlex="100" class="whiteframe" style="background-color: white; margin-top: 5px; padding: 15px;" >
+                                <span class="material-symbols-outlined notranslate" style=" transform: scale(1.5);color: rgb(37, 150, 190) "> star </span> &nbsp; &nbsp;&nbsp;
+                                <span class="font" fxFlex="80" >Main Features: {{project.project_scope.main_features}}</span>
+                        </div>
+
+
+                        <div fxLayout="row wrap"  fxLayoutAlign="start start"  fxFlex="100" class="whiteframe" style="background-color: white; margin-top: 5px; padding: 15px;" >
+                                <span class="material-symbols-outlined notranslate" style=" transform: scale(1.5);color: rgb(37, 150, 190) "> update </span> &nbsp; &nbsp;&nbsp;
+                                <span class="font" fxFlex="80" >Creation date: {{project.createdAt}}</span>
+                        </div>
+
+                      
+                        
+                        <div fxLayout="row wrap"  fxLayoutAlign="start center"  fxFlex="100" class="whiteframe" style="background-color: white; margin-top: 5px; padding: 15px;" >
+                                <span class="material-symbols-outlined notranslate" style=" transform: scale(1.5);color: rgb(37, 150, 190) "> groups </span> &nbsp; &nbsp;&nbsp;
+                                <span class="font" fxFlex="80" >Staff Members:</span>
+                                <ul style="padding-left: 30px" class="font">
+                                        <li *ngFor="let pro of project.employee" style="cursor: pointer; color: blue; margin-left: 20px"  [routerLink]="['../view-employee/',pro._id, ]" (click)="close()">
+                                          {{ pro.name | capitalizeFirstLetter}}
+                                        </li>
+                                      </ul>
+                        </div>
+                        
+    
+                    
+            
+            </div>
+
+       </div>
 </div>
+

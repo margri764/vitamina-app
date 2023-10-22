@@ -1,0 +1,81 @@
+
+
+<div fxLayout="row wrap" fxLayoutAlign="center start"  style="background-color: rgb(233, 233, 233); padding: 20px; height: 100%;"   >
+
+   <div fxLayout="row wrap" fxLayoutAlign="center center" fxFlex.xs="100" fxFlex="75"   >
+
+        <div fxLayout="row wrap" fxLayoutAlign="center center"  style="margin-top: 60px; "  >
+
+            <span class="material-symbols-outlined notranslate" style="font-size: 180px; color: rgb(19, 123, 175);"> account_circle </span> 
+          <span class="font mt-40" fxFlex="100" style="font-size: 1.5em; text-align: center; margin-top: 20px; font-weight: bolder;" >{{employee.name  | capitalizeFirstLetter}}</span>
+        </div>
+
+            <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="100" style="margin-top: 30px;"  >
+
+                         <!--  personal Info -->
+                        <div fxLayout="row wrap"  fxLayoutAlign="center"  fxFlex="100" class="whiteframe" style="background-color: white; padding: 25px;" >
+
+                            <div fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex="100" style="background-color: rgb(37, 150, 190); height: 60px; border-radius: 5px; padding: 15px;">
+                                <span class="material-symbols-outlined notranslate" style=" transform: scale(1.2); color: white; "> description </span> &nbsp; &nbsp;&nbsp;
+                                <span class="font" style="color: white;">Personal Information</span>
+                            </div>
+
+                            <div fxLayout="row" fxLayoutAlign="space-between center" fxFlex="95" class="font" style="margin-top: 20px; ">
+
+                                <span class="font"  fxFlex="45" style="font-size: 1.2em;  ">
+                                    <b style="font-size: 0.9em;">Address:</b>&nbsp; &nbsp;&nbsp; {{employee.contact_info.street_address | capitalizeFirstLetter}}
+                                </span>
+                                <span class="font"  fxFlex="45" style="font-size: 1.2em; text-align: end;">
+                                  <b style="font-size: 0.9em;">City:</b>&nbsp; &nbsp;&nbsp; {{employee.contact_info.city | capitalizeFirstLetter}}
+                                </span>
+                                
+                            </div>
+
+                            <div fxLayout="row" fxLayoutAlign="space-between center" fxFlex="95" class="font" style="margin-top: 20px;">
+                                <span class="font" fxFlex="45" style="font-size: 1.2em;">
+                                  <b style="font-size: 0.9em;">State:</b>&nbsp; &nbsp;&nbsp; {{employee.contact_info.state | capitalizeFirstLetter}}
+                                </span>
+                                <span class="font" fxFlex="45" style="font-size: 1.2em; margin-top: 20px; text-align: end;">
+                                  <b style="font-size: 0.9em;">Country:</b>&nbsp; &nbsp;&nbsp;{{employee.contact_info.country | capitalizeFirstLetter}}
+                                </span>
+                            </div>
+
+                            <div fxLayout="row" fxLayoutAlign="space-between center" fxFlex="95" class="font" style="margin-top: 20px;">
+                                <span class="font" fxFlex="45" style="font-size: 1.2em;">
+                                  <b style="font-size: 0.9em;">Email:</b>&nbsp; &nbsp;&nbsp; {{employee.contact_info.email }}
+                                </span>
+                                <span class="font" fxFlex="45" style="font-size: 1.2em; margin-top: 20px; text-align: end;">
+                                  <b style="font-size: 0.9em;">Phone:</b>&nbsp; &nbsp;&nbsp;{{employee.contact_info.phone }}
+                                </span>
+                            </div>
+                              
+                        </div>
+
+                        <div fxLayout="row wrap"  fxLayoutAlign="start start"  fxFlex="100" class="whiteframe" style="background-color: white; margin-top: 5px; padding: 15px;" >
+                            <div fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex="100" style="background-color: rgb(37, 150, 190); height: 60px; border-radius: 5px; padding: 15px;">
+                                <span class="material-symbols-outlined notranslate" style=" transform: scale(1.4); color: white; "> star </span> &nbsp; &nbsp;&nbsp;
+                                <span class="font" style="color: white;">Skills</span>
+                            </div>
+                              
+                                <span class="font" fxFlex="80" >Skills: 
+                                    <ul>
+                                        <li *ngFor="let skill of employee.skillList">
+                                            {{skill}}
+                                        </li>
+                                    </ul>
+                                </span>    
+                        </div>
+                    
+
+        </div>
+   
+   </div>
+</div>
+
+
+
+<div *ngIf="isLoading" style="margin-top: 30px;" class="loading-overlay">
+    <mat-spinner diameter="80"></mat-spinner>
+</div>
+  
+

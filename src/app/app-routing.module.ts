@@ -5,6 +5,7 @@ import { LoginComponent } from './protected/pages/login/login/login.component';
 import { RoleGuard } from './protected/guards/role.guard';
 import { SettingsComponent } from './protected/pages/setting/settings.component';
 import { ClientComponent } from './protected/pages/client/client/client.component';
+import { ViewEmployeeComponent } from './protected/pages/view-employee/view-employee/view-employee.component';
 
 
 const routes: Routes = [
@@ -14,6 +15,10 @@ const routes: Routes = [
   
   {
     path: 'settings',  component: SettingsComponent
+  },
+
+  {
+    path: 'view-employee/:id',  component: ViewEmployeeComponent
   },
   {
     path: 'client-list',  component: ClientComponent,

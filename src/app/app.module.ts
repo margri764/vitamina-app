@@ -51,6 +51,7 @@ import { environment } from 'src/environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { ViewProjectComponent } from './protected/messages/view-project/view-project/view-project.component';
 import { ClientComponent } from './protected/pages/client/client/client.component';
+import { ViewEmployeeComponent } from './protected/pages/view-employee/view-employee/view-employee.component';
 
 registerLocaleData( localeEs );
 
@@ -79,6 +80,7 @@ registerLocaleData( localeEs );
     SettingsComponent,
     ViewProjectComponent,
     ClientComponent,
+    ViewEmployeeComponent,
   ],
   imports: [
     BrowserModule,

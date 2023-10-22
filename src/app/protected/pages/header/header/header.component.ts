@@ -71,12 +71,16 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
  }
 
  updateLabelHeader( url : string){
+
+  if (url.startsWith('/view-employee')) {
+   this.url = '/view-employee';
+  } 
   switch (url) {
     case '/client-list':
           this.labelHeader = "Clients";
       break;
-    case '/listado-articulos':
-            this.labelHeader = "Artículos";
+    case '/view-employee':
+            this.labelHeader = "Employee";
     break;  
 
     case '/pedidos-temporales':
@@ -147,11 +151,7 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
             break;
         }
 
-  //  if(this.path === '/listado-precios/listado'){
-  //    this.router.navigateByUrl('/listado-precios')
-  //   }else{
-  //     this.router.navigateByUrl('/home')
-  //   }
+  
 
  }
 

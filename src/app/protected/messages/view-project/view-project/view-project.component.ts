@@ -21,7 +21,7 @@ export class ViewProjectComponent implements OnInit {
     console.log(this.project);
   }
 
-  closeComponent(){
+  close(){
     this.dialogRef.close();
   }
 
@@ -33,5 +33,9 @@ export class ViewProjectComponent implements OnInit {
     },500)
 
 
+  }
+
+  goToEmployee( employee:any ){
+    
   }
 }
