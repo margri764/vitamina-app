@@ -1,0 +1,189 @@
+<div  fxLayout="row wrap"  fxLayoutAlign="center start" fxFlex="100" (scroll)="onScroll($event)" class="scroll" style="background-color: rgb(233, 233, 233)">
+    
+    <div  fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex.xs="98" fxFlex.sm="95" fxFlex="75" >
+
+        <div  style=" align-items: center; display: flex; justify-content: start center; height: 50px; width: 100%; margin-top: 40px;" >
+
+
+                <form  [formGroup]="myForm" autocomplete="off" style="height: 50px;" > 
+                    <mat-form-field  appearance="outline" class="font "  >
+                        <input type="text" matInput  placeholder="Search Employee"  name="itemSearch" formControlName="itemSearch"  >
+                        <mat-icon matSuffix style="transform:scale(1.5); color: rgb(37, 150, 190); margin-right: 10px;" >search</mat-icon>
+                    </mat-form-field>
+                </form>
+
+
+            <div fxLayout="row wrap"  fxLayoutAlign="start start"  style="margin-left: 20px;">
+                <div fxLayout="row wrap"  fxLayoutAlign="center center"  style=" background-color: rgb(37, 150, 190); border-radius: 7px; height: 50px; padding: 15px; margin-top: 9px; cursor: pointer; " (click)="addEmployee()" class="whiteframe" >
+                    <span class="material-symbols-outlined notranslate" style="color: white; transform: scale(1);" > add </span> &nbsp;  &nbsp;
+                    <span class="font" style="color: white;"> Add Employee</span>
+                </div>
+            </div>  
+        </div>  
+
+        <!-- start no items -->
+        <div fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex="100" *ngIf="noMatches">
+            
+            <div fxLayout="row wrap" fxLayoutAlign="space-betweencenter"  class="fs-4 whiteframe notFound" >
+               <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="90"   >
+                  <span class="material-icons" style="color: white;"> error </span>
+                  <span class="font " style="color: white; text-align: center; margin-left: 20px; font-size: 1em;">Employee not found...</span>
+                </div>
+                <span class="material-icons" style="color: white; text-align: end; transform: scale(0.8); cursor: pointer;" (click)="closeNoMatch()"> close </span>
+            </div>
+        </div>
+        <!-- end no items -->
+
+        <!-- start suggested    -->
+        <div fxLayout="row wrap"  fxLayoutAlign.xs="start center" fxLayoutAlign="center center"  fxFlex="100" *ngIf="mostrarSugerencias" style="margin-top: 20px;" >
+                
+            <div fxLayout="row wrap"  fxLayoutAlign="center center"  fxFlex="100" *ngIf="spinner" style="margin-top: 30px;">
+                <mat-spinner diameter="48"></mat-spinner>
+            </div>
+                        
+            <div fxLayout="row wrap"  fxLayoutAlign.xs="start center"  fxLayoutAlign="center center" fxFlex="100" class="font" style="margin-top: 3px;"  *ngFor="let item of suggested" >
+
+                <div fxLayout="row wrap" fxLayoutAlign="space-between center"  fxFlex="100"  class="fs-4 boxSelection" >
+                   <div fxLayout="row wrap" fxLayoutAlign="start center"  fxFlex="90"   >
+                      <mat-radio-button class="example-margin" (click)="Search(item)"></mat-radio-button>
+                      <span  style="cursor: pointer; text-align: start; margin-left: 15px; font-size: 0.8em;" fxFlex="80">{{ item.name | capitalizeFirstLetter}}</span>
+                   </div>  
+                   <div fxLayout="row wrap" fxLayoutAlign="end center"  fxFlex="10" >
+                        <span class="material-icons notranslate" style="transform: scale(1); color: green; margin-left: 0px;"  *ngIf="item.availability" >
+                            check_circle</span> 
+                        <span class="material-icons notranslate" style="transform: scale(1); color: gray; margin-left: 0px;" *ngIf="!item.availability"> do_not_disturb_on  </span>
+                    </div>    
+                </div>   
+
+            </div>
+        </div>
+        <!-- end suggested    -->
+
+        <!-- start result search cards -->
+        <div  fxLayout="row wrap"  fxLayoutAlign.xs="center start" fxLayoutAlign="start start"  fxFlex="100" style="margin-top: 40px;" *ngIf="isEmployeeFound">
+
+            <div fxLayout="row wrap"  fxLayoutAlign="space-between center" style="margin-bottom: 30px;  padding: 10px; background-color: white;" fxFlex.xs="100" fxFlex="50" class="whiteframe" >
+
+        
+                <div fxLayout="row wrap"  fxLayoutAlign="space-between center"  fxFlex="100" style="margin-top: 20px; padding: 10px;">
+
+                    <div fxLayout="row wrap"  fxLayoutAlign="start center"  fxFlex="80"  >
+                        <span class="material-symbols-outlined notranslate" style=" transform: scale(2);color: rgb(135, 135, 135); "> person </span> 
+                   
+                        <div fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex="80" style="margin-left: 20px;" >
+                            <span style="font-size: 1.2em; font-family: poppins-light; width: 100%; "> {{employeeFound.name | capitalizeFirstLetter }} </span>
+                            <span style="font-size: 0.9em; font-family: poppins-light;  color: gray;"> {{employeeFound.contact_info.headline | capitalizeFirstLetter }} </span>
+                        </div>
+                    </div>
+
+                     <div fxLayout="row wrap"  fxLayoutAlign="end center"  fxFlex="20"  >
+
+                        <span class="material-icons-outlined notranslate" style="transform: scale(1); color: gray; margin-left: 0px;" *ngIf="!employeeFound.availability" > do_not_disturb_on  </span>
+
+                        <span class="material-icons-outlined notranslate" style="transform: scale(1); color: green; margin-left: 0px;" *ngIf="employeeFound.availability" > check_circle  </span>
+                     
+                     </div>
+
+                     <div fxLayout="row wrap"  fxLayoutAlign="start center"  fxFlex="100" style="margin-top: 20px;">
+                         <span class="material-symbols-outlined notranslate" style=" transform: scale(1.5);color: rgb(135, 135, 135);"> paid </span>
+                        <span style="font-size: 1.1em;  font-family: poppins-light; margin-left: 20px;">   {{ employeeFound.hourly_rate | currency:'USD':'symbol':'1.2-2' }} </span>
+                      </div>
+                  
+                </div>
+
+                <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" style="margin-top: 18px;">
+                    <span class="font " style="text-align: start; color: blue; cursor: pointer; margin-left: 10px;" fxFlex="30" [routerLink]="['../view-employee/', employeeFound._id, ]"> <b>view more...</b></span>
+
+                    <div fxLayout="row wrap" fxLayoutAlign="end center" fxFlex="60" >
+                        <div class="icon mr-10" (click)="deleteEmployee(employeeFound)" >
+                            <span class="material-symbols-outlined notranslate cursor" style="color: red;"> delete </span>
+                        </div>
+                        
+                        <div class="icon mr-10"  (click)="editEmployee(employeeFound)">
+                            <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57);"> edit </span>
+                        </div>
+    
+                        <div class="icon"  (click)="close()" style="margin-right: 10px;">
+                            <span class="material-symbols-outlined notranslate cursor" > close </span>
+                        </div>
+                    </div>
+
+                </div>
+             
+                
+            </div>
+        
+        </div>
+        <!-- end result search cards -->
+
+        <span class="font" style="font-size: 1.3em; text-align: start; margin-top: 60px; width: 100%; margin-left: 5px; font-weight: bold;"> Employee List</span>
+        <!-- start table -->
+          <div class="example-container mat-elevation-z8 font" style="background-color: white; border-radius: 10px; margin-top: 18px;">
+
+            <table mat-table [dataSource]="dataTableActive"  >
+            
+                    <ng-container matColumnDef="name"  >
+                        <th mat-header-cell *matHeaderCellDef > Name </th>
+                        <td mat-cell *matCellDef="let element" [routerLink]="['../view-employee/',element._id, ]"> {{element.name}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="state" >
+                        <th mat-header-cell *matHeaderCellDef> State</th>
+                        <td mat-cell *matCellDef="let element" [routerLink]="['../view-employee/',element._id, ]">
+                            <span class="material-icons notranslate" style="transform: scale(1); color: green; margin-left: 0px;"  *ngIf="element.availability">check_circle</span> 
+                            <span class="material-icons-outlined notranslate" style="transform: scale(1); color: gray; margin-left: 0px;" *ngIf="!element.availability"> do_not_disturb_on  </span>
+                         </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="rate" >
+                        <th mat-header-cell *matHeaderCellDef> Hourly Rate (U$S)</th>
+                        <td mat-cell *matCellDef="let element" [routerLink]="['../view-employee/',element._id, ]"> {{element.hourly_rate}}
+                         </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action"  >
+                        <th mat-header-cell *matHeaderCellDef >Action</th>
+                        <td mat-cell *matCellDef="let element" > 
+                            <div style="display: flex; justify-content:center; " >
+                                    <div class="icon" (click)="editEmployee(element)">
+                                        <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57);"> edit </span>
+                                    </div>
+                                    <div class="icon" (click)="deleteEmployee(element)" style="margin-left: 3px;">
+                                        <span class="material-symbols-outlined notranslate cursor" style="color: red;"> delete </span>
+                                    </div>
+                            </div>
+
+                           
+                    </td>
+               
+                    </ng-container>
+
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns "></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <!-- <mat-paginator #paginator
+            class="demo-paginator"
+            (page)="handlePageEvent($event)"
+            [length]="length"
+            [pageSize]="pageSize"
+            [disabled]="disabled"
+            [showFirstLastButtons]="showFirstLastButtons"
+            [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+            [hidePageSize]="hidePageSize"
+            [pageIndex]="pageIndex"
+            aria-label="Select page" style="margin-top: 30px;">
+            </mat-paginator> -->
+
+
+          </div> 
+        <!-- end table -->
+
+       </div> 
+    
+  
+ <div *ngIf="isLoading" class="loading-overlay">
+    <mat-spinner diameter="80"></mat-spinner>
+</div>
+

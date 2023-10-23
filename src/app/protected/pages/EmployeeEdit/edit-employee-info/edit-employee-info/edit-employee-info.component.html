@@ -1,0 +1,58 @@
+
+<div fxLayout="row wrap" fxLayoutAlign="center center" fxFlex="100" style="padding: 20px;">
+
+    <div fxLayout="row wrap"  fxLayoutAlign="end center" fxFlex="100"  class="mt-20">
+      <span class="material-symbols-outlined notranslate cursor" (click)="close()" style="transform: scale(1.3); margin-right: 20px;">close</span> 
+    </div>  
+  
+      <span class="font" fxFlex="100" style="margin-top: 20px; font-size: 1.7em; text-align: start; font-weight: bold; line-height:30px;"> Edit contact info</span>        
+    
+     
+      <form  [formGroup]="myForm"  fxLayout="row wrap" fxLayoutAlign="center center" fxFlex="100" style="margin-top:50px; border: 1px solid rgb(197, 197, 197); border-radius: 10px; padding: 10px;">     
+        
+          <mat-form-field appearance="outline"  fxFlex="90" class="mt-10 font " >		
+              <mat-label>Street</mat-label>
+              <input matInput type="text" required formControlName="street">
+          </mat-form-field> 
+          <mat-error *ngIf ="validField ('street')" fxLayoutAlign="start" fxFlex="85" class="font fs-4"> Required </mat-error> 
+      
+  
+          <mat-form-field appearance="outline"  fxFlex="90" class="mt-10 font " >		
+            <mat-label>City</mat-label>
+            <input matInput type="text" required formControlName="city">
+        </mat-form-field> 
+        <mat-error *ngIf ="validField ('city')" fxLayoutAlign="start" fxFlex="85" class="font fs-4 mb-10"> Required </mat-error> 
+
+        <mat-form-field appearance="outline"  fxFlex="90" class="mt-10 font " >		
+            <mat-label>State</mat-label>
+            <input matInput type="text" required formControlName="state">
+        </mat-form-field> 
+        <mat-error *ngIf ="validField ('state')" fxLayoutAlign="start" fxFlex="85" class="font fs-4 mb-10"> Required </mat-error> 
+
+        
+        <mat-form-field appearance="outline"  fxFlex="90" class="mt-10 font " >		
+            <mat-label>Email</mat-label>
+            <input matInput type="email" required formControlName="email">
+        </mat-form-field> 
+        <mat-error *ngIf ="validField ('email')" fxLayoutAlign="start" fxFlex="85" class="font fs-4 mb-10"> Required </mat-error> 
+
+        <mat-form-field appearance="outline"  fxFlex="90" class="mt-10 font " >		
+            <mat-label>Phone number</mat-label>
+            <input matInput type="email" required formControlName="phone">
+        </mat-form-field> 
+        <mat-error *ngIf ="validField ('phone')" fxLayoutAlign="start" fxFlex="85" class="font fs-4 mb-10"> Required </mat-error> 
+    
+    
+          <button type="button" fxLayout="row wrap" fxLayoutAlign="center center" [ngClass]="confirm ? 'btnMenuClicked':'btnMenu'" style="margin-top: 30px; margin-bottom: 10px;" fxFlex="90"  (click)="onSaveForm()">  Editar
+          </button>
+      
+        </form>
+  
+  </div>
+  
+  <div *ngIf="isLoading" style="margin-top: 30px;" class="loading-overlay">
+    <mat-spinner diameter="80"></mat-spinner>
+  </div>
+  
+    
+  

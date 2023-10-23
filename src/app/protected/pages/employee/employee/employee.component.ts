@@ -10,14 +10,14 @@ import { MatAccordion } from '@angular/material/expansion';
 import { CookieService } from 'ngx-cookie-service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ViewProjectComponent } from 'src/app/protected/messages/view-project/view-project/view-project.component';
+import { EmployeeService } from 'src/app/protected/services/employee/employee.service';
 
 @Component({
-  selector: 'app-client',
-  templateUrl: './client.component.html',
-  styleUrls: ['./client.component.scss']
+  selector: 'app-employee',
+  templateUrl: './employee.component.html',
+  styleUrls: ['./employee.component.scss']
 })
-
-export class ClientComponent implements OnInit {
+export class EmployeeComponent implements OnInit {
 
   @HostListener('window:scroll') onScroll(e: Event): void {
     const scrollPosition = window.innerHeight + window.scrollY;
@@ -35,7 +35,7 @@ export class ClientComponent implements OnInit {
   debouncer: Subject<string> = new Subject();
 
 
-  displayedColumns: string[] = ['name', 'industry','email', 'projects','action'];
+  displayedColumns: string[] = ['name', 'state','rate','action'];
   dataTableActive : any ;
   
   myForm! : FormGroup;
@@ -51,11 +51,11 @@ export class ClientComponent implements OnInit {
   product  : any[] = [];
 // end search
 
-  clients : any []=[];
+  employees : any []=[];
   isLoading : boolean = false;
-  arrClient : any []=[];
-  clientFound : any = null;
-  isClientFound : boolean = false;
+  arrEmployee : any []=[];
+  employeeFound : any = null;
+  isEmployeeFound : boolean = false;
   labelNoFinded : boolean = false;
   phone : boolean = false;
 
@@ -89,6 +89,7 @@ export class ClientComponent implements OnInit {
               private authService : AuthService,
               private dialog : MatDialog,
               private errorService : ErrorService,
+              private employeeService : EmployeeService,
               private store : Store <AppState>,
               private cookieService : CookieService,
               private fb : FormBuilder,
@@ -110,9 +111,9 @@ export class ClientComponent implements OnInit {
 
   ngOnInit(): void {
     this.errorService.closeIsLoading$.subscribe( (emmited)=>{ if(emmited){this.isLoading = false}});
-    this.authService.updateEditingUser$.subscribe( (emmited)=>{ if(emmited){this.isLoading = true; this.getInitialClients()} })
+    // this.authService.updateEditingUser$.subscribe( (emmited)=>{ if(emmited){this.isLoading = true; this.getInitialEmployees()} })
     
-    this.getInitialClients();
+    this.getInitialEmployees();
 
         //para las busquedas
         this.myForm.get('itemSearch')?.valueChanges.subscribe(newValue => {
@@ -135,13 +136,13 @@ export class ClientComponent implements OnInit {
         });
   }
 
- getInitialClients(){
+ getInitialEmployees(){
   this.isLoading = true;
 
-  this.authService.getClientsPaginator(this.pageIndex, this.pageSize).subscribe(
-    ({clients, pagination})=>{
-      this.clients = clients;
-      this.dataTableActive = clients;
+  this.employeeService.getAllEmployees(this.pageIndex, this.pageSize).subscribe(
+    ({employees, pagination})=>{
+      this.employees = employees;
+      this.dataTableActive = employees;
       this.isLoading = false;
       this.length = pagination.total_reg;
     })
@@ -152,25 +153,25 @@ visibility(){
   this.toogle = !this.toogle
 }
 
-viewProject( project:any){
-  console.log(project);
-  if(screen.width >= 800) {
-    this.width = "600px";
-    this.height = "650px";
-  }
+// viewProject( project:any){
+//   console.log(project);
+//   if(screen.width >= 800) {
+//     this.width = "600px";
+//     this.height = "650px";
+//   }
 
-    this.dialog.open(ViewProjectComponent, {
-      data:  project,
-      width: `${this.width}`|| "",
-      height:`${this.height}`|| "",
-      panelClass:"custom-modalbox-edit",
-    });
-}
+//     this.dialog.open(ViewProjectComponent, {
+//       data:  project,
+//       width: `${this.width}`|| "",
+//       height:`${this.height}`|| "",
+//       panelClass:"custom-modalbox-edit",
+//     });
+// }
 
 
 loadInfiniteScroll(){
   // this.pageIndex++;
-  // this.authService.getClientsPaginator(this.pageIndex, this.pageSize).subscribe(
+  // this.authService.getemployeePaginator(this.pageIndex, this.pageSize).subscribe(
   //   ({lients, pagination})=>{
   //     this.lients = [...this.lients, ...lients];
   //     this.dataTableActive = lients;
@@ -193,15 +194,15 @@ handlePageEvent(e: PageEvent) {
       return
     }
 
-    this.authService.getClientsPaginator(this.pageIndex, this.pageSize,).subscribe(
-      ({clients})=>{
-        this.clients = clients;
-        this.dataTableActive = clients;
+    this.employeeService.getAllEmployees(this.pageIndex, this.pageSize,).subscribe(
+      ({employees})=>{
+        this.employees = employees;
+        this.dataTableActive = employees;
         this.isLoading = false
       })
 }
 
-deleteClient(client : any){
+deleteEmployee(employee : any){
 
   if(screen.width >= 800) {
     this.width = "600px";
@@ -227,7 +228,7 @@ deleteClient(client : any){
   
 }
 
-editClient(client: any){
+editEmployee(employee: any){
 
   if(screen.width >= 800) {
     this.width = "600px";
@@ -245,7 +246,7 @@ editClient(client: any){
 
 
 
-addClient(){
+addEmployee(){
 
   if(screen.width >= 800) {
     this.width = "600px";
@@ -267,8 +268,8 @@ close(){
   this.spinner= false;
   this.myForm.get('itemSearch')?.setValue('');
   this.noMatches = false;
-  this.clientFound= null;
-  this.isClientFound = false;
+  this.employeeFound= null;
+  this.isEmployeeFound = false;
 }
 
 
@@ -285,12 +286,11 @@ sugerencias(value : string){
     this.itemSearch = value;
     this.mostrarSugerencias = true;  
     const valueSearch = value.toUpperCase();
-    this.authService.searchClientByName(valueSearch)
-    .subscribe ( ({client} )=>{
-      if(client.length !== 0){
+    this.employeeService.searchEmployeeByName(valueSearch)
+    .subscribe ( ({employee} )=>{
+      if(employee.length !== 0){
         // this.arrArticlesSugested = articulos;
-        this.suggested = client.splice(0,10);
-        console.log(this.suggested);
+        this.suggested = employee.splice(0,10);
           this.spinner = false;
         }else{
           this.spinner = false;
@@ -306,8 +306,8 @@ Search( item: any ){
     this.mostrarSugerencias = true;
     this.spinner = false;
     this.fade = false;
-    this.clientFound = item;
-    this.isClientFound = true;
+    this.employeeFound = item;
+    this.isEmployeeFound = true;
     this.myForm.get('itemSearch')?.setValue('');
     this.suggested = [];
     this.noMatches = false;

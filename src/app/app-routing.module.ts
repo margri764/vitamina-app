@@ -6,6 +6,7 @@ import { RoleGuard } from './protected/guards/role.guard';
 import { SettingsComponent } from './protected/pages/setting/settings.component';
 import { ClientComponent } from './protected/pages/client/client/client.component';
 import { ViewEmployeeComponent } from './protected/pages/view-employee/view-employee/view-employee.component';
+import { EmployeeComponent } from './protected/pages/employee/employee/employee.component';
 
 
 const routes: Routes = [
@@ -24,6 +25,9 @@ const routes: Routes = [
     path: 'client-list',  component: ClientComponent,
     // canActivate: [RoleGuard ],
     // canLoad: [ RoleGuard],
+  },
+  {
+    path: 'employee-list',  component: EmployeeComponent
   },
   {
     path: 'login',  component: LoginComponent

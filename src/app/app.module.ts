@@ -25,6 +25,12 @@ import { GenericMessageComponent } from './protected/messages/generic-message/ge
 import { MantainMessageComponent } from './protected/messages/maintain-message/mantain-message/mantain-message.component';
 import { NoPermissionMessageComponent } from './protected/messages/no-permission-message/no-permission-message/no-permission-message.component';
 import { SettingsComponent } from './protected/pages/setting/settings.component';
+import { ViewProjectComponent } from './protected/messages/view-project/view-project/view-project.component';
+import { ClientComponent } from './protected/pages/client/client/client.component';
+import { ViewEmployeeComponent } from './protected/pages/view-employee/view-employee/view-employee.component';
+import { EmployeeComponent } from './protected/pages/employee/employee/employee.component';
+import { EditEmployeeNameComponent } from './protected/pages/EmployeeEdit/edit-employee-name/edit-employee-name/edit-employee-name.component';
+import { EditEmployeeInfoComponent } from './protected/pages/EmployeeEdit/edit-employee-info/edit-employee-info/edit-employee-info.component';
 
 
 // services
@@ -40,18 +46,17 @@ import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './auth.effect';
 
 // pipes
-import { CapitalizeFirstLetterPipe } from './protected/pipes/CapitalizeFirstLetterPipe';
 import { PriceRound } from './protected/pipes/priceRound';
 import { TwoDecimalPipe } from './protected/pipes/twoDecimal.pipe';
+import { CapitalizeFirstLetterPipe } from './protected/pipes/CapitalizeFirstLetterPipe';
+
 
 //idioma de la app
 import localeEs from '@angular/common/locales/es-AR'; //nombre inventado el AR es por Argentina
 import { registerLocaleData } from '@angular/common';
 import { environment } from 'src/environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { ViewProjectComponent } from './protected/messages/view-project/view-project/view-project.component';
-import { ClientComponent } from './protected/pages/client/client/client.component';
-import { ViewEmployeeComponent } from './protected/pages/view-employee/view-employee/view-employee.component';
+
 
 registerLocaleData( localeEs );
 
@@ -81,6 +86,9 @@ registerLocaleData( localeEs );
     ViewProjectComponent,
     ClientComponent,
     ViewEmployeeComponent,
+    EmployeeComponent,
+    EditEmployeeNameComponent,
+    EditEmployeeInfoComponent
   ],
   imports: [
     BrowserModule,

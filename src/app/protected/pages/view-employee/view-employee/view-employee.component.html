@@ -4,20 +4,40 @@
 
    <div fxLayout="row wrap" fxLayoutAlign="center center" fxFlex.xs="100" fxFlex="75"   >
 
-        <div fxLayout="row wrap" fxLayoutAlign="center center"  style="margin-top: 60px; "  >
-
-            <span class="material-symbols-outlined notranslate" style="font-size: 180px; color: rgb(19, 123, 175);"> account_circle </span> 
-          <span class="font mt-40" fxFlex="100" style="font-size: 1.5em; text-align: center; margin-top: 20px; font-weight: bolder;" >{{employee.name  | capitalizeFirstLetter}}</span>
-        </div>
 
             <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="100" style="margin-top: 30px;"  >
 
                          <!--  personal Info -->
-                        <div fxLayout="row wrap"  fxLayoutAlign="center"  fxFlex="100" class="whiteframe" style="background-color: white; padding: 25px;" >
+                        <div fxLayout="row wrap"  fxLayoutAlign="center center"  fxFlex="100" class="whiteframe" style="background-color: white; padding: 25px;" >
 
-                            <div fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex="100" style="background-color: rgb(37, 150, 190); height: 60px; border-radius: 5px; padding: 15px;">
-                                <span class="material-symbols-outlined notranslate" style=" transform: scale(1.2); color: white; "> description </span> &nbsp; &nbsp;&nbsp;
-                                <span class="font" style="color: white;">Personal Information</span>
+                            <div fxLayout="row wrap" fxLayoutAlign="center center"  fxFlex="100"  style="margin-left: 20px; " >
+
+                                <div fxLayout="row wrap" fxLayoutAlign="end center"  fxFlex="100"  >
+                                        <div class="icon mr-10"  >
+                                            <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57);" (click)="edit('name', employee)"> edit </span>
+                                        </div>
+                                </div>
+
+                                <span class="material-symbols-outlined notranslate" style="font-size: 180px; color: rgb(19, 123, 175);"> account_circle </span> 
+
+                               <div fxLayout="row wrap" fxLayoutAlign="center center" fxFlex="100" style="margin-left: 20px;" >
+                                  <span class="font " fxFlex="100" style="font-size: 1.5em; text-align: center; font-weight: bolder;" >{{employee.name  | capitalizeFirstLetter}}</span>
+
+                                  <span class="font " fxFlex="100" style="font-size: 1.2em; text-align: center; color: gray; margin-top: 5px;" >{{employee.contact_info.headline  | capitalizeFirstLetter}}</span>
+                               </div>
+                            </div>
+                    
+
+                            <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="100" style="background-color: rgb(37, 150, 190); height: 60px; border-radius: 5px; padding: 15px; margin-top: 30px;">
+
+                                <div fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex="90" >
+                                    <span class="material-symbols-outlined notranslate" style=" transform: scale(1.2); color: white; "> description </span> &nbsp; &nbsp;&nbsp;
+                                    <span class="font" style="color: white;">Personal Information</span>
+                                </div>
+
+                                <div class="icon mr-10" style="background-color: rgba(255, 255, 255, 0.875);"  >
+                                    <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57);" (click)="edit('info', employee)"> edit </span>
+                                </div>
                             </div>
 
                             <div fxLayout="row" fxLayoutAlign="space-between center" fxFlex="95" class="font" style="margin-top: 20px; ">

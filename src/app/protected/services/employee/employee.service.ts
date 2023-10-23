@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -8,7 +8,8 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class EmployeeService {
-    // updateEditingUser$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+
+    updateEditingEmployee$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
 
   
     // token : string = '';
@@ -32,17 +33,27 @@ export class EmployeeService {
             return res} )
     );
   }
+
+  
+  getAllEmployees( from : any, to : any ){
+    return this.http.get<any>(`${this.baseUrl}api/employee/getAllEmployees?p=${from}&r=${to}`)
+  .pipe(
+    map( res =>{ 
+          console.log('from service getAllEmployees', res)
+            return res} )
+    );
+  }
   
   
-  // updateEmployeeById( body : any, id:any){
+  updateEmployeeById( body : any, id:any){
                                           
-  //   return this.http.put<any>(`${this.baseUrl}api/Employee/${id}`, body)
-  // .pipe(
-  //   map( res =>{ 
-  //         console.log('desde service updateEmployeeById', res)
-  //           return res} )
-  //   );
-  // }
+    return this.http.put<any>(`${this.baseUrl}api/employee/updateEmployee/${id}`, body)
+  .pipe(
+    map( res =>{ 
+          console.log('from service updateEmployeeById', res)
+            return res} )
+    );
+  }
   
   // deleteEmployeeById( id:any){
   //                    id = "2737";                   
@@ -65,14 +76,14 @@ export class EmployeeService {
   //   );
   // }
   
-  // searchEmployeeByName( query :  string ){
-  //   return this.http.get<any>(`${this.baseUrl}api/Employee/searchEmployee?querySearch=${query}`)
-  // .pipe(
-  //   map( res =>{ 
-  //         console.log('desde service searchEmployeeByName', res)
-  //           return res} )
-  //   );
-  // }
+  searchEmployeeByName( query :  string ){
+    return this.http.get<any>(`${this.baseUrl}api/employee/searchEmployee?querySearch=${query}`)
+  .pipe(
+    map( res =>{ 
+          console.log('from service searchEmployeeByName', res)
+            return res} )
+    );
+  }
   
 
   
