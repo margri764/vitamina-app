@@ -1,0 +1,27 @@
+.shape {
+    width: 200px; /* Ancho del rectángulo */
+    height: 100px; /* Alto del rectángulo */
+    background-color: #3498db; /* Color del rectángulo */
+    border-top-left-radius: 100px 100px; /* Radio del semicírculo izquierdo */
+    border-top-right-radius: 100px 100px; /* Radio del semicírculo derecho */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.semicircle {
+    width: 100px; /* Diámetro del semicírculo */
+    height: 100px; /* Diámetro del semicírculo */
+    background-color: #3498db; /* Color del semicírculo */
+    border-radius: 50% 50% 0 0; /* Hace que el elemento sea un semicírculo */
+    position: absolute;
+}
+
+.semicircle.left {
+    left: 0;
+}
+
+.semicircle.right {
+    right: 0;
+}

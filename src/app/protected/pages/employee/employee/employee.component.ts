@@ -115,7 +115,6 @@ export class EmployeeComponent implements OnInit {
     
     this.getInitialEmployees();
 
-        //para las busquedas
         this.myForm.get('itemSearch')?.valueChanges.subscribe(newValue => {
           this.itemSearch = newValue;
     

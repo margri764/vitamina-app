@@ -84,6 +84,15 @@ export class EmployeeService {
             return res} )
     );
   }
+
+  searchSkillByName( query :  string ){
+    return this.http.get<any>(`${this.baseUrl}api/skill/searchSkill?querySearch=${query}`)
+  .pipe(
+    map( res =>{ 
+          console.log('from service searchSkillByName', res)
+            return res} )
+    );
+  }
   
 
   

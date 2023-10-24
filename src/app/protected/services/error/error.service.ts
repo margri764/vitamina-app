@@ -139,13 +139,13 @@ export class ErrorService {
     if (error.status === 404 ) {
       this.closeIsLoading$.emit(true);
       // ojo esto va en duro en el componente para redirigir al login!!
-      this.openGenericMsgAlert('Parece en error involuntario. Contacte al administrador')
+      this.openGenericMsgAlert('Internal Server Error. Sorry, something went wrong on our server. Please try again later')
       return of(null);
     }
 
     if (error.statusText === "Unknown Error" ) {
       this.closeIsLoading$.emit(true);
-      this.openGenericMsgAlert('Parece en error involuntario. Contacte al administrador')
+      this.openGenericMsgAlert('Internal Server Error. Sorry, something went wrong on our server. Please try again later')
       return of(null);
     }
 
@@ -216,7 +216,7 @@ export class ErrorService {
 
     if(screen.width >= 800) {
       width = "350px"
-      height ="400px";
+      height ="450px";
     }
 
     this.dialog.open(WrongActionMessageComponent, {

@@ -5,6 +5,8 @@ import { EmployeeService } from 'src/app/protected/services/employee/employee.se
 import { ErrorService } from 'src/app/protected/services/error/error.service';
 import { EditEmployeeNameComponent } from '../../EmployeeEdit/edit-employee-name/edit-employee-name/edit-employee-name.component';
 import { EditEmployeeInfoComponent } from '../../EmployeeEdit/edit-employee-info/edit-employee-info/edit-employee-info.component';
+import { throwToolbarMixedModesError } from '@angular/material/toolbar';
+import { EditEmployeeSkillsComponent } from '../../EmployeeEdit/edit-employee-skills/edit-employee-skills/edit-employee-skills.component';
 
 @Component({
   selector: 'app-view-employee',
@@ -18,6 +20,7 @@ export class ViewEmployeeComponent implements OnInit {
   height : string = '';
   width : string = '';
   id : string = '';
+  phone : boolean = false;
 
   employee: any = {
                   name: '',
@@ -38,8 +41,10 @@ export class ViewEmployeeComponent implements OnInit {
                   // private store : Store<AppState>
  )
 { 
-this.activatedRoute.params.subscribe(
-( {id} ) =>{ this.getEmployeeById(id); this.id = id; })
+  (screen.width <=800) ? this.phone = true : this.phone = false;
+
+  this.activatedRoute.params.subscribe(
+   ( {id} ) =>{ this.getEmployeeById(id); this.id = id; })
 
 }
 
@@ -69,8 +74,11 @@ this.activatedRoute.params.subscribe(
 
       case 'info':
                   this.openDialogInfo(employee)
-      break;
+        break;
     
+      case 'add':
+                 this.openDialogAddSkill(employee)
+      break;
       default:
         break;
     }
@@ -98,10 +106,26 @@ this.activatedRoute.params.subscribe(
 
     if(screen.width >= 800) {
       this.width = "600px";
-      this.height = "740px";
+      this.height = "540px";
     }
   
       this.dialog.open(EditEmployeeInfoComponent, {
+        data:  employee,
+        width: `${this.width}`|| "",
+        height:`${this.height}`|| "",
+        panelClass:"custom-modalbox-edit",
+      });
+  }
+
+    
+  openDialogAddSkill( employee:any){
+
+    if(screen.width >= 800) {
+      this.width = "600px";
+      this.height = "260px";
+    }
+  
+      this.dialog.open(EditEmployeeSkillsComponent, {
         data:  employee,
         width: `${this.width}`|| "",
         height:`${this.height}`|| "",

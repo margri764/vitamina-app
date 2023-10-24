@@ -28,7 +28,7 @@ export class WrongActionMessageComponent implements OnInit {
     this.confirm = true;
     setTimeout(()=>{ this.dialogRef.close() },300);
 
-    if(this.msg === 'Parece en error involuntario. Contacte al administrador'){
+    if(this.msg === "Internal Server Error. Sorry, something went wrong on our server. Please try again later"){
       this.router.navigateByUrl('/login');
       return
     }

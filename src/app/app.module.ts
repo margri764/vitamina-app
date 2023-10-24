@@ -56,6 +56,7 @@ import localeEs from '@angular/common/locales/es-AR'; //nombre inventado el AR e
 import { registerLocaleData } from '@angular/common';
 import { environment } from 'src/environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { EditEmployeeSkillsComponent } from './protected/pages/EmployeeEdit/edit-employee-skills/edit-employee-skills/edit-employee-skills.component';
 
 
 registerLocaleData( localeEs );
@@ -88,7 +89,8 @@ registerLocaleData( localeEs );
     ViewEmployeeComponent,
     EmployeeComponent,
     EditEmployeeNameComponent,
-    EditEmployeeInfoComponent
+    EditEmployeeInfoComponent,
+    EditEmployeeSkillsComponent
   ],
   imports: [
     BrowserModule,
