@@ -38,6 +38,8 @@ export class EditEmployeeSkillsComponent implements OnInit {
   isSkillFound : boolean = false;
 // end search
 
+  errorLabel : boolean= false;
+
   constructor(
             private fb: FormBuilder,
              private dialogRef : MatDialogRef<EditEmployeeSkillsComponent>,
@@ -144,6 +146,7 @@ export class EditEmployeeSkillsComponent implements OnInit {
         this.myForm.get('itemSearch')?.setValue('');
         this.noMatches = false;
         this.skill = null;
+        this.errorLabel = false;
     }
   
   
@@ -154,7 +157,6 @@ export class EditEmployeeSkillsComponent implements OnInit {
 
   onSaveForm(){
 
-
     if ( this.myForm.invalid ) {
       this.myForm.markAllAsTouched();
       return;
@@ -162,6 +164,11 @@ export class EditEmployeeSkillsComponent implements OnInit {
 
     if(this.skill === null){
       return;
+    }
+
+    if( this.employee.skillList.includes(this.skill.name) ){
+       this.errorLabel = true;
+       return;
     }
 
     const updatedEmployee = { ...this.employee };
@@ -172,6 +179,7 @@ export class EditEmployeeSkillsComponent implements OnInit {
         this.isLoading = false;
         if(success){
           this.close();
+          this.errorLabel = false;
           this.employeeService.updateEditingEmployee$.emit(true);
         }
       });

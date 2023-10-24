@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment';
 export class EmployeeService {
 
     updateEditingEmployee$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+     authDelSkill$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
 
   
     // token : string = '';
@@ -34,6 +35,16 @@ export class EmployeeService {
     );
   }
 
+  getEmployeeProjects( id : any ){
+    return this.http.get<any>(`${this.baseUrl}api/employee/getEmployeeProjects/${id}`)
+  .pipe(
+    map( res =>{ 
+          console.log('from service getEmployeeProjects', res)
+            return res} )
+    );
+  }
+
+
   
   getAllEmployees( from : any, to : any ){
     return this.http.get<any>(`${this.baseUrl}api/employee/getAllEmployees?p=${from}&r=${to}`)
@@ -54,6 +65,16 @@ export class EmployeeService {
             return res} )
     );
   }
+
+  updateEmployeeSkill( body : any, id:any){
+                                          
+    return this.http.patch<any>(`${this.baseUrl}api/skill/updateSkill/${id}`, body)
+  .pipe(
+    map( res =>{ 
+          console.log('from service updateEmployeeSkill', res)
+            return res} )
+    );
+  }
   
   // deleteEmployeeById( id:any){
   //                    id = "2737";                   
@@ -65,16 +86,15 @@ export class EmployeeService {
   //   );
   // }
   
-  // addNewEmployee( body : User){
+  addNewEmployee( body : any){
   
-  
-  // return this.http.post<any>(`${this.baseUrl}api/Employee`, body)
-  // .pipe(
-  //   map( res =>{ 
-  //          console.log('desde service addNewEmployee', res)
-  //   return res} )
-  //   );
-  // }
+  return this.http.post<any>(`${this.baseUrl}api/employee/createEmployee`, body)
+  .pipe(
+    map( res =>{ 
+           console.log('from service addNewEmployee', res)
+    return res} )
+    );
+  }
   
   searchEmployeeByName( query :  string ){
     return this.http.get<any>(`${this.baseUrl}api/employee/searchEmployee?querySearch=${query}`)

@@ -11,6 +11,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ViewProjectComponent } from 'src/app/protected/messages/view-project/view-project/view-project.component';
 import { EmployeeService } from 'src/app/protected/services/employee/employee.service';
+import { AddEmployeeComponent } from '../../add-employee/add-employee/add-employee.component';
 
 @Component({
   selector: 'app-employee',
@@ -249,14 +250,14 @@ addEmployee(){
 
   if(screen.width >= 800) {
     this.width = "600px";
-    this.height ="770px";
+    this.height ="700px";
   }
 
-  // this.dialog.open(NewcustomerComponent, {
-  //   width: `${this.width}`|| "",
-  //   height:`${this.height}`|| "",
-  //   panelClass:"custom-modalbox-NoMoreComponent", 
-  // });
+  this.dialog.open(AddEmployeeComponent, {
+    width: `${this.width}`|| "",
+    height:`${this.height}`|| "",
+    panelClass:"custom-modalbox-NoMoreComponent", 
+  });
 }
 
    // search

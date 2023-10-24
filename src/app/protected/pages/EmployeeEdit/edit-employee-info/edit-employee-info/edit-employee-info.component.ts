@@ -63,8 +63,6 @@ export class EditEmployeeInfoComponent implements OnInit {
     setTimeout( ()=>{
       this.dialogRef.close();
     },500)
-
-
   }
 
   onSaveForm(){

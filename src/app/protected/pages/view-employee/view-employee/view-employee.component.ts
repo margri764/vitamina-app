@@ -7,6 +7,9 @@ import { EditEmployeeNameComponent } from '../../EmployeeEdit/edit-employee-name
 import { EditEmployeeInfoComponent } from '../../EmployeeEdit/edit-employee-info/edit-employee-info/edit-employee-info.component';
 import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 import { EditEmployeeSkillsComponent } from '../../EmployeeEdit/edit-employee-skills/edit-employee-skills/edit-employee-skills.component';
+import { take } from 'rxjs';
+import { AskDelSkillComponent } from 'src/app/protected/messages/ask-del-skill/ask-del-skill/ask-del-skill.component';
+import { ViewProjectComponent } from 'src/app/protected/messages/view-project/view-project/view-project.component';
 
 @Component({
   selector: 'app-view-employee',
@@ -21,6 +24,8 @@ export class ViewEmployeeComponent implements OnInit {
   width : string = '';
   id : string = '';
   phone : boolean = false;
+  delSkill : boolean = false;
+
 
   employee: any = {
                   name: '',
@@ -52,6 +57,8 @@ export class ViewEmployeeComponent implements OnInit {
 
     this.errorService.closeIsLoading$.subscribe( (emmited)=>{ if(emmited){this.isLoading = false}});
     this.employeeService.updateEditingEmployee$.subscribe( (emmited)=>{ if(emmited){this.getEmployeeById(this.id)}});
+    this.getEmployeeProjects(this.id)
+  
 
   }
 
@@ -64,6 +71,19 @@ export class ViewEmployeeComponent implements OnInit {
       });
 
   }
+
+  projects : any [] = [];
+
+  getEmployeeProjects(id:string){
+    this.isLoading = true;
+    this.employeeService.getEmployeeProjects(id).subscribe( 
+      ( {projects} )=>{
+        this.projects = projects;
+        this.isLoading = false;
+      });
+
+  }
+
 
   edit( value : string, employee:any){
 
@@ -79,12 +99,67 @@ export class ViewEmployeeComponent implements OnInit {
       case 'add':
                  this.openDialogAddSkill(employee)
       break;
+
+      case 'del':
+                this.delSkill = !this.delSkill;
+      break;
       default:
         break;
     }
 
   }
 
+
+  deleteSkill( skill : any){   
+
+    let { skillList } = this.employee;
+    
+    skillList = skillList.filter( (item:any)=> item !== skill);
+    const updatedEmployee = {...this.employee};
+
+    updatedEmployee.skillList = skillList;
+
+    if(screen.width >= 800) {
+      this.width = "400px";
+      this.height = "280px";
+    }
+  
+      this.dialog.open(AskDelSkillComponent, {
+        width: `${this.width}`|| "",
+        height:`${this.height}`|| "",
+        panelClass:"custom-modalbox-edit",
+      });
+    
+    this.employeeService.authDelSkill$.pipe(
+      take(1)
+    ).subscribe((auth)=>{
+      if(auth){
+        this.employeeService.updateEmployeeSkill(updatedEmployee, this.employee._id).subscribe( ({success})=>{
+          if(success){
+            this.getEmployeeById(this.employee._id)
+          }
+      });
+      }
+
+    })
+    
+ 
+  }
+
+  viewProject( project:any){
+    console.log(project);
+    if(screen.width >= 800) {
+      this.width = "600px";
+      this.height = "650px";
+    }
+  
+      this.dialog.open(ViewProjectComponent, {
+        data:  project,
+        width: `${this.width}`|| "",
+        height:`${this.height}`|| "",
+        panelClass:"custom-modalbox-edit",
+      });
+  }
 
   openDialogName( employee:any){
 
@@ -100,7 +175,6 @@ export class ViewEmployeeComponent implements OnInit {
         panelClass:"custom-modalbox-edit",
       });
   }
-
   
   openDialogInfo( employee:any){
 
@@ -120,11 +194,11 @@ export class ViewEmployeeComponent implements OnInit {
     
   openDialogAddSkill( employee:any){
 
+    this.delSkill = false;
     if(screen.width >= 800) {
       this.width = "600px";
       this.height = "260px";
     }
-  
       this.dialog.open(EditEmployeeSkillsComponent, {
         data:  employee,
         width: `${this.width}`|| "",

@@ -138,10 +138,24 @@ export class ErrorService {
 
     if (error.status === 404 ) {
       this.closeIsLoading$.emit(true);
-      // ojo esto va en duro en el componente para redirigir al login!!
       this.openGenericMsgAlert('Internal Server Error. Sorry, something went wrong on our server. Please try again later')
       return of(null);
     }
+
+    if (error.status === 400 && error.error.success === false) {
+      this.openGenericMsgAlert(error.error.error);
+      this.closeIsLoading$.emit(true);
+
+      return of(null);
+  }
+    
+
+    if (error.status === 400) {
+        this.openGenericMsgAlert(error.error.message);
+        this.closeIsLoading$.emit(true);
+        return of(null);
+    }
+      
 
     if (error.statusText === "Unknown Error" ) {
       this.closeIsLoading$.emit(true);

@@ -1,27 +1,123 @@
-.shape {
-    width: 200px; /* Ancho del rectángulo */
-    height: 100px; /* Alto del rectángulo */
-    background-color: #3498db; /* Color del rectángulo */
-    border-top-left-radius: 100px 100px; /* Radio del semicírculo izquierdo */
-    border-top-right-radius: 100px 100px; /* Radio del semicírculo derecho */
-    position: relative;
-    display: flex;
+
+.leftSizeSkill{
+    width: 30px; 
+    height: 40px; 
+    border-left: 1px solid rgb(37, 150, 190); 
+    border-top: 1px solid rgb(37, 150, 190); 
+    border-bottom: 1px solid rgb(37, 150, 190); 
+    border-bottom-left-radius: 50%; 
+    border-top-left-radius: 50%;
+}
+
+.centerSizeSkill{
+    min-width: 70px; 
+    height: 40px; 
+    border-top: 1px solid rgb(37, 150, 190); 
+    border-bottom: 1px solid rgb(37, 150, 190); 
+    display: flex; 
+    justify-content: center; 
+    text-align: center; 
     align-items: center;
-    justify-content: center;
+    font-size: 0.9em;
+    
 }
 
-.semicircle {
-    width: 100px; /* Diámetro del semicírculo */
-    height: 100px; /* Diámetro del semicírculo */
-    background-color: #3498db; /* Color del semicírculo */
-    border-radius: 50% 50% 0 0; /* Hace que el elemento sea un semicírculo */
-    position: absolute;
+.rigthSizeSkill{
+    width: 30px; 
+    height: 40px; 
+    border-right: 1px solid rgb(37, 150, 190); 
+    border-top: 1px solid rgb(37, 150, 190); 
+    border-bottom: 1px solid rgb(37, 150, 190); 
+    border-bottom-right-radius: 50%; 
+    border-top-right-radius: 50%;
 }
 
-.semicircle.left {
-    left: 0;
+.leftSizeSkillRed{
+    width: 30px; 
+    height: 40px; 
+    border-left: 1px solid red; 
+    border-top: 1px solid red; 
+    border-bottom: 1px solid red; 
+    border-bottom-left-radius: 50%; 
+    border-top-left-radius: 50%;
 }
 
-.semicircle.right {
-    right: 0;
+.centerSizeSkillRed{
+    min-width: 70px; 
+    height: 40px; 
+    border-top: 1px solid red; 
+    border-bottom: 1px solid red; 
+    display: flex; 
+    justify-content: center; 
+    text-align: center; 
+    align-items: center;
+    font-size: 0.9em;
+    
 }
+
+.rigthSizeSkillRed{
+    width: 30px; 
+    height: 40px; 
+    border-right: 1px solid red; 
+    border-top: 1px solid red; 
+    border-bottom: 1px solid red; 
+    border-bottom-right-radius: 50%; 
+    border-top-right-radius: 50%;
+}
+
+@media only screen and (max-width: 574px) {
+  
+
+    .leftSizeSkill{
+        width: 30px; 
+        height: 30px; 
+    }
+    
+    .centerSizeSkill{
+        min-width: 50px; 
+        height: 30px; 
+        font-size: 0.6em;
+    }
+    
+    .rigthSizeSkill{
+        width: 30px; 
+        height: 30px; 
+    }
+
+    .leftSizeSkillRed{
+        width: 30px; 
+        height: 30px; 
+    }
+    
+    .centerSizeSkillRed{
+        min-width: 50px; 
+        height: 30px; 
+        font-size: 0.6em;
+    }
+    
+    .rigthSizeSkillRed{
+        width: 30px; 
+        height: 30px; 
+    }
+
+
+    .icon{
+        width: 30px;
+        height: 30px;
+        .mmaterial-symbols-outlined{
+            transform: scale(0.6);
+        }
+    }
+  
+    
+}
+    
+  
+  //Extra small devices (phones, 600px and down) */
+  @media only screen and (min-width: 800px) {
+  
+
+  
+  
+  }
+  

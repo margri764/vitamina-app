@@ -4,24 +4,27 @@
     <!-- <div fxLayout="row wrap"  fxLayoutAlign="end center" fxFlex="100"  class="mt-20">
       <span class="material-symbols-outlined notranslate cursor" (click)="close()" style="transform: scale(1.3); margin-right: 20px;">close</span> 
     </div>   -->
-        <span class="font" fxFlex="100" style=" font-size: 1.5em; text-align: start; font-weight: bold; "> Add skill</span>        
-    
-     
-      <form  [formGroup]="myForm"  fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" style="margin-top: 20px;">     
-        
+
+       <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" style="">
+        <span class="font" fxFlex="80" style=" font-size: 1.5em; text-align: start; font-weight: bold; "> Add skill</span>        
+        <span class="material-symbols-outlined notranslate cursor" (click)="close()" style="transform: scale(1.3); margin-right: 20px;">close</span> 
+      </div>
+
+      <form  [formGroup]="myForm"  fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" style="margin-top: 30px;">     
           <mat-form-field  appearance="outline" class="font " fxFlex="100"  >
-            <input type="text" matInput  placeholder="Add skill"  name="itemSearch" formControlName="itemSearch"  >
+            <input type="text" matInput  placeholder="Add skill"  name="itemSearch" formControlName="itemSearch" autocomplete="off" >
             <mat-icon matSuffix style="transform:scale(1.5); color: rgb(37, 150, 190); margin-right: 10px;" *ngIf="!isSkillFound">search</mat-icon>
             <mat-icon matSuffix class="material-symbols-outlined notranslate" style="transform:scale(1); cursor: pointer; margin-right: 10px;" *ngIf="isSkillFound" (click)="delSelectedSkill()" >close</mat-icon>
         </mat-form-field>
+        <mat-error class="font" *ngIf="errorLabel"> Skill already exist in employee</mat-error>
           
       </form>
 
         <!-- start suggested    -->
-        <div fxLayout="row wrap"  fxLayoutAlign.xs="start center" fxLayoutAlign="center center"  fxFlex="100" *ngIf="mostrarSugerencias" style="margin-top: 20px;" >
+        <div fxLayout="row wrap"  fxLayoutAlign.xs="start center" fxLayoutAlign="center center"  fxFlex="100" *ngIf="mostrarSugerencias"  >
                 
                         
-            <div fxLayout="row wrap"  fxLayoutAlign.xs="start center"  fxLayoutAlign="center center" fxFlex="100" class="font" style="margin-top: 3px;"  *ngFor="let item of suggested" >
+            <div fxLayout="row wrap"  fxLayoutAlign.xs="start center"  fxLayoutAlign="center center" fxFlex="100" class="font" style="margin-top: 7px;"  *ngFor="let item of suggested" >
 
                 <div fxLayout="row wrap" fxLayoutAlign="space-between center"  fxFlex="100"  class="fs-4 boxSelection" >
                    <div fxLayout="row wrap" fxLayoutAlign="start center"  fxFlex="90"   >

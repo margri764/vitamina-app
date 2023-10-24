@@ -57,6 +57,9 @@ import { registerLocaleData } from '@angular/common';
 import { environment } from 'src/environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { EditEmployeeSkillsComponent } from './protected/pages/EmployeeEdit/edit-employee-skills/edit-employee-skills/edit-employee-skills.component';
+import { AskDelSkillComponent } from './protected/messages/ask-del-skill/ask-del-skill/ask-del-skill.component';
+import { AddEmployeeComponent } from './protected/pages/add-employee/add-employee/add-employee.component';
+import { AddSkillRateComponent } from './protected/pages/add-skill-rate/add-skill-rate/add-skill-rate.component';
 
 
 registerLocaleData( localeEs );
@@ -90,7 +93,10 @@ registerLocaleData( localeEs );
     EmployeeComponent,
     EditEmployeeNameComponent,
     EditEmployeeInfoComponent,
-    EditEmployeeSkillsComponent
+    EditEmployeeSkillsComponent,
+    AskDelSkillComponent,
+    AddEmployeeComponent,
+    AddSkillRateComponent
   ],
   imports: [
     BrowserModule,

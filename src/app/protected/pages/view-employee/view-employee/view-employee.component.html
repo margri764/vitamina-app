@@ -73,36 +73,77 @@
                     
             </div>
 
-            <!-- skills -->
+            <!-- start skills -->
             <div fxLayout="row wrap"  fxLayoutAlign="center center"  fxFlex="100" class="whiteframe" style="background-color: white; padding: 25px; margin-top: 7px;">
 
                 <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="100" style="background-color: rgb(37, 150, 190); height: 60px; border-radius: 5px; padding: 15px; margin-top: 30px;">
 
-                    <div fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex="80" >
+                    <div fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex="70" >
                         <span class="material-symbols-outlined notranslate" style=" transform: scale(1.2); color: white; "> description </span> &nbsp; &nbsp;&nbsp;
                         <span class="font" style="color: white;">Skills</span>
                     </div>
                     
-                     <div fxLayout="row wrap"  fxLayoutAlign="end center" fxFlex="20" >
+                     <div fxLayout="row wrap"  fxLayoutAlign="end center" fxFlex="30" >
 
                         <div class="icon mr-10"   >
-                            <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57); transform: scale(0.85);" (click)="edit('skill', employee)"> edit </span>
+                            <span class="material-symbols-outlined notranslate cursor" style="color: red; " (click)="edit('del', employee)"> delete </span>
                         </div>
-                        <div class="icon" style="margin-right: 5px;"  >
-                            <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57);" (click)="edit('add', employee)"> add </span>
+                        <div class="icon"  >
+                            <span class="material-symbols-outlined notranslate cursor" style="color: green;" (click)="edit('add', employee)"> add </span>
                         </div>
                     </div>
                 </div>
 
-                        <div fxLayout="row wrap"  fxLayoutAlign="center center"  fxFlex="100"  style="padding: 25px; margin-top: 7px;">
+                <div fxLayout="row wrap"  fxLayoutAlign="start center"  fxFlex="100" style="margin-top: 40px; margin-bottom: 20px;" >
 
+                            <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex.xs="50" *ngFor="let skill of employee.skillList">
 
-                            <button mat-stroked-button *ngFor="let skill of employee.skillList" style="border: 1px solid rgb(37, 150, 190); min-width: 100px; margin-left: 10px; ">
-                                {{skill}} </button>
-                        </div>        
+                                <!-- skill btn   -->
+                                <div fxLayout="row wrap"  fxLayoutAlign="start center"  fxFlex="100" style="margin-top: 9px; margin-left: 5px;" >
+                             
+                                    <div [ngClass]="delSkill ? 'leftSizeSkillRed':' leftSizeSkill'" ></div>
+
+                                    <div [ngClass]="delSkill ? 'centerSizeSkillRed':' centerSizeSkill'" class="font">
+                                        <span > {{skill}} </span>
+                                    </div>
+                                    
+                                    <div [ngClass]="delSkill ? 'rigthSizeSkillRed':' rigthSizeSkill'"></div>
+                                    
+                                    <span class="material-symbols-outlined notranslate cursor" style="color: red; margin-top: 0px;" (click)="deleteSkill(skill)" *ngIf="delSkill"> highlight_off </span>
+                                </div>        
+                            </div>        
+                </div>        
                         
 
-        </div>
+            </div>
+            <!-- end skills -->
+
+                <!-- start projects -->
+                <div fxLayout="row wrap"  fxLayoutAlign="center center"  fxFlex="100" class="whiteframe" style="background-color: white; padding: 25px; margin-top: 7px;">
+
+                    <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="100" style="background-color: rgb(37, 150, 190); height: 60px; border-radius: 5px; padding: 15px; margin-top: 30px;">
+    
+                        <div fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex="70" >
+                            <span class="material-symbols-outlined notranslate" style=" transform: scale(1.2); color: white; "> description </span> &nbsp; &nbsp;&nbsp;
+                            <span class="font" style="color: white;">Previous projects</span>
+                        </div>
+                       
+                    </div>
+    
+                    <div fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex="100" style="padding: 30px;" >
+
+                        <ul style="padding-left: 10px">
+                            <li *ngFor="let project of projects" style="cursor: pointer; color: blue; margin-left: 0px !important;" (click)="viewProject(project)" class="font">
+                              {{ project.project_scope.name }}
+                            </li>
+                          </ul>
+                    </div>        
+                            
+    
+                </div>
+                <!-- end projects -->
+    
+
    
    </div>
 </div>
