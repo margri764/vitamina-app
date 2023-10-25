@@ -12,6 +12,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ViewProjectComponent } from 'src/app/protected/messages/view-project/view-project/view-project.component';
 import { EmployeeService } from 'src/app/protected/services/employee/employee.service';
 import { AddEmployeeComponent } from '../../add-employee/add-employee/add-employee.component';
+import { AddSkillRateComponent } from '../../add-skill-rate/add-skill-rate/add-skill-rate.component';
 
 @Component({
   selector: 'app-employee',
@@ -253,7 +254,8 @@ addEmployee(){
     this.height ="700px";
   }
 
-  this.dialog.open(AddEmployeeComponent, {
+  // this.dialog.open(AddEmployeeComponent, {
+  this.dialog.open(AddSkillRateComponent, {
     width: `${this.width}`|| "",
     height:`${this.height}`|| "",
     panelClass:"custom-modalbox-NoMoreComponent", 

@@ -15,6 +15,11 @@ export class AddSkillRateComponent implements OnInit {
   confirm : boolean = false;
   isLoading : boolean = false;
   private body : any;
+  categories : any [] = [];
+  phone : boolean = false;
+  selSkill : boolean = false;
+  selectedSkill: string | null = null;
+
 
   constructor(
              private fb: FormBuilder,
@@ -25,18 +30,51 @@ export class AddSkillRateComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: any,
 
   ) {
+
+    (screen.width > 800) ? this.phone = false : this.phone = true;
+
     this.myForm = this.fb.group({
-      hourly_rate: [ '', [Validators.required] ],
       skillList:  [ '', [Validators.required]],
  
     });
   }
 
   ngOnInit(): void {
-    
+
     this.body = this.data;
-    console.log(this.body);
     this.errorService.closeIsLoading$.subscribe( (emmited)=>{ if(emmited){this.isLoading = false}});
+    this.getAllSkillCategories();
+   
+  }
+
+  selectSkill( skill:any ){
+    this.selectedSkill = skill;
+  }
+
+  skills : any [] = [];
+  
+  selectCategory( category:any ){
+   
+    // this.selSkill = true;
+    this.skills = category.skillList;
+
+    console.log(this.skills);
+
+  }
+
+
+  getAllSkillCategories(){
+
+    this.isLoading = true;
+    this.employeeService.getAllSkillCategories().subscribe( 
+      ({success, categories})=>{
+        this.isLoading = false;
+        if(success){
+          this.categories = categories;
+          console.log(categories);
+        }
+      } )
+
   }
   
   close(){

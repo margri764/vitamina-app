@@ -113,6 +113,15 @@ export class EmployeeService {
             return res} )
     );
   }
+
+  getAllSkillCategories(  ){
+    return this.http.get<any>(`${this.baseUrl}api/skill/getAllCategories`)
+  .pipe(
+    map( res =>{ 
+          console.log('from service getAllSkillCategories', res)
+            return res} )
+    );
+  }
   
 
   
