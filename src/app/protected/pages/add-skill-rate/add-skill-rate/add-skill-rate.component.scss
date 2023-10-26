@@ -1,111 +1,71 @@
+.skillSelected{
+     line-height: 35px; 
+     min-width: 100px; 
+     background-color:rgb(37, 150, 190) !important;
+     word-wrap:break-word; 
+     color: white;
+     border-radius: 60px;
+     font-size: 0.9em;
+     cursor: pointer;
 
-.leftSizeSkill{
-    width: 30px; 
-    height: 40px; 
-    border-left: 1px solid rgb(37, 150, 190); 
-    border-top: 1px solid rgb(37, 150, 190); 
-    border-bottom: 1px solid rgb(37, 150, 190); 
-    border-bottom-left-radius: 50%; 
-    border-top-left-radius: 50%;
+     box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.22);
+     -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.22);
+     -moz-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.22);
 }
 
-.centerSizeSkill{
-    min-width: 70px; 
-    height: 40px; 
-    border-top: 1px solid rgb(37, 150, 190); 
-    border-bottom: 1px solid rgb(37, 150, 190); 
-    display: flex; 
-    justify-content: center; 
-    text-align: center; 
-    align-items: center;
+.skill{
+    line-height: 35px; 
+    min-width: 100px; 
+    border: 1px solid rgb(37, 150, 190) ;
+    word-wrap:break-word; 
+    border-radius: 60px;
     font-size: 0.9em;
-    
+    background-color: rgb(254, 254, 254);
+    cursor: pointer;
+
 }
 
-.rigthSizeSkill{
-    width: 30px; 
-    height: 40px; 
-    border-right: 1px solid rgb(37, 150, 190); 
-    border-top: 1px solid rgb(37, 150, 190); 
-    border-bottom: 1px solid rgb(37, 150, 190); 
-    border-bottom-right-radius: 50%; 
-    border-top-right-radius: 50%;
-}
 
-.leftSizeSkillRed{
-    width: 30px; 
-    height: 40px; 
-    border-left: 1px solid rgb(37, 150, 190); 
-    border-top: 1px solid rgb(37, 150, 190); 
-    border-bottom: 1px solid rgb(37, 150, 190); 
-    border-bottom-left-radius: 50%; 
-    border-top-left-radius: 50%;
-    background-color: rgb(37, 150, 190);
-    color: white;
-}
-
-.centerSizeSkillRed{
-    min-width: 70px; 
-    height: 40px; 
-    border-top: 1px solid rgb(37, 150, 190); 
-    border-bottom: 1px solid rgb(37, 150, 190); 
-    display: flex; 
-    justify-content: center; 
-    text-align: center; 
-    align-items: center;
+.save{
+    line-height: 35px; 
+    min-width: 100px; 
+    border: 1px solid green ;
+    word-wrap:break-word; 
+    border-radius: 60px;
     font-size: 0.9em;
-    background-color: rgb(37, 150, 190);
-    color: white;
-    
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
 }
 
-.rigthSizeSkillRed{
-    width: 30px; 
-    height: 40px; 
-    border-right: 1px solid rgb(37, 150, 190); 
-    border-top: 1px solid rgb(37, 150, 190); 
-    border-bottom: 1px solid rgb(37, 150, 190); 
-    border-bottom-right-radius: 50%; 
-    border-top-right-radius: 50%;
-    background-color: rgb(37, 150, 190);
+.saveSelected{
+    line-height: 35px; 
+    min-width: 100px; 
+    word-wrap:break-word; 
+    border-radius: 60px;
+    font-size: 0.9em;
+    background-color: green;
     color: white;
+    cursor: pointer;
+
+    box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.22);
+    -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.22);
+    -moz-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.22);
+
 }
+
+.category{
+    height: 50px; 
+    margin-top: 15px; 
+    font-size: 1em; 
+    margin-left: 10px; 
+}
+
+
+
 
 @media only screen and (max-width: 574px) {
-  
-
-    .leftSizeSkill{
-        width: 30px; 
-        height: 30px; 
-    }
-    
-    .centerSizeSkill{
-        min-width: 50px; 
-        height: 30px; 
-        font-size: 0.6em;
-    }
-    
-    .rigthSizeSkill{
-        width: 30px; 
-        height: 30px; 
-    }
-
-    .leftSizeSkillRed{
-        width: 30px; 
-        height: 30px; 
-    }
-    
-    .centerSizeSkillRed{
-        min-width: 50px; 
-        height: 30px; 
-        font-size: 0.6em;
-    }
-    
-    .rigthSizeSkillRed{
-        width: 30px; 
-        height: 30px; 
-    }
-
 
     .icon{
         width: 30px;
@@ -114,6 +74,12 @@
             transform: scale(0.6);
         }
     }
+
+    .category{
+        font-size: 0.7em; 
+    }
+    
+    
   
     
 }
@@ -123,7 +89,11 @@
   @media only screen and (min-width: 800px) {
   
 
-  
+    .category{
+        font-size: 0.8em; 
+    }
+    
+    
   
   }
   

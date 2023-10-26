@@ -19,6 +19,8 @@ export class AddSkillRateComponent implements OnInit {
   phone : boolean = false;
   selSkill : boolean = false;
   selectedSkill: string | null = null;
+  skills : any [] = [];
+  arrSkills : any []=[];
 
 
   constructor(
@@ -35,6 +37,7 @@ export class AddSkillRateComponent implements OnInit {
 
     this.myForm = this.fb.group({
       skillList:  [ '', [Validators.required]],
+      rate:  [ '', [Validators.required]],
  
     });
   }
@@ -47,21 +50,71 @@ export class AddSkillRateComponent implements OnInit {
    
   }
 
-  selectSkill( skill:any ){
-    this.selectedSkill = skill;
+  showButton : boolean = false;
+  showDelSkill : boolean = false;
+
+  onSelect(skill: any, event: MouseEvent) {
+
+    const target = event.target as HTMLElement;
+  
+    if (target.classList.contains('skillSelected')) {
+
+      target.classList.remove('skillSelected');
+
+      const index = this.arrSkills.indexOf(skill);
+      if (index !== -1) {
+        console.log(index);
+        this.arrSkills.splice(index, 1);
+      }
+    } else {
+      target.classList.add('skillSelected');
+      this.arrSkills.push(skill);
+    }
+
+    this.showButton = true;
+    this.selectedSkills = this.arrSkills;
   }
 
-  skills : any [] = [];
   
   selectCategory( category:any ){
    
-    // this.selSkill = true;
     this.skills = category.skillList;
+  }
 
-    console.log(this.skills);
+  selectedSkills : any [] = [];
+
+  saveSkills(event: MouseEvent){
+
+    
+      const target = event.target as HTMLElement;
+    
+      if (target.classList.contains('saveSelected')) {
+  
+        target.classList.remove('saveSelected');
+      }else {
+        target.classList.add('saveSelected');
+      }
+
+      setTimeout( ()=>{
+        this.skills = [];
+        this.showButton = false;
+      },700)
+
 
   }
 
+  deleteSkill( skill : any){   
+
+    
+    
+    this.selectedSkills= this.selectedSkills.filter( (item:any)=> item !== skill);
+
+ 
+  }
+
+  delSkill(){
+    this.showDelSkill = !this.showDelSkill;
+  }
 
   getAllSkillCategories(){
 
