@@ -30,6 +30,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatTreeModule} from '@angular/material/tree';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import {MatStepperModule} from '@angular/material/stepper';
 
 
 
@@ -67,6 +68,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatListModule,
     MatProgressBarModule,
     MatPaginatorModule,
+    MatStepperModule
   ]
 })
 export class MaterialModule { }

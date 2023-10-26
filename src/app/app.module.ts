@@ -60,6 +60,9 @@ import { EditEmployeeSkillsComponent } from './protected/pages/EmployeeEdit/edit
 import { AskDelSkillComponent } from './protected/messages/ask-del-skill/ask-del-skill/ask-del-skill.component';
 import { AddEmployeeComponent } from './protected/pages/add-employee/add-employee/add-employee.component';
 import { AddSkillRateComponent } from './protected/pages/add-skill-rate/add-skill-rate/add-skill-rate.component';
+import { AskGenericDeleteComponent } from './protected/messages/ask-generic-delete/ask-generic-delete/ask-generic-delete.component';
+import { EditEmployeeRateComponent } from './protected/EmployeeEdit/edit-employee-rate/edit-employee-rate/edit-employee-rate.component';
+import { ProjectComponent } from './protected/pages/project/project/project.component';
 
 
 registerLocaleData( localeEs );
@@ -96,7 +99,10 @@ registerLocaleData( localeEs );
     EditEmployeeSkillsComponent,
     AskDelSkillComponent,
     AddEmployeeComponent,
-    AddSkillRateComponent
+    AddSkillRateComponent,
+    AskGenericDeleteComponent,
+    EditEmployeeRateComponent,
+    ProjectComponent
   ],
   imports: [
     BrowserModule,

@@ -1,11 +1,11 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { setTempClient, setUser, unSetTempClient, unSetUser } from './auth.actions';
+import { setTempEmployee, setUser,  unSetTempEmployee, unSetUser } from './auth.actions';
 import { User } from './protected/models/user.models';
 
 
 export interface Auth {
     user: User | null; 
-    tempClient: any | null; 
+    tempEmployee: any | null; 
     // staff: Staff | null; 
     // verifyAccount : boolean,
     // path : string,
@@ -27,7 +27,7 @@ export interface Auth {
 
 export const initialState: Auth = {
      user: null,
-     tempClient: null,
+     tempEmployee: null,
     //  staff: null,
     //  verifyAccount: false,
     //  banner : true,
@@ -49,8 +49,8 @@ const _authReducer = createReducer(initialState,
     on( setUser, (state, { user }) => ({ ...state, user: { ...user }  })),
     on( unSetUser, state => ({ ...state, user: null  })),
 
-    on( setTempClient, (state, { client }) => ({ ...state, tempClient: { ...client }  })),
-    on( unSetTempClient, state => ({ ...state, tempClient: null  })),
+    on( setTempEmployee, (state, { employee }) => ({ ...state, tempEmployee: { ...employee }  })),
+    on( unSetTempEmployee, state => ({ ...state, tempEmployee: null  })),
 
 
     

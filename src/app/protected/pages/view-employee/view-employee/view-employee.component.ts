@@ -10,6 +10,8 @@ import { EditEmployeeSkillsComponent } from '../../EmployeeEdit/edit-employee-sk
 import { take } from 'rxjs';
 import { AskDelSkillComponent } from 'src/app/protected/messages/ask-del-skill/ask-del-skill/ask-del-skill.component';
 import { ViewProjectComponent } from 'src/app/protected/messages/view-project/view-project/view-project.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { EditEmployeeRateComponent } from 'src/app/protected/EmployeeEdit/edit-employee-rate/edit-employee-rate/edit-employee-rate.component';
 
 @Component({
   selector: 'app-view-employee',
@@ -25,6 +27,8 @@ export class ViewEmployeeComponent implements OnInit {
   id : string = '';
   phone : boolean = false;
   delSkill : boolean = false;
+  myForm!: FormGroup;
+  projects : any [] = [];
 
 
   employee: any = {
@@ -42,14 +46,19 @@ export class ViewEmployeeComponent implements OnInit {
                   private activatedRoute : ActivatedRoute,
                   private employeeService : EmployeeService,
                   private errorService : ErrorService,
-                  private dialog : MatDialog
+                  private dialog : MatDialog,
+                  private fb : FormBuilder
                   // private store : Store<AppState>
  )
 { 
   (screen.width <=800) ? this.phone = true : this.phone = false;
 
   this.activatedRoute.params.subscribe(
-   ( {id} ) =>{ this.getEmployeeById(id); this.id = id; })
+   ( {id} ) =>{ this.getEmployeeById(id); this.id = id; });
+
+   this.myForm = this.fb.group({
+    hourly_rate:  [ '', [Validators.required]],
+  });
 
 }
 
@@ -58,6 +67,10 @@ export class ViewEmployeeComponent implements OnInit {
     this.errorService.closeIsLoading$.subscribe( (emmited)=>{ if(emmited){this.isLoading = false}});
     this.employeeService.updateEditingEmployee$.subscribe( (emmited)=>{ if(emmited){this.getEmployeeById(this.id)}});
     this.getEmployeeProjects(this.id)
+
+    this.myForm = this.fb.group({
+      hourly_rate:  [ this.employee.hourly_rate, [Validators.required]],
+    });
   
 
   }
@@ -72,7 +85,6 @@ export class ViewEmployeeComponent implements OnInit {
 
   }
 
-  projects : any [] = [];
 
   getEmployeeProjects(id:string){
     this.isLoading = true;
@@ -98,11 +110,16 @@ export class ViewEmployeeComponent implements OnInit {
     
       case 'add':
                  this.openDialogAddSkill(employee)
-      break;
+        break;
 
       case 'del':
-                this.delSkill = !this.delSkill;
-      break;
+                 this.delSkill = !this.delSkill;
+        break;
+
+      case 'hourly':
+                 this.openDialogEditHourly(employee)
+        break;
+      
       default:
         break;
     }
@@ -190,6 +207,22 @@ export class ViewEmployeeComponent implements OnInit {
         panelClass:"custom-modalbox-edit",
       });
   }
+
+  openDialogEditHourly( employee:any){
+
+    if(screen.width >= 800) {
+      this.width = "600px";
+      this.height = "270px";
+    }
+  
+      this.dialog.open(EditEmployeeRateComponent, {
+        data:  employee,
+        width: `${this.width}`|| "",
+        height:`${this.height}`|| "",
+        panelClass:"custom-modalbox-edit",
+      });
+  }
+
 
     
   openDialogAddSkill( employee:any){

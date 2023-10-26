@@ -5,8 +5,8 @@ export const setUser = createAction( '[Auth] setUser',
     props<{ user: any }>()
 );
 
-export const setTempClient = createAction( '[Auth] setTempClient',
-    props<{ client: any }>()
+export const setTempEmployee = createAction( '[Auth] setTempEmployee',
+    props<{ employee: any }>()
 );
 
 
@@ -15,4 +15,4 @@ export const setTempClient = createAction( '[Auth] setTempClient',
 
 /************************** UNSET *******************************/
 export const unSetUser = createAction('[Auth] unSetUser');
-export const unSetTempClient = createAction('[Auth] unSetTempClient');
+export const unSetTempEmployee = createAction('[Auth] unSetTempEmployee');

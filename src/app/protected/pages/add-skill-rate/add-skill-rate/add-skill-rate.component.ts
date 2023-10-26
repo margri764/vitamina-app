@@ -1,8 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
+import { filter } from 'rxjs';
+import { AppState } from 'src/app/app.reducer';
+import { getDataSS } from 'src/app/protected/Storage';
 import { EmployeeService } from 'src/app/protected/services/employee/employee.service';
 import { ErrorService } from 'src/app/protected/services/error/error.service';
+import * as authActions from 'src/app/auth.actions';
+import { GenericSuccessComponent } from 'src/app/protected/messages/generic-success/generic-success/generic-success.component';
+
 
 @Component({
   selector: 'app-add-skill-rate',
@@ -21,6 +28,16 @@ export class AddSkillRateComponent implements OnInit {
   selectedSkill: string | null = null;
   skills : any [] = [];
   arrSkills : any []=[];
+  
+  showButton : boolean = false;
+  showDelSkill : boolean = false;
+  isSkillSelected = false;
+  isSelectedSkill = false;
+  isCategorySelected = false;
+  isRateSelected = false;
+  selectedSkills : any [] = [];
+tempEmployee : any;
+
 
 
   constructor(
@@ -29,6 +46,7 @@ export class AddSkillRateComponent implements OnInit {
               private employeeService : EmployeeService,
               private errorService : ErrorService,
               private dialog : MatDialog,
+              private store : Store <AppState>,
               @Inject(MAT_DIALOG_DATA) public data: any,
 
   ) {
@@ -36,27 +54,31 @@ export class AddSkillRateComponent implements OnInit {
     (screen.width > 800) ? this.phone = false : this.phone = true;
 
     this.myForm = this.fb.group({
-      skillList:  [ '', [Validators.required]],
-      rate:  [ '', [Validators.required]],
+      hourly_rate:  [ '', [Validators.required]],
  
     });
+
   }
 
   ngOnInit(): void {
 
+    // toDo!!!
+    //si entro aca desde las notificaciones el "body" con los datos basicos del empleado tengo q guardarlos en algun lugar (esto esta xq puedo crear los datos generales y mas tarde querer agregar las skill y el rate)
+
+    this.store.select('auth')
+    .pipe(
+      filter( ({tempEmployee})=>  tempEmployee != null && tempEmployee != undefined),
+    ).subscribe(
+      ({tempEmployee})=>{
+        this.tempEmployee = tempEmployee;
+        this.isLoading = false;
+      })
     this.body = this.data;
     this.errorService.closeIsLoading$.subscribe( (emmited)=>{ if(emmited){this.isLoading = false}});
     this.getAllSkillCategories();
    
   }
 
-  showButton : boolean = false;
-  showDelSkill : boolean = false;
-  isSkillSelected = false;
-  isSelectedSkill = false;
-  isCategorySelected = false;
-  isRateSelected = false;
-  selectedSkills : any [] = [];
 
 
   onSelect(skill: any, event: MouseEvent) {
@@ -129,12 +151,13 @@ export class AddSkillRateComponent implements OnInit {
     this.showDelSkill = !this.showDelSkill;
   }
 
+
   onInput(event: Event) {
     this.isSkillSelected = false;
     this.isCategorySelected = false;
     this.isSelectedSkill = false;
     this.isRateSelected = true;
-    console.log('Valor ingresado:', (event.target as HTMLInputElement).value);
+
   }
   
   onFocus() {
@@ -150,13 +173,11 @@ export class AddSkillRateComponent implements OnInit {
   }
   getAllSkillCategories(){
 
-    this.isLoading = true;
     this.employeeService.getAllSkillCategories().subscribe( 
       ({success, categories})=>{
         this.isLoading = false;
         if(success){
           this.categories = categories;
-          console.log(categories);
         }
       } )
 
@@ -177,19 +198,46 @@ export class AddSkillRateComponent implements OnInit {
 
     this.confirm = true;
 
+
     if ( this.myForm.invalid ) {
       this.myForm.markAllAsTouched();
       return;
     }
 
-    // this.employeeService.addNewEmployee(body).subscribe( 
-    //   ({success})=>{
-    //     this.isLoading = false;
-    //     if(success){
-    //       this.close();
-    //       this.employeeService.updateEditingEmployee$.emit(true);
-    //     }
-    //   });
+    this.isLoading = true;
+    const updatedEmployee = { ...this.tempEmployee };
+    updatedEmployee.skillList = this.selectedSkills;
+    updatedEmployee.hourly_rate = this.myForm.get('hourly_rate')?.value;
+
+  
+    this.employeeService.updateEmployeeById(updatedEmployee, this.tempEmployee._id).subscribe( 
+      ({success})=>{
+        this.isLoading = false;
+        if(success){
+          this.store.dispatch(authActions.unSetTempEmployee());
+          this.employeeService.updateEditingEmployee$.emit(true)
+          this.close();
+          setTimeout(()=>{ this.openDialogSuccesss('Employee created successfully!!'); },900);
+        }
+      });
+  }
+
+  openDialogSuccesss( body:any ){
+
+    let width = "";
+    let height ="";
+
+      if(screen.width >= 800) {
+        width = "400px";
+        height ="300px";
+      }
+    
+      this.dialog.open(GenericSuccessComponent, {
+        data: body,
+        width: `${width}`|| "",
+        height:`${height}`|| "",
+        panelClass:"custom-modalbox-NoMoreComponent", 
+      });
   }
 
  

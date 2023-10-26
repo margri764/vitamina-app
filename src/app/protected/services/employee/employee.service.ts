@@ -11,6 +11,7 @@ export class EmployeeService {
 
     updateEditingEmployee$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
      authDelSkill$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+     authDelEmployee$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
 
   
     // token : string = '';
@@ -21,7 +22,7 @@ export class EmployeeService {
     constructor(  
                   private http : HttpClient,
                   // private store : Store <AppState>,
-                  private router : Router
+                  private router : Router,
                 )
   { 
   }
@@ -75,16 +76,18 @@ export class EmployeeService {
             return res} )
     );
   }
+
+
+
   
-  // deleteEmployeeById( id:any){
-  //                    id = "2737";                   
-  //   return this.http.delete<any>(`${this.baseUrl}api/Employee(delete/${id}`)
-  // .pipe(
-  //   map( res =>{ 
-  //         console.log('desde service deleteCulientById', res)
-  //           return res} )
-  //   );
-  // }
+  deleteEmployeeById( id:string, body:any){
+    return this.http.patch<any>(`${this.baseUrl}api/employee/deleteEmployee/${id}`, body)
+  .pipe(
+    map( res =>{ 
+          console.log('from service deleteEmployeeById', res)
+            return res} )
+    );
+  }
   
   addNewEmployee( body : any){
   

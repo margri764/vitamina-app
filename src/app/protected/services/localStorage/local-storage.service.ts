@@ -16,11 +16,11 @@ export class LocalStorageService {
   {
     }
 
-   loadInitialState() {
-    const storedState = getDataSS("arrArticles");
-    const openOrders = getDataSS("openOrders");
-    const user = getDataLS("user");
-    const tempUser = getDataSS("tempClient");
+    loadInitialState() {
+     const user = getDataLS("user");
+    // const storedState = getDataSS("arrArticles");
+    // const openOrders = getDataSS("openOrders");
+    // const tempUser = getDataSS("tempClient");
     //  console.log(openOrders);
     // console.log(storedState);
 
@@ -30,9 +30,9 @@ export class LocalStorageService {
       this.store.dispatch(authAction.setUser({ user }));
     }
 
-    if(tempUser !== undefined && tempUser !== null){
-      this.store.dispatch(authAction.setTempClient({ client: tempUser }));
-    }
+    // if(tempUser !== undefined && tempUser !== null){
+    //   this.store.dispatch(authAction.setTempClient({ client: tempUser }));
+    // }
 
 
  

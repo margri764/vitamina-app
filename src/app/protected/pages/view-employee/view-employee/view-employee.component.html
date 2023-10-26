@@ -118,31 +118,72 @@
             </div>
             <!-- end skills -->
 
-                <!-- start projects -->
-                <div fxLayout="row wrap"  fxLayoutAlign="center center"  fxFlex="100" class="whiteframe" style="background-color: white; padding: 25px; margin-top: 7px;">
+            <!-- start hourly rate -->
+            <div fxLayout="row wrap"  fxLayoutAlign="center center"  fxFlex="100" class="whiteframe" style="background-color: white; padding: 25px; margin-top: 7px;">
 
-                    <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="100" style="background-color: rgb(37, 150, 190); height: 60px; border-radius: 5px; padding: 15px; margin-top: 30px;">
-    
-                        <div fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex="70" >
-                            <span class="material-symbols-outlined notranslate" style=" transform: scale(1.2); color: white; "> description </span> &nbsp; &nbsp;&nbsp;
-                            <span class="font" style="color: white;">Previous projects</span>
-                        </div>
-                       
+                <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="100" style="background-color: rgb(37, 150, 190); height: 60px; border-radius: 5px; padding: 15px; margin-top: 30px;">
+
+                    <div fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex="70" >
+                        <span class="material-symbols-outlined notranslate" style=" transform: scale(1.2); color: white; "> paid </span> &nbsp; &nbsp;&nbsp;
+                        <span class="font" style="color: white;">Hourly Rate</span>
                     </div>
-    
-                    <div fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex="100" style="padding: 30px;" >
+                    <div fxLayout="row wrap"  fxLayoutAlign="end center" fxFlex="30" >
 
-                        <ul style="padding-left: 10px">
-                            <li *ngFor="let project of projects" style="cursor: pointer; color: blue; margin-left: 0px !important;" (click)="viewProject(project)" class="font">
-                              {{ project.project_scope.name }}
-                            </li>
-                          </ul>
-                    </div>        
-                            
-    
+                        <div class="icon"  >
+                            <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57);" (click)="edit('hourly', employee)"> edit </span>
+                        </div>
+                    </div>
                 </div>
-                <!-- end projects -->
     
+                <div fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex="100" style="margin-top: 40px; padding: 20px;" >
+
+                    <div  class="font" style="border: 1px solid rgb(37, 150, 190); border-radius: 5px; width: 30px; text-align: center; padding: 10px;  ">
+                    U$S
+                    </div>
+                    <!-- <span class="font" style="font-size: 1.1em; margin-left: 10px;"> U$S</span> -->
+                    <div  class="font" style="border: 1px solid rgb(37, 150, 190); border-radius: 5px; width: 100px; text-align: center; padding: 10px; margin-left: 10px; ">
+                        
+                        {{employee.hourly_rate}} &nbsp; &nbsp; &nbsp;  <span style="color: rgb(162, 162, 162);"> /hour </span>
+                    </div>
+                </div>
+
+
+            
+            </div>    
+            <!-- end hourly rate -->
+
+
+            <!-- start projects -->
+            <div fxLayout="row wrap"  fxLayoutAlign="center center"  fxFlex="100" class="whiteframe" style="background-color: white; padding: 25px; margin-top: 7px;">
+
+                <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="100" style="background-color: rgb(37, 150, 190); height: 60px; border-radius: 5px; padding: 15px; margin-top: 30px;">
+
+                    <div fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex="70" >
+                        <span class="material-symbols-outlined notranslate" style=" transform: scale(1.2); color: white; "> description </span> &nbsp; &nbsp;&nbsp;
+                        <span class="font" style="color: white;">Previous projects</span>
+                    </div>
+                    
+                </div>
+
+                <div fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex="100" style="padding: 30px;" *ngIf="projects.length === 0" >
+                    <span class="font" style="font-size: 1.3em;"> No previous projects found</span>
+                </div>
+                
+                <div fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex="100" style="padding: 30px;" >
+
+                    <ul style="padding-left: 10px">
+                        <li *ngFor="let project of projects" style="cursor: pointer; color: blue; margin-left: 0px !important;" (click)="viewProject(project)" class="font">
+                            {{ project.project_scope.name }}
+                        </li>
+                        </ul>
+                </div>        
+
+
+                        
+
+            </div>
+            <!-- end projects -->
+
 
    
    </div>

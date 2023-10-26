@@ -6,6 +6,10 @@ import { EmployeeService } from 'src/app/protected/services/employee/employee.se
 import { ErrorService } from 'src/app/protected/services/error/error.service';
 import { ValidatorService } from 'src/app/protected/services/validator/validator.service';
 import { AddSkillRateComponent } from '../../add-skill-rate/add-skill-rate/add-skill-rate.component';
+import { AppState } from 'src/app/app.reducer';
+import { Store } from '@ngrx/store';
+import * as authActions from 'src/app/auth.actions';
+import { GenericSuccessComponent } from 'src/app/protected/messages/generic-success/generic-success/generic-success.component';
 
 @Component({
   selector: 'app-add-employee',
@@ -17,6 +21,8 @@ export class AddEmployeeComponent implements OnInit {
   myForm!: FormGroup;
   confirm : boolean = false;
   isLoading : boolean = false;
+  tempEmployee : any;
+
 
   constructor(
              private fb: FormBuilder,
@@ -24,7 +30,8 @@ export class AddEmployeeComponent implements OnInit {
               private employeeService : EmployeeService,
               private errorService : ErrorService,
               private validatorService : ValidatorService,
-              private dialog : MatDialog
+              private dialog : MatDialog,
+              private store : Store <AppState>,
 
   ) {
     this.myForm = this.fb.group({
@@ -45,9 +52,8 @@ export class AddEmployeeComponent implements OnInit {
   ngOnInit(): void {
 
     this.errorService.closeIsLoading$.subscribe( (emmited)=>{ if(emmited){this.isLoading = false}});
-
+  
   }
-
   
   close(){
     this.dialogRef.close();
@@ -58,8 +64,6 @@ export class AddEmployeeComponent implements OnInit {
     setTimeout( ()=>{
       this.dialogRef.close();
     },500)
-
-
   }
 
   onSaveForm(){
@@ -83,24 +87,25 @@ export class AddEmployeeComponent implements OnInit {
                   }
               }
     
-    saveDataSS('tempEmployee', body);
-
-    setTimeout(()=>{ this.close() },300)
+    // saveDataSS('tempEmployee', body);
+ 
     
-    setTimeout(()=>{ this.opendialogSkillRate(body) },900)
+    // setTimeout(()=>{ this.close() },300)
     
-
-    // this.employeeService.addNewEmployee(body).subscribe( 
-    //   ({success})=>{
-    //     this.isLoading = false;
-    //     if(success){
-    //       this.close();
-    //       this.employeeService.updateEditingEmployee$.emit(true);
-    //     }
-    //   });
+    this.employeeService.addNewEmployee(body).subscribe( 
+      ( {success, employee})=>{
+        if(success){
+          this.isLoading = false;
+          this.store.dispatch(authActions.setTempEmployee( {employee}))
+          this.employeeService.updateEditingEmployee$.emit(true);
+          this.close();
+          setTimeout(()=>{ this.openDialogSkillRate(body) }, 300)
+        }
+      });
   }
 
-  opendialogSkillRate( body:any ){
+
+  openDialogSkillRate( body:any ){
 
     let width = "";
     let height ="";

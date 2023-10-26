@@ -114,7 +114,7 @@ export class ClientComponent implements OnInit {
     
     this.getInitialClients();
 
-        //para las busquedas
+     
         this.myForm.get('itemSearch')?.valueChanges.subscribe(newValue => {
           this.itemSearch = newValue;
     

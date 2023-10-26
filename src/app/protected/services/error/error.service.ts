@@ -33,6 +33,7 @@ export class ErrorService {
   labelInvalidCredential$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   labelInvalidCode$ : EventEmitter<boolean> = new EventEmitter<boolean>; // en las
   loadAllOrders$ : EventEmitter<boolean> = new EventEmitter<boolean>; // en las
+  authDelEmployee$: any;
   
   constructor(
               private dialog : MatDialog,
@@ -88,41 +89,8 @@ export class ErrorService {
       return of(null);
     }
 
-    if (error.status === 403 && error.error.message === "No Autorizado para esta acción (Forbidden).") {
-      this.openDialogNoAuth();
-      this.close$.next(true);
-      this.close$.next(false);
-      this.closeIsLoading$.emit(true);
-      return of(null);
-    }
-    if (error.status === 500 && error.error.message === "Pedido no encontrado"){
-      this.closeIsLoading$.emit(true);
-      this.openGenericMsgAlert(error.error.message);
-      return of(null);
-    }
-
-    if (error.status === 500 && error.error.message === "El pedido no puede ser editado, se encuentra emitido o cancelado.") {
-      // alert("El pedido no puede ser editado, se encuentra emitido o cancelado.");
-      this.openGenericMsgAlert(error.error.message);
-      this.closeIsLoading$.emit(true);
-      return of(null);
-    }
 
 
-    if (error.status === 500 && /El CUIT \d+ ya existe en la agenda/.test(error.error.message)) {
-      this.labelInvalidCode$.emit(true);
-      this.closeIsLoading$.emit(true);
-      this.openGenericMsgAlert(error.error.message);
-      return of(null);
-    }
-    
-    
-    // if (error.status === 500 && error.error.message.includes("El CUIT 20277527473 ya existe en la agenda") ) {
-    //   this.labelInvalidCode$.emit(true);
-    //   this.closeIsLoading$.emit(true);
-    //   alert("cuit")
-    //   return of(null);
-    // }
     
     if (error.status === 500) {
       this.openDialogBackendDown();
@@ -189,7 +157,7 @@ export class ErrorService {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("openOrders");
     this.cookieService.delete('token');
-    this.store.dispatch(authActions.unSetTempClient());
+    this.store.dispatch(authActions.unSetTempEmployee());
     this.store.dispatch(authActions.unSetUser());
     localStorage.removeItem('salePoint')
    //  setTimeout(()=>{location.reload()},100)

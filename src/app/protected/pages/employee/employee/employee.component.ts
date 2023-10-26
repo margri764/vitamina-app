@@ -1,7 +1,7 @@
 import { Component, EventEmitter, HostListener, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/protected/services/auth/auth.service';
-import { Subject, Subscription, debounceTime, take } from 'rxjs';
+import { Subject, Subscription, debounceTime, elementAt, take } from 'rxjs';
 import { ErrorService } from 'src/app/protected/services/error/error.service';
 import { PageEvent } from '@angular/material/paginator';
 import { AppState } from 'src/app/app.reducer';
@@ -13,6 +13,7 @@ import { ViewProjectComponent } from 'src/app/protected/messages/view-project/vi
 import { EmployeeService } from 'src/app/protected/services/employee/employee.service';
 import { AddEmployeeComponent } from '../../add-employee/add-employee/add-employee.component';
 import { AddSkillRateComponent } from '../../add-skill-rate/add-skill-rate/add-skill-rate.component';
+import { AskGenericDeleteComponent } from 'src/app/protected/messages/ask-generic-delete/ask-generic-delete/ask-generic-delete.component';
 
 @Component({
   selector: 'app-employee',
@@ -113,7 +114,7 @@ export class EmployeeComponent implements OnInit {
 
   ngOnInit(): void {
     this.errorService.closeIsLoading$.subscribe( (emmited)=>{ if(emmited){this.isLoading = false}});
-    // this.authService.updateEditingUser$.subscribe( (emmited)=>{ if(emmited){this.isLoading = true; this.getInitialEmployees()} })
+    this.authService.updateEditingUser$.subscribe( (emmited)=>{ if(emmited){this.isLoading = true; this.getInitialEmployees()} })
     
     this.getInitialEmployees();
 
@@ -206,26 +207,33 @@ handlePageEvent(e: PageEvent) {
 deleteEmployee(employee : any){
 
   if(screen.width >= 800) {
-    this.width = "600px";
-    this.height = "510px";
+    this.width = "400px";
+    this.height = "250px";
+
   }
 
-    // this.dialog.open(AskDelcustomerComponent, {
-    //   data:  customer.archivarComo,
-    //   width: `${this.width}`|| "",
-    //   height:`${this.height}`|| "",
-    //   panelClass:"custom-modalbox-edit",
-    // });
+  console.log(employee);
+    this.dialog.open(AskGenericDeleteComponent, {
+      data: employee.name,
+      width: `${this.width}`|| "",
+      height:`${this.height}`|| "",
+      panelClass:"custom-modalbox-edit",
+    });
 
-    // this.errorService.authDelCustomer$.pipe(
-    //   take(1)
-    // ).subscribe( (auth)=> { // el ask-edit dispara ui boolean si se elige CONTINUAR con la acción
-      
-    //   if(auth){
-    //     this.authService.deletecustomerById(customer.id).subscribe( 
-    //       ()=>{})
-    //   }
-    // })
+    this.employeeService.authDelEmployee$.pipe(
+      take(1)
+    ).subscribe( (auth: any)=> { // el ask-edit dispara ui boolean si se elige CONTINUAR con la acción
+      this.isLoading = true;
+      if(auth){
+        this.employeeService.deleteEmployeeById(employee._id, employee).subscribe( 
+          ({success})=>{
+            if(success){
+            this.getInitialEmployees();
+            this.isLoading = false;
+            }
+          })
+      }
+    })
   
 }
 
@@ -254,8 +262,8 @@ addEmployee(){
     this.height ="700px";
   }
 
-  // this.dialog.open(AddEmployeeComponent, {
-  this.dialog.open(AddSkillRateComponent, {
+  // this.dialog.open(AddSkillRateComponent, {
+  this.dialog.open(AddEmployeeComponent, {
     width: `${this.width}`|| "",
     height:`${this.height}`|| "",
     panelClass:"custom-modalbox-NoMoreComponent", 

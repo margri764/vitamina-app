@@ -7,6 +7,7 @@ import { SettingsComponent } from './protected/pages/setting/settings.component'
 import { ClientComponent } from './protected/pages/client/client/client.component';
 import { ViewEmployeeComponent } from './protected/pages/view-employee/view-employee/view-employee.component';
 import { EmployeeComponent } from './protected/pages/employee/employee/employee.component';
+import { ProjectComponent } from './protected/pages/project/project/project.component';
 
 
 const routes: Routes = [
@@ -28,6 +29,10 @@ const routes: Routes = [
   },
   {
     path: 'employee-list',  component: EmployeeComponent
+  },
+
+  {
+    path: 'projects-managment',  component: ProjectComponent
   },
   {
     path: 'login',  component: LoginComponent
