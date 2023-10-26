@@ -294,8 +294,8 @@ mat-form-field  {
 }
 
 .icon{
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   border-radius: 200px;
   border: 1px solid rgb(217, 217, 217);
   display: flex;
@@ -305,6 +305,10 @@ mat-form-field  {
   box-shadow: 1px 1px 5px 0px rgba(133,133,133,0.29);
   -webkit-box-shadow: 1px 1px 5px 0px rgba(133,133,133,0.29);
   -moz-box-shadow: 1px 1px 5px 0px rgba(133,133,133,0.29);
+
+  .material-symbols-outlined {
+      transform: scale(0.8);
+  }
 }
 
 .selection{

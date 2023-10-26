@@ -25,35 +25,18 @@
 
 }
 
-
-.save{
-    line-height: 35px; 
-    min-width: 100px; 
-    border: 1px solid green ;
-    word-wrap:break-word; 
-    border-radius: 60px;
-    font-size: 0.9em;
-    background-color: white;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
+.frameSelected{
+    padding: 7px;
+    border-radius: 10px;
+    border: 1px solid rgb(37, 150, 190);
+    
+    box-shadow: 0px 1px 9px 2px rgba(175, 175, 175, 0.85);
+  -webkit-box-shadow: 0px 1px 9px 2px rgba(175, 175, 175, 0.85);
+  -moz-box-shadow: 0px 1px 9px 2px rgba(175, 175, 175, 0.85);
 }
 
-.saveSelected{
-    line-height: 35px; 
-    min-width: 100px; 
-    word-wrap:break-word; 
-    border-radius: 60px;
-    font-size: 0.9em;
-    background-color: green;
-    color: white;
-    cursor: pointer;
 
-    box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.22);
-    -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.22);
-    -moz-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.22);
 
-}
 
 .category{
     height: 50px; 

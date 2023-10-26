@@ -52,6 +52,12 @@ export class AddSkillRateComponent implements OnInit {
 
   showButton : boolean = false;
   showDelSkill : boolean = false;
+  isSkillSelected = false;
+  isSelectedSkill = false;
+  isCategorySelected = false;
+  isRateSelected = false;
+  selectedSkills : any [] = [];
+
 
   onSelect(skill: any, event: MouseEvent) {
 
@@ -68,6 +74,10 @@ export class AddSkillRateComponent implements OnInit {
       }
     } else {
       target.classList.add('skillSelected');
+      this.isSkillSelected = !this.isSkillSelected;
+      this.isCategorySelected = false;
+      this.isSelectedSkill = false;
+
       this.arrSkills.push(skill);
     }
 
@@ -75,13 +85,15 @@ export class AddSkillRateComponent implements OnInit {
     this.selectedSkills = this.arrSkills;
   }
 
-  
-  selectCategory( category:any ){
-   
+  selectCategory( category:any , event: MouseEvent){
+
+    this.isSkillSelected = false;
+    this.isRateSelected = false;
+    this.isSelectedSkill = false;
+    this.isCategorySelected = true;
     this.skills = category.skillList;
   }
 
-  selectedSkills : any [] = [];
 
   saveSkills(event: MouseEvent){
 
@@ -103,19 +115,39 @@ export class AddSkillRateComponent implements OnInit {
 
   }
 
-  deleteSkill( skill : any){   
+  deleteSkill(skill:any){   
 
-    
-    
     this.selectedSkills= this.selectedSkills.filter( (item:any)=> item !== skill);
-
  
   }
 
   delSkill(){
+    this.isSkillSelected = false;
+    this.isCategorySelected = false;
+    this.isRateSelected = false;
+    this.isSelectedSkill = true;
     this.showDelSkill = !this.showDelSkill;
   }
 
+  onInput(event: Event) {
+    this.isSkillSelected = false;
+    this.isCategorySelected = false;
+    this.isSelectedSkill = false;
+    this.isRateSelected = true;
+    console.log('Valor ingresado:', (event.target as HTMLInputElement).value);
+  }
+  
+  onFocus() {
+    this.isSkillSelected = false;
+    this.isCategorySelected = false;
+    this.isSelectedSkill = false;
+    this.isRateSelected = true;
+  }
+
+  onBlur() {
+    this.isRateSelected = false;
+
+  }
   getAllSkillCategories(){
 
     this.isLoading = true;
@@ -142,6 +174,8 @@ export class AddSkillRateComponent implements OnInit {
   }
 
   onSaveForm(){
+
+    this.confirm = true;
 
     if ( this.myForm.invalid ) {
       this.myForm.markAllAsTouched();
