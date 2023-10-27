@@ -15,140 +15,65 @@ import { ErrorService } from 'src/app/protected/services/error/error.service';
 export class ProjectComponent implements OnInit {
 
 
-  @Output() onDebounce: EventEmitter<string> = new EventEmitter();
-  @Output() onEnter   : EventEmitter<string> = new EventEmitter();
-  debouncer: Subject<string> = new Subject();
+  isLinear = false;
+   myForm! : FormGroup;
+  isLoading : boolean = false;
+  confirm: boolean = false;
 
   firstFormGroup = this.fb.group({
     firstCtrl: ['', Validators.required],
   });
   secondFormGroup = this.fb.group({
-    secondCtrl: ['', Validators.required],
+    name: ['', ],
+    features: ['',],
   });
-  isLinear = false;
-
-
-  displayedColumns: string[] = ['name', 'industry','email', 'projects','action'];
-  dataTableActive : any ;
   
-  myForm! : FormGroup;
-  noMatches : boolean = false;
 
-  itemSearch : string = '';
-  mostrarSugerencias: boolean = false;
-  sugested : string= "";
-  suggested : any[] = [];
-  spinner : boolean = false;
-  fade : boolean = false;
-  search : boolean = true;
-  product  : any[] = [];
-// end search
-
-  clients : any []=[];
-  isLoading : boolean = false;
-  arrClient : any []=[];
-  clientFound : any = null;
-  isClientFound : boolean = false;
-  labelNoFinded : boolean = false;
-  phone : boolean = false;
 
   constructor(
-              private authService : AuthService,
-              private dialog : MatDialog,
-              private errorService : ErrorService,
-              private store : Store <AppState>,
               private fb : FormBuilder,
+              // private authService : AuthService,
+              // private dialog : MatDialog,
+              // private errorService : ErrorService,
+              // private store : Store <AppState>,
   ) {
 
-    this.myForm = this.fb.group({
-      itemSearch:  [ '',  ],
-    });   
+
+      this.myForm = this.fb.group({
+        firstCtrl: ['', Validators.required],
+      });
+   
    }
 
   ngOnInit(): void {
 
-       //para las busquedas
-       this.myForm.get('itemSearch')?.valueChanges.subscribe(newValue => {
-        this.itemSearch = newValue;
-  
-         console.log(this.myForm.get('itemSearch')?.value);
-        if(this.itemSearch !== ''){
-           this.teclaPresionada();
-        }else{
-          this.suggested = [];
-          this.spinner= false;
-        }
-      });
-  
-      this.debouncer
-      .pipe(debounceTime(400))
-      .subscribe( valor => {
-  
-        this.sugerencias(valor);
-      });
+
   }
 
+  onSaveForm(){
 
-  close(){
-    this.mostrarSugerencias = false;
-    this.itemSearch = '';
-    this.suggested = [];
-    this.spinner= false;
-    this.myForm.get('itemSearch')?.setValue('');
-    this.noMatches = false;
-    this.clientFound= null;
-    this.isClientFound = false;
   }
-  
-  
-  
-  
-  teclaPresionada(){
-    this.noMatches = false;
-    this.debouncer.next( this.itemSearch );  
-  };
-  
-  
-  sugerencias(value : string){
-      this.spinner = true;
-      this.itemSearch = value;
-      this.mostrarSugerencias = true;  
-      const valueSearch = value.toUpperCase();
-      this.authService.searchClientByName(valueSearch)
-      .subscribe ( ({client} )=>{
-        if(client.length !== 0){
-          // this.arrArticlesSugested = articulos;
-          this.suggested = client.splice(0,10);
-          console.log(this.suggested);
-            this.spinner = false;
-          }else{
-            this.spinner = false;
-            this.noMatches = true;
-            this.myForm.get('itemSearch')?.setValue('');
-          }
-        }
-      )
-  }
+
+  arrFeatures : any [] = [];
+
+  onEnterKey(event: Event) {
+
+    const newFeature = this.secondFormGroup.get('features')?.value;
+
+    if (event instanceof KeyboardEvent && event.key === 'Enter') {
     
-  Search( item: any ){
-    setTimeout(()=>{
-      this.mostrarSugerencias = true;
-      this.spinner = false;
-      this.fade = false;
-      this.clientFound = item;
-      this.isClientFound = true;
-      this.myForm.get('itemSearch')?.setValue('');
-      this.suggested = [];
-      this.noMatches = false;
-    },500)
-  }
-    // search
-  
-  
-    closeNoMatch(){
-      this.noMatches = false;
+      this.arrFeatures.push(newFeature);
+      this.secondFormGroup.controls['features'].setValue('');
     }
-  
+  }
+
+  delFeature( feature:any ){
+
+    this.arrFeatures= this.arrFeatures.filter( (item:any)=> item !== feature);
+
+
+  }
+
   
 
 }

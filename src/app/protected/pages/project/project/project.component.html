@@ -4,121 +4,70 @@
     
     <div  fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex.xs="98" fxFlex.sm="95" fxFlex="75" >
 
-       
+          <mat-stepper [linear]="isLinear" #stepper style="width: 100%; height: 100vh; margin-top: 40px;">
 
-
-          <mat-stepper [linear]="isLinear" #stepper style="width: 100%;">
             <mat-step [stepControl]="firstFormGroup">
               <form [formGroup]="firstFormGroup">
                 <ng-template matStepLabel > <span class="font">Select Client</span></ng-template>
-                <div  style=" align-items: center; display: flex; justify-content: start center; height: 50px; width: 100%; margin-top: 40px;" >
-
-
-                    <form  [formGroup]="myForm" autocomplete="off" style="height: 50px;" > 
-                        <mat-form-field  appearance="outline" class="font "  >
-                            <input type="text" matInput  placeholder="Search Client"  name="itemSearch" formControlName="itemSearch"  >
-                            <mat-icon matSuffix style="transform:scale(1.5); color: rgb(37, 150, 190); margin-right: 10px;" >search</mat-icon>
-                        </mat-form-field>
-                    </form>
-    
-    
-                <div fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="40" style="margin-left: 20px;">
-                    <div fxLayout="row wrap"  fxLayoutAlign="center center"  style=" background-color: rgb(37, 150, 190); border-radius: 7px; height: 50px; padding: 15px; margin-top: 9px; cursor: pointer;"  class="whiteframe" >
-                        <span class="material-symbols-outlined notranslate" style="color: white; transform: scale(1);" > add </span> &nbsp;  &nbsp;
-                        <span class="font" style="color: white;"> Add Client</span>
-                    </div>
-                </div>  
-            </div>  
-    
-            <!-- start no items -->
-            <div fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex="100" *ngIf="noMatches">
+              
+                <div  style="margin-top: 40px;  width: 100%; " >
+                  <app-search-client fxFlex="100" ></app-search-client>
+                </div>
                 
-                <div fxLayout="row wrap" fxLayoutAlign="space-betweencenter"  class="fs-4 whiteframe notFound" >
-                   <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="90"   >
-                      <span class="material-icons" style="color: white;"> error </span>
-                      <span class="font " style="color: white; text-align: center; margin-left: 20px; font-size: 1em;">Client not found...</span>
-                    </div>
-                    <span class="material-icons" style="color: white; text-align: end; transform: scale(0.8); cursor: pointer;" (click)="closeNoMatch()"> close </span>
+                <div>
+
+                  <button mat-button matStepperNext class="font" style="margin-top: 40px;">Next</button>
                 </div>
-            </div>
-            <!-- end no items -->
-    
-    
-            <!-- start suggested    -->
-            <div fxLayout="row wrap"  fxLayoutAlign.xs="start center" fxLayoutAlign="center center"  fxFlex="100" *ngIf="mostrarSugerencias" style="margin-top: 20px;" >
-                    
-                <div fxLayout="row wrap"  fxLayoutAlign="center center"  fxFlex="100" *ngIf="spinner" style="margin-top: 30px;">
-                    <mat-spinner diameter="48"></mat-spinner>
-                </div>
-                            
-                <div fxLayout="row wrap"  fxLayoutAlign.xs="start center"  fxLayoutAlign="center center" fxFlex="100" class="font" style="margin-top: 3px;"  *ngFor="let item of suggested" >
-    
-                    <div fxLayout="row wrap" fxLayoutAlign="space-between center"  fxFlex="100"  class="fs-4 boxSelection" >
-                       <div fxLayout="row wrap" fxLayoutAlign="start center"  fxFlex="90"   >
-                          <mat-radio-button class="example-margin" (click)="Search(item)"></mat-radio-button>
-                          <span  style="cursor: pointer; text-align: start; margin-left: 15px; font-size: 0.8em;" fxFlex="80">{{ item.company_name | capitalizeFirstLetter}}</span>
-                       </div>  
-                       <div fxLayout="row wrap" fxLayoutAlign="end center"  fxFlex="10" >
-                            <span class="material-symbols-outlined notranslate" style="transform: scale(1); color: rgb(37, 150, 190); margin-left: 0px;" [ngClass]="item.previous_projects.length != 0 ? 'material-icons' : 'material-symbols-outlined notranslate'" >work</span> 
-                        </div>    
-                    </div>   
-    
-                </div>
-            </div>
-            <!-- end suggested    -->
-    
-            <!-- start result search cards -->
-            <div  fxLayout="row wrap"  fxLayoutAlign="center start"  fxFlex="100" style="margin-top: 40px;" *ngIf="isClientFound">
-    
-                <div fxLayout="row wrap"  fxLayoutAlign="space-between center" style="margin-bottom: 30px;  padding: 10px; background-color: white;" fxFlex="100" class="whiteframe" >
-    
+              </form>
+            </mat-step>
+
             
-                    <div fxLayout="row wrap"  fxLayoutAlign="space-between center"  fxFlex="100" style="margin-top: 20px; padding: 10px;">
-    
-                        <div fxLayout="row wrap"  fxLayoutAlign="start center"  fxFlex.xs="100" fxFlex="50" >
-                            <span class="material-symbols-outlined notranslate" style=" transform: scale(1.5);color: rgb(135, 135, 135); "> person </span> &nbsp; &nbsp;&nbsp;
-                            <span style="font-size: 1.1em; font-family: poppins-light; "> {{clientFound.company_name | capitalizeFirstLetter }} </span>
-                        </div>
-    
-                        <div fxLayout="row wrap"  fxLayoutAlign="end center" fxLayoutAlign.xs="start center" fxFlex.xs="100" fxFlex="50" style="margin-top: 20px;">
-                            <span class="material-symbols-outlined notranslate" style=" transform: scale(1.5);color: rgb(135, 135, 135); "> email </span> &nbsp; &nbsp;&nbsp;
-                           <span style="font-size: 1.1em;  font-family: poppins-light;"> {{clientFound.email}} </span>
-                         </div>
-    
-                         <div fxLayout="row wrap"  fxLayoutAlign="start center"  fxFlex="100" style="margin-top: 20px;">
-                             <span class="material-symbols-outlined notranslate" style=" transform: scale(1.5);color: rgb(135, 135, 135);"> factory </span> &nbsp; &nbsp;&nbsp;
-                            <span style="font-size: 1.1em;  font-family: poppins-light;"> {{clientFound.industry_type| capitalizeFirstLetter }} </span>
-                          </div>
+            <mat-step [stepControl]="secondFormGroup"  >
+              <ng-template matStepLabel > <span class="font">Project Scope</span></ng-template>
+
+
+              <form [formGroup]="secondFormGroup" fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" style="margin-top: 30px; border: 1px solid rgb(197, 197, 197); border-radius: 10px; padding: 10px;">
+             
+                    <span class="font" fxFlex="100" style="margin-top: 20px; font-size: 1.7em; text-align: start; font-weight: bold; line-height:30px;"> Project Scope</span>        
                       
-                    </div>
-                </div>
-            
-            </div>
-            <!-- end result search cards -->
-                
-                
-                
-                
-                
-                
-                <div>
-                  <button mat-button matStepperNext>Next</button>
-                </div>
-              </form>
-            </mat-step>
-            <mat-step [stepControl]="secondFormGroup"  label="Describe project">
-              <form [formGroup]="secondFormGroup">
-                <mat-form-field>
-                  <mat-label>Address</mat-label>
-                  <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY"
-                         required>
+                        <mat-form-field appearance="outline"  fxFlex="49" class="mt-20 font" >		
+                            <mat-label>Project´s name</mat-label>
+                            <input matInput type="text" required formControlName="name">
+                        </mat-form-field> 
+
+                        <mat-form-field appearance="outline"  fxFlex="100" class="mt-10 font" >
+                          <mat-label>Description</mat-label>
+                          <textarea matInput style="height: 80px;"></textarea>
+                        </mat-form-field>
+
+                <span class="font" fxFlex="100" style="margin-top: 20px; font-size: 1.5em; text-align: start; font-weight: bold; line-height:30px;"> Main features</span>   
+        
+                <mat-form-field appearance="outline" fxFlex="100" class="fs-4" style="margin-top: 30px;">
+                  <mat-label> add feature</mat-label>
+                    <input matInput type="text" formControlName="features" (keyup.enter)="onEnterKey($event)">
                 </mat-form-field>
-                <div>
-                  <button mat-button matStepperPrevious>Back</button>
-                  <button mat-button matStepperNext>Next</button>
-                </div>
-              </form>
+                   
+                  
+                  <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" class="font boxSelection" *ngFor="let feature of arrFeatures" style="margin-top: 6px;">
+
+                  
+                    <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="90" >
+                      <span class="material-symbols-outlined notranslate cursor" style="color: green;"> done </span> &nbsp;
+                      <span class="feature-text">{{ feature }}</span>
+                    </div>
+                    <div fxLayout="row wrap" fxLayoutAlign="end center" fxFlex="10">
+                      <span class="material-symbols-outlined notranslate cursor" style="color: red;" (click)="delFeature(feature)"> highlight_off </span>
+                    </div>
+                  </div>
+                
+                      </form>
+                      <div>
+                          <button mat-button matStepperPrevious > <span class="font"> Back  </span></button>
+                          <button mat-button matStepperNext>  <span class="font"> Next  </span></button>
+                      </div>
             </mat-step>
+
+
             <mat-step>
               <ng-template matStepLabel>Done</ng-template>
               <p>You are now done.</p>

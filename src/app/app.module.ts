@@ -63,6 +63,7 @@ import { AddSkillRateComponent } from './protected/pages/add-skill-rate/add-skil
 import { AskGenericDeleteComponent } from './protected/messages/ask-generic-delete/ask-generic-delete/ask-generic-delete.component';
 import { EditEmployeeRateComponent } from './protected/EmployeeEdit/edit-employee-rate/edit-employee-rate/edit-employee-rate.component';
 import { ProjectComponent } from './protected/pages/project/project/project.component';
+import { SearchClientComponent } from './protected/pages/search-client/search-client/search-client.component';
 
 
 registerLocaleData( localeEs );
@@ -102,7 +103,8 @@ registerLocaleData( localeEs );
     AddSkillRateComponent,
     AskGenericDeleteComponent,
     EditEmployeeRateComponent,
-    ProjectComponent
+    ProjectComponent,
+    SearchClientComponent
   ],
   imports: [
     BrowserModule,

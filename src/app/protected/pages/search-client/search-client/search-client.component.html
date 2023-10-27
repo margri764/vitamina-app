@@ -1,0 +1,146 @@
+
+
+<div fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex="100">
+
+<div  style=" display: flex; justify-content: start center;align-items: center; height: 50px; width: 100%; " >
+
+    <form  [formGroup]="myForm" autocomplete="off" style="height: 50px;" > 
+        <mat-form-field  appearance="outline" class="font "  >
+            <input type="text" matInput  placeholder="Search Client"  name="itemSearch" formControlName="itemSearch"  >
+            <mat-icon matSuffix style="transform:scale(1.5); color: rgb(37, 150, 190); margin-right: 10px;" >search</mat-icon>
+        </mat-form-field>
+    </form>
+
+
+    <div fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="40" style="margin-left: 10px;">
+        <div fxLayout="row wrap"  fxLayoutAlign="center center"  style=" background-color: rgb(37, 150, 190); border-radius: 7px; height: 50px; padding: 15px; margin-top: 9px; cursor: pointer;"  class="whiteframe" >
+            <span class="material-symbols-outlined notranslate" style="color: white; transform: scale(1);" > add </span> &nbsp;  &nbsp;
+            <span class="font" style="color: white;"> Add Client</span>
+        </div>
+    </div>  
+</div>  
+
+<!-- start no items -->
+<div fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex="100" *ngIf="noMatches">
+
+<div fxLayout="row wrap" fxLayoutAlign="space-betweencenter"  class="fs-4 whiteframe notFound" >
+   <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="90"   >
+      <span class="material-icons" style="color: white;"> error </span>
+      <span class="font " style="color: white; text-align: center; margin-left: 20px; font-size: 1em;">Client not found...</span>
+    </div>
+    <span class="material-icons" style="color: white; text-align: end; transform: scale(0.8); cursor: pointer;" (click)="closeNoMatch()"> close </span>
+</div>
+</div>
+<!-- end no items -->
+
+
+<!-- start suggested    -->
+<div fxLayout="row wrap"  fxLayoutAlign.xs="start center" fxLayoutAlign="center center"  fxFlex="100" *ngIf="mostrarSugerencias" style="margin-top: 20px;" >
+    
+<div fxLayout="row wrap"  fxLayoutAlign="center center"  fxFlex="100" *ngIf="spinner" style="margin-top: 30px;">
+    <mat-spinner diameter="48"></mat-spinner>
+</div>
+            
+<div fxLayout="row wrap"  fxLayoutAlign.xs="start center"  fxLayoutAlign="center center" fxFlex="100" class="font" style="margin-top: 3px;"  *ngFor="let item of suggested" >
+
+    <div fxLayout="row wrap" fxLayoutAlign="space-between center"  fxFlex="100"  class="fs-4 boxSelection" >
+       <div fxLayout="row wrap" fxLayoutAlign="start center"  fxFlex="90"   >
+          <mat-radio-button class="example-margin" (click)="Search(item)"></mat-radio-button>
+          <span  style="cursor: pointer; text-align: start; margin-left: 15px; font-size: 0.8em;" fxFlex="80">{{ item.company_name | capitalizeFirstLetter}}</span>
+       </div>  
+       <div fxLayout="row wrap" fxLayoutAlign="end center"  fxFlex="10" >
+            <span class="material-symbols-outlined notranslate" style="transform: scale(1); color: rgb(37, 150, 190); margin-left: 0px;" [ngClass]="item.previous_projects.length != 0 ? 'material-icons' : 'material-symbols-outlined notranslate'" >work</span> 
+        </div>    
+    </div>   
+
+</div>
+</div>
+<!-- end suggested    -->
+
+     <!-- start result search cards -->
+     <div  fxLayout="row wrap"  fxLayoutAlign="center start"  fxFlex="100" style="margin-top: 40px;" *ngIf="isClientFound">
+
+        <div fxLayout="row wrap"  fxLayoutAlign="space-between center" style="margin-bottom: 30px;  padding: 10px; background-color: white;" fxFlex="100" class="whiteframe" >
+
+    
+            <div fxLayout="row wrap"  fxLayoutAlign="space-between center"  fxFlex="100" style="margin-top: 20px; padding: 10px;">
+
+                <div fxLayout="row wrap"  fxLayoutAlign="start center"  fxFlex.xs="100" fxFlex="50" >
+                    <span class="material-symbols-outlined notranslate" style=" transform: scale(1.5);color: rgb(135, 135, 135); "> person </span> &nbsp; &nbsp;&nbsp;
+                    <span style="font-size: 1.1em; font-family: poppins-light; "> {{clientFound.company_name | capitalizeFirstLetter }} </span>
+                </div>
+
+                <div fxLayout="row wrap"  fxLayoutAlign="end center" fxLayoutAlign.xs="start center" fxFlex.xs="100" fxFlex="50" style="margin-top: 20px;">
+                    <span class="material-symbols-outlined notranslate" style=" transform: scale(1.5);color: rgb(135, 135, 135); "> email </span> &nbsp; &nbsp;&nbsp;
+                   <span style="font-size: 1.1em;  font-family: poppins-light;"> {{clientFound.email}} </span>
+                 </div>
+
+                 <div fxLayout="row wrap"  fxLayoutAlign="start center"  fxFlex="100" style="margin-top: 20px;">
+                     <span class="material-symbols-outlined notranslate" style=" transform: scale(1.5);color: rgb(135, 135, 135);"> factory </span> &nbsp; &nbsp;&nbsp;
+                    <span style="font-size: 1.1em;  font-family: poppins-light;"> {{clientFound.industry_type| capitalizeFirstLetter }} </span>
+                  </div>
+              
+            </div>
+
+
+               <mat-accordion  style="margin-top: 20px;" fxFlex="100">
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState" style="
+                border-radius:10px;
+                
+                box-shadow: -1px 4px 14px -1px rgba(197, 196, 196, 0.45);
+               -webkit-box-shadow: -1px 4px 14px -1px rgba(197, 196, 196, 0.45);
+                -moz-box-shadow: -1px 4px 14px -1px rgba(197, 196, 196, 0.45);
+        
+                " >
+                  <mat-expansion-panel-header >
+                      
+                      <mat-panel-description fxLayoutAlign="start" style="color: rgb(158, 158, 158);">
+
+                        <div  fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex="100">
+                                <span class="material-symbols-outlined notranslate" style=" transform: scale(1); color: rgb(135, 135, 135); margin-left: 10px; "> work </span> &nbsp; &nbsp;&nbsp;
+                                <span style="font-size: 0.9em;  font-family: poppins-light; text-align: start;"> Previous Projects </span>
+                        </div>  
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  
+          
+                    <div  fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex="100" *ngIf="clientFound && clientFound.previous_projects.length > 0">
+                        <ul style="padding-left: 10px" class="font">
+                            <li *ngFor="let project of clientFound.previous_projects" style="cursor: pointer; color: blue; margin-left: 20px" (click)="viewProject(project)">
+                              {{ project.project_scope.name }}
+                            </li>
+                          </ul>
+                   </div>
+
+                   <div  fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex="100" *ngIf="clientFound && clientFound.previous_projects.length === 0">
+                      <span style="font-size: 1.1em;  font-family: poppins-light; text-align: start;"> No Projects founds... </span>
+                   
+                  </div>
+
+          
+                </mat-expansion-panel>
+              </mat-accordion>
+        
+
+            
+            <div fxLayout="row wrap" fxLayoutAlign="end center" fxFlex="100" style="margin-top: 18px;">
+                <div class="icon mr-10" (click)="deleteClient(clientFound)" >
+                    <span class="material-symbols-outlined notranslate cursor" style="color: red;"> delete </span>
+                </div>
+                
+                <div class="icon mr-10"  (click)="editClient(clientFound)">
+                    <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57);"> edit </span>
+                </div>
+
+                <div class="icon"  (click)="close()" style="margin-right: 10px;">
+                    <span class="material-symbols-outlined notranslate cursor" > close </span>
+                </div>
+            </div>
+            
+        </div>
+    
+    </div>
+    <!-- end result search cards -->
+
+
+</div>
