@@ -13,7 +13,7 @@
                 <div  style="margin-top: 40px;  width: 100%; " >
                   <app-search-client fxFlex="100" ></app-search-client>
                 </div>
-                
+              
                 <div>
 
                   <button mat-button matStepperNext class="font" style="margin-top: 40px;">Next</button>
@@ -59,7 +59,16 @@
                       <span class="material-symbols-outlined notranslate cursor" style="color: red;" (click)="delFeature(feature)"> highlight_off </span>
                     </div>
                   </div>
-                
+
+                  <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 20px;" >
+
+                      <span class="font" style=" font-size: 1.5em; text-align: start; font-weight: bold; line-height:30px;" > Select Related skills</span>   
+
+                      <div class="font" style="border: 1px solid; border-radius: 7px; width: 80px; height: 30px; color: white; margin-left:20px;background-color:  rgb(37, 150, 190); text-align: center; display: flex; justify-content: center; align-items: center; cursor: pointer;     box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+                      -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+                      -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);" (click)="openDialogSkills()">Go</div>
+                  </div>
+               
                       </form>
                       <div>
                           <button mat-button matStepperPrevious > <span class="font"> Back  </span></button>
@@ -69,11 +78,19 @@
 
 
             <mat-step>
-              <ng-template matStepLabel>Done</ng-template>
-              <p>You are now done.</p>
+              <ng-template matStepLabel > <span class="font">Asign Employee</span></ng-template>
+
+              <div  style="margin-top: 40px;  width: 100%; " >
+                <app-search-employee fxFlex="100" ></app-search-employee>
+              </div>
+              <div  style="margin-top: 40px;  width: 100%; " >
+
+              <span class="font" style="font-size: 1.1em; text-align: start; margin-top: 150px; cursor: pointer;" (click)="suggestEmployeeBySkill()">Suggest Employee by skill</span>
+              </div>
               <div>
-                <button mat-button matStepperPrevious>Back</button>
-                <button mat-button (click)="stepper.reset()">Reset</button>
+                <button mat-button matStepperPrevious > <span class="font"> Back  </span></button>
+                <button mat-button matStepperNext>  <span class="font"> Next  </span></button>
+                <!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
               </div>
             </mat-step>
           </mat-stepper>

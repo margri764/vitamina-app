@@ -64,6 +64,8 @@ import { AskGenericDeleteComponent } from './protected/messages/ask-generic-dele
 import { EditEmployeeRateComponent } from './protected/EmployeeEdit/edit-employee-rate/edit-employee-rate/edit-employee-rate.component';
 import { ProjectComponent } from './protected/pages/project/project/project.component';
 import { SearchClientComponent } from './protected/pages/search-client/search-client/search-client.component';
+import { SearchEmployeeComponent } from './protected/pages/search-employee/search-employee/search-employee.component';
+import { ProjectSkillsComponent } from './protected/messages/project-skills/project-skills/project-skills.component';
 
 
 registerLocaleData( localeEs );
@@ -104,7 +106,9 @@ registerLocaleData( localeEs );
     AskGenericDeleteComponent,
     EditEmployeeRateComponent,
     ProjectComponent,
-    SearchClientComponent
+    SearchClientComponent,
+    SearchEmployeeComponent,
+    ProjectSkillsComponent
   ],
   imports: [
     BrowserModule,

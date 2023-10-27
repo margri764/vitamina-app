@@ -117,9 +117,8 @@ export class AddEmployeeComponent implements OnInit {
     
       this.dialog.open(AddSkillRateComponent, {
         data: body,
-        width: `${width}`|| "",
-        height:`${height}`|| "",
-        panelClass:"custom-modalbox-NoMoreComponent", 
+
+        panelClass:"custom-modalbox-responsive", 
       });
   }
 

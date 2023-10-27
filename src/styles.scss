@@ -504,6 +504,18 @@ h1.font{
     }
 }
 
+.custom-modalbox-responsive {
+  
+  max-width: 800px!important;  /*max-width para el ancho del dialog*/
+  max-height: 98vh!important;
+
+  .mat-dialog-container{
+    padding: 0px!important;
+    border-radius: 10px !important;
+    margin: 0 auto;
+    }
+}
+
 .custom-modalbox-EditArticleComponent {
   
   max-width: 95vw!important;  /*max-width para el ancho del dialog*/
@@ -564,9 +576,15 @@ h1.font{
 
 
 
-// end phone
 
+@media only screen and (max-width: 574px) {
+.custom-modalbox-responsive {
+  
+  max-width: 97vw!important;  /*max-width para el ancho del dialog*/
+  max-height: 98vh!important;
+}
 
+}
 
 //Extra small devices (phones, 600px and down) */
 @media only screen and (min-width: 800px) {
@@ -584,8 +602,6 @@ h1.font{
 
 mat-form-field  {
   font-size: 1em !important;
-
-
 }
 
 

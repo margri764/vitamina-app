@@ -125,6 +125,20 @@ export class EmployeeService {
             return res} )
     );
   }
+
+  suggestEmployeeBySkill( query : string ){
+    return this.http.get<any>(`${this.baseUrl}api/employee/suggestEmployeeBySkill?skill=${query}`)
+  .pipe(
+    map( res =>{ 
+          console.log('from service suggestEmployeeBySkill', res)
+            return res} )
+    );
+  }
+
+
+
+
+
   
 
   

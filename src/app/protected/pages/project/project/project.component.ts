@@ -6,6 +6,8 @@ import { Subject, debounceTime } from 'rxjs';
 import { AppState } from 'src/app/app.reducer';
 import { AuthService } from 'src/app/protected/services/auth/auth.service';
 import { ErrorService } from 'src/app/protected/services/error/error.service';
+import { EmployeeService } from 'src/app/protected/services/employee/employee.service';
+import { ProjectSkillsComponent } from 'src/app/protected/messages/project-skills/project-skills/project-skills.component';
 
 @Component({
   selector: 'app-project',
@@ -32,8 +34,9 @@ export class ProjectComponent implements OnInit {
 
   constructor(
               private fb : FormBuilder,
+              private employeeService : EmployeeService,
+              private dialog : MatDialog,
               // private authService : AuthService,
-              // private dialog : MatDialog,
               // private errorService : ErrorService,
               // private store : Store <AppState>,
   ) {
@@ -73,6 +76,37 @@ export class ProjectComponent implements OnInit {
 
 
   }
+
+  suggestEmployeeBySkill(){
+
+    this.isLoading = true;
+
+    this.employeeService.suggestEmployeeBySkill('javascript').subscribe( 
+      ( {success})=>{
+        if(success){
+          this.isLoading = false;
+        }
+      });
+  }
+
+  openDialogSkills(){
+
+    
+    let width = "";
+    let height ="";
+
+      if(screen.width >= 800) {
+        width = "600px";
+        height ="520px";
+      }
+    this.dialog.open(ProjectSkillsComponent, {
+      // data: body,
+      // width: `${width}`|| "",
+      // height:`${height}`|| "",
+      panelClass:"custom-modalbox-responsive", 
+    });
+}
+
 
   
 
