@@ -169,7 +169,6 @@ tempEmployee : any;
 
   onBlur() {
     this.isRateSelected = false;
-
   }
   getAllSkillCategories(){
 

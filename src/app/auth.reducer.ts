@@ -1,47 +1,27 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { setTempEmployee, setUser,  unSetTempEmployee, unSetUser } from './auth.actions';
+import { setEmployeeProjectTime, setProjectSkills, setTempEmployee, setUser,  unSetEmployeeProjectTime,  unSetProjectSkills,  unSetTempEmployee, unSetUser } from './auth.actions';
 import { User } from './protected/models/user.models';
+
+type ProjectTime = {
+  id: string,
+  name: string,
+  hourly_rate: number
+  time: number;
+};
 
 
 export interface Auth {
     user: User | null; 
     tempEmployee: any | null; 
-    // staff: Staff | null; 
-    // verifyAccount : boolean,
-    // path : string,
-    // banner : boolean,
-    // userRegister: any | null,
-    // body : any,
-    // id : string | null,
-    // address : string | null,
-    // delivery : string | null,
-    // favorite : boolean;
-    // arrItems: [] | null,
-    // isLoading: boolean,
-    // appState : any
-
-
-    // el body tendria q ser de tipo user o register no se
-
+    projectSkills: any [] ,
+    projectTime: ProjectTime[];
 }
 
 export const initialState: Auth = {
      user: null,
      tempEmployee: null,
-    //  staff: null,
-    //  verifyAccount: false,
-    //  banner : true,
-    //  path : '',
-    //  body: null,
-    //  userRegister: null,
-    //  id: null,
-    //  address : null,
-    //  delivery : null,
-    //  favorite : false,
-    //  arrItems : null,
-    //  isLoading: false,
-    //  appState : true
-
+     projectSkills:  [],
+     projectTime: [],
 }
 
 const _authReducer = createReducer(initialState,
@@ -51,6 +31,16 @@ const _authReducer = createReducer(initialState,
 
     on( setTempEmployee, (state, { employee }) => ({ ...state, tempEmployee: { ...employee }  })),
     on( unSetTempEmployee, state => ({ ...state, tempEmployee: null  })),
+
+    on( setProjectSkills, (state, { projectSkills }) => ({ ...state, projectSkills: [ ...projectSkills ]  })),
+    on( unSetProjectSkills, state => ({ ...state, projectSkills: []  })),
+
+    on(setEmployeeProjectTime, (state, { projectTime }) => { return {
+          ...state,
+          projectTime: [...state.projectTime, ...projectTime],
+        };
+      }),
+    on( unSetEmployeeProjectTime, state => ({ ...state, projectTime: []  })),  
 
 
     

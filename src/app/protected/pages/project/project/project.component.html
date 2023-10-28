@@ -60,15 +60,29 @@
                     </div>
                   </div>
 
-                  <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 20px;" >
+                  <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 20px; margin-bottom: 30px;" >
 
                       <span class="font" style=" font-size: 1.5em; text-align: start; font-weight: bold; line-height:30px;" > Select Related skills</span>   
 
-                      <div class="font" style="border: 1px solid; border-radius: 7px; width: 80px; height: 30px; color: white; margin-left:20px;background-color:  rgb(37, 150, 190); text-align: center; display: flex; justify-content: center; align-items: center; cursor: pointer;     box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
-                      -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
-                      -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);" (click)="openDialogSkills()">Go</div>
+                      <button mat-raised-button class="font" style="margin-left: 20px; " [ngClass]="selection ? 'btnMenuClicked':'btnMenu'"  (click)="openDialogSkills()">Go <i class="material-symbols-outlined notranslate" style="font-size: 25px;">     chevron_right
+                      </i>  </button>
                   </div>
-               
+
+                                
+                          <div fxLayout="row wrap"  fxLayoutAlign.xs="start center"  fxLayoutAlign="center center" fxFlex="100" class="font" style="margin-top: 10px;"   *ngFor="let item of projectSkills; let i = index"      (mouseenter)="showDeleteIcon[i] = true"
+                          (mouseleave)="showDeleteIcon[i] = false">
+
+                            <div fxLayout="row wrap" fxLayoutAlign="space-between center"  fxFlex="100"  class="fs-4 boxSelection"
+                        >
+                                <div fxLayout="row wrap" fxLayoutAlign="start center"  fxFlex="90"   >
+                                  <span class="material-symbols-outlined notranslate">done </span>
+                                    <span  style="cursor: pointer; text-align: start; margin-left: 15px; font-size: 0.8em;" fxFlex="80">{{ item |capitalizeFirstLetter}}</span>
+                                </div>  
+                                <span *ngIf="showDeleteIcon[i]" (click)="deleteSkill(item)"> 
+                                  <i class="material-symbols-outlined notranslate" style="cursor: pointer; color: red;">delete</i>
+                                </span>
+                            </div>   
+                        </div>
                       </form>
                       <div>
                           <button mat-button matStepperPrevious > <span class="font"> Back  </span></button>
@@ -80,14 +94,85 @@
             <mat-step>
               <ng-template matStepLabel > <span class="font">Asign Employee</span></ng-template>
 
-              <div  style="margin-top: 40px;  width: 100%; " >
+              <div  style="width: 100%; " >
                 <app-search-employee fxFlex="100" ></app-search-employee>
               </div>
               <div  style="margin-top: 40px;  width: 100%; " >
 
-              <span class="font" style="font-size: 1.1em; text-align: start; margin-top: 150px; cursor: pointer;" (click)="suggestEmployeeBySkill()">Suggest Employee by skill</span>
+              <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 20px;" >
+
+                <span class="font" style="font-size: 1.3em; text-align: start;  font-weight: bold;"> Suggested Employees with the Best Matching Skills</span>
+
+                <span class="material-icons-outlined notranslate" style="color: green; margin-left: 10px;" (click)="suggestEmployeeBySkill()">refresh</span>
+  
               </div>
+
+            
+              </div>
+  
+              <!-- start table -->
+                <div class="example-container mat-elevation-z8 font" style="background-color: white; border-radius: 10px; margin-top: 18px;">
+      
+                  <table mat-table [dataSource]="dataTableActive"  >
+                  
+                          <ng-container matColumnDef="name"  >
+                              <th mat-header-cell *matHeaderCellDef > Name </th>
+                              <td mat-cell *matCellDef="let element" > {{element.name}} </td>
+                          </ng-container>
+      
+                          <ng-container matColumnDef="state" >
+                              <th mat-header-cell *matHeaderCellDef> State</th>
+                              <td mat-cell *matCellDef="let element" >
+                                  <span class="material-icons notranslate" style="transform: scale(1); color: green; margin-left: 0px;"  *ngIf="element.availability">check_circle</span> 
+                                  <span class="material-icons-outlined notranslate" style="transform: scale(1); color: gray; margin-left: 0px;" *ngIf="!element.availability"> do_not_disturb_on  </span>
+                               </td>
+                          </ng-container>
+      
+                          <ng-container matColumnDef="rate" >
+                              <th mat-header-cell *matHeaderCellDef> Hourly Rate (U$S)</th>
+                              <td mat-cell *matCellDef="let element" > {{element.hourly_rate}}
+                               </td>
+                          </ng-container>
+      
+                          <ng-container matColumnDef="action"  >
+                              <th mat-header-cell *matHeaderCellDef >Action</th>
+                              <td mat-cell *matCellDef="let element" > 
+                                  <div style="display: flex; justify-content:center; " >
+                                          <div class="icon" [routerLink]="['../view-employee/',element._id, ]">
+                                              <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57);"> edit </span>
+                                          </div>
+                                          <div class="icon" (click)="deleteEmployee(element)" style="margin-left: 3px;">
+                                              <span class="material-symbols-outlined notranslate cursor" style="color: red;"> delete </span>
+                                          </div>
+                                          <div class="icon" (click)="openDialogAssignTime(element)" style="margin-left: 3px;">
+                                            <span class="material-symbols-outlined notranslate cursor" style="color: green;"> settings </span>
+                                        </div>
+                                  </div>
+      
+                                 
+                          </td>
+                     
+                          </ng-container>
+      
+      
+                          <tr mat-header-row *matHeaderRowDef="displayedColumns "></tr>
+                          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                  </table>
+      
+                </div> 
+              <!-- end table -->
+
               <div>
+                <ul>
+                  <li *ngFor="let time of arrProjectTime">
+                        <b fxFlex="80">Employee:</b> &nbsp; {{time.name}} 
+                        <b fxFlex="80">Assigned hours:</b> &nbsp; {{time.time}} 
+                        <b fxFlex="80">Hourly rate:</b> &nbsp; {{time.hourly_rate}} 
+                  </li>
+                </ul>
+              </div>
+
+              <div style="margin-top: 40px;">
                 <button mat-button matStepperPrevious > <span class="font"> Back  </span></button>
                 <button mat-button matStepperNext>  <span class="font"> Next  </span></button>
                 <!-- <button mat-button (click)="stepper.reset()">Reset</button> -->

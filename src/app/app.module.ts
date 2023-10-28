@@ -66,6 +66,7 @@ import { ProjectComponent } from './protected/pages/project/project/project.comp
 import { SearchClientComponent } from './protected/pages/search-client/search-client/search-client.component';
 import { SearchEmployeeComponent } from './protected/pages/search-employee/search-employee/search-employee.component';
 import { ProjectSkillsComponent } from './protected/messages/project-skills/project-skills/project-skills.component';
+import { AssignTimeComponent } from './protected/pages/assign-time/assign-time/assign-time.component';
 
 
 registerLocaleData( localeEs );
@@ -108,7 +109,8 @@ registerLocaleData( localeEs );
     ProjectComponent,
     SearchClientComponent,
     SearchEmployeeComponent,
-    ProjectSkillsComponent
+    ProjectSkillsComponent,
+    AssignTimeComponent
   ],
   imports: [
     BrowserModule,

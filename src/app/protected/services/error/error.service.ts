@@ -143,6 +143,8 @@ export class ErrorService {
           localStorage.removeItem("logged");
           localStorage.removeItem("user");
           this.store.dispatch(authActions.unSetUser());
+          this.store.dispatch(authActions.unSetProjectSkills());
+          this.store.dispatch(authActions.unSetEmployeeProjectTime());
           this.router.navigateByUrl('login'); 
             
   }

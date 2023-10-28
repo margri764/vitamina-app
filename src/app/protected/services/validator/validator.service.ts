@@ -69,4 +69,26 @@ export class ValidatorService {
         return null;
       };
     }
+
+    positiveNumberWithDecimals( ): ValidatorFn {
+      return (control: AbstractControl) => {
+        
+        const value = control.value;
+        console.log(value);
+    
+        // Verificar si el valor es un número y es mayor o igual a 0
+        if (isNaN(value) || value < 0) {
+          return { positiveNumberWithDecimals: true };
+        }
+    
+        // Verificar si el valor tiene más de dos decimales
+        const decimalPart = (value.toString().split('.')[1] || '').length;
+        if (decimalPart > 2) {
+          return { positiveNumberWithDecimals: true };
+        }
+    
+        return null;
+      };
+    }
+
   }

@@ -211,8 +211,6 @@ deleteEmployee(employee : any){
     this.height = "250px";
 
   }
-
-  console.log(employee);
     this.dialog.open(AskGenericDeleteComponent, {
       data: employee.name,
       width: `${this.width}`|| "",

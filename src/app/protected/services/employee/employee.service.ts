@@ -126,8 +126,11 @@ export class EmployeeService {
     );
   }
 
-  suggestEmployeeBySkill( query : string ){
-    return this.http.get<any>(`${this.baseUrl}api/employee/suggestEmployeeBySkill?skill=${query}`)
+  suggestEmployeeBySkill( skills : any[] ){
+
+    const body = { skills  }
+    console.log(body);
+    return this.http.post<any>(`${this.baseUrl}api/employee/suggestEmployeeBySkill`, body)
   .pipe(
     map( res =>{ 
           console.log('from service suggestEmployeeBySkill', res)

@@ -222,8 +222,6 @@ export class ViewEmployeeComponent implements OnInit {
         panelClass:"custom-modalbox-edit",
       });
   }
-
-
     
   openDialogAddSkill( employee:any){
 

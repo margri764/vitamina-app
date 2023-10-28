@@ -3,18 +3,18 @@
     <div  style=" align-items: center; display: flex; justify-content: start center; height: 50px; width: 100%; margin-top: 40px;" >
 
 
-            <form  [formGroup]="myForm" autocomplete="off" style="height: 50px;" > 
-                <mat-form-field  appearance="outline" class="font "  >
-                    <input type="text" matInput  placeholder="Search Employee"  name="itemSearch" formControlName="itemSearch"  >
-                    <mat-icon matSuffix style="transform:scale(1.5); color: rgb(37, 150, 190); margin-right: 10px;" >search</mat-icon>
-                </mat-form-field>
-            </form>
+        <form  [formGroup]="myForm" autocomplete="off" style="height: 50px; " > 
+            <mat-form-field  appearance="outline" class="font" style="width: 200px;">
+                <input type="text" matInput  placeholder="Search Employee"  name="itemSearch" formControlName="itemSearch"  >
+                <mat-icon matSuffix style="transform:scale(1.5); color: rgb(37, 150, 190); margin-right: 10px;" >search</mat-icon>
+            </mat-form-field>
+        </form>
 
 
-        <div fxLayout="row wrap"  fxLayoutAlign="start start"  style="margin-left: 10px;">
-            <div fxLayout="row wrap"  fxLayoutAlign="center center"  style=" background-color: rgb(37, 150, 190); border-radius: 7px; height: 50px; padding: 15px; margin-top: 9px; cursor: pointer; " class="whiteframe" (click)="addEmployee()">
+        <div fxLayout="row wrap"  fxLayoutAlign="start start"  style="margin-left: 10px; width: 150px; ">
+            <div fxLayout="row wrap"  fxLayoutAlign="center center"  style=" background-color: rgb(37, 150, 190); border-radius: 7px; height: 50px; padding: 10px; margin-top: 9px; cursor: pointer; " class="whiteframe" (click)="addEmployee()">
                 <span class="material-symbols-outlined notranslate" style="color: white; transform: scale(1);" > add </span> &nbsp;  &nbsp;
-                <span class="font" style="color: white;"> Add Employee</span>
+                <span class="font" style="color: white; font-size: 0.9em;"> Add Employee</span>
             </div>
         </div>  
     </div>  

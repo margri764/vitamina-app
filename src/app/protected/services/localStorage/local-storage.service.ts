@@ -18,7 +18,7 @@ export class LocalStorageService {
 
     loadInitialState() {
      const user = getDataLS("user");
-    // const storedState = getDataSS("arrArticles");
+    const projectSkills = getDataSS("projectSkills");
     // const openOrders = getDataSS("openOrders");
     // const tempUser = getDataSS("tempClient");
     //  console.log(openOrders);
@@ -30,9 +30,9 @@ export class LocalStorageService {
       this.store.dispatch(authAction.setUser({ user }));
     }
 
-    // if(tempUser !== undefined && tempUser !== null){
-    //   this.store.dispatch(authAction.setTempClient({ client: tempUser }));
-    // }
+    if(projectSkills !== undefined && projectSkills !== null){
+      this.store.dispatch(authAction.setProjectSkills({ projectSkills }));
+    }
 
 
  
