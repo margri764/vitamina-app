@@ -12,6 +12,7 @@ import { AskGenericDeleteComponent } from 'src/app/protected/messages/ask-generi
 import { saveDataSS } from 'src/app/protected/Storage';
 import { AssignTimeComponent } from '../../assign-time/assign-time/assign-time.component';
 import { ValidatorService } from 'src/app/protected/services/validator/validator.service';
+import * as authActions from 'src/app/auth.actions';
 
 @Component({
   selector: 'app-project',
@@ -37,7 +38,7 @@ export class ProjectComponent implements OnInit {
   showDeleteIconFeature: boolean[] = new Array(this.arrFeatures.length).fill(false);
   employees : any [] = [];
   arrProjectTime : any [] =[];
-
+  noSuggestedEmployees: boolean = false;
 
 
   
@@ -46,18 +47,17 @@ export class ProjectComponent implements OnInit {
               private employeeService : EmployeeService,
               private dialog : MatDialog,
               private store : Store <AppState>,
-              private validatorService : ValidatorService
+              private validatorService : ValidatorService,
+              private errorService : ErrorService,
               // private authService : AuthService,
-              // private errorService : ErrorService,
   ) {
-
-
 
    
    }
 
   ngOnInit(): void {
 
+    this.errorService.closeIsLoading$.subscribe( emmited => {if(emmited)this.isLoading = false})
 
     this.store.select('auth')
     .pipe(
@@ -65,8 +65,6 @@ export class ProjectComponent implements OnInit {
     ).subscribe(
       ({projectSkills, projectTime})=>{
         this.projectSkills = projectSkills;
-        saveDataSS('projectSkills', projectSkills);
-        this.suggestEmployeeBySkill();
         this.getProjectTime(projectTime);
 
       })
@@ -128,8 +126,8 @@ export class ProjectComponent implements OnInit {
 
   deleteSkill( skill:any){
     this.projectSkills= this.projectSkills.filter( (item:any)=> item !== skill);
+    this.store.dispatch(authActions.setProjectSkills({projectSkills : this.projectSkills}))
   }
-
 
   onEnterKey(event: Event) {
     event.stopPropagation();
@@ -147,6 +145,7 @@ export class ProjectComponent implements OnInit {
     this.arrFeatures= this.arrFeatures.filter( (item:any)=> item !== feature);
   }
   
+
   suggestEmployeeBySkill(){
 
       this.isLoading = true;
@@ -156,20 +155,45 @@ export class ProjectComponent implements OnInit {
           if(success){
             this.employees = employees;
             this.dataTableActive = employees;
-            this.isLoading = false
+            this.isLoading = false;
+          }else if(employees.length === 0){
+            this.noSuggestedEmployees = true;
           }
         });
   }
 
-  validField( field: string ) {
+validField( field: string ) {
     return this.secondFormGroup.controls[field].errors && this.secondFormGroup.controls[field].touched;
+}
+
+closeNotMatching(){
+  this.noSuggestedEmployees = false;
+}
+
+ getTotalHs(){
+
+  if (!this.arrProjectTime || this.arrProjectTime.length === 0) {
+    return 0;
+  }
+
+  const duration = this.secondFormGroup.get('duration')?.value;
+  console.log(duration);
+
+  const accumProjectTime = this.arrProjectTime.reduce((total, time) => total + time.time, 0);
+  
+  const total = duration - accumProjectTime; 
+  
+  return total 
+
+
+
 }
 
 
   getProjectTime( projectTime:any){
     if(!projectTime) return;
-
     this.arrProjectTime = projectTime;
+    this.getTotalHs();
 
   }
 
@@ -190,7 +214,7 @@ export class ProjectComponent implements OnInit {
 
     if(screen.width >= 800) {
       width = "600px";
-      height = "280px";
+      height = "310px";
     }
       this.dialog.open(AssignTimeComponent, {
         data: employee,

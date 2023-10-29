@@ -27,7 +27,7 @@
             <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex.xs="50" *ngFor="let skill of skills">
 
                 <div fxLayout="row wrap"  fxLayoutAlign="start center"  fxFlex="100" style="margin-top: 9px; margin-left: 5px;" >
-                    <button  class="skill font" (click)="onSelect(skill, $event)"> {{ skill }} </button>
+                    <button  class="skill font" (click)="onSelect(skill, $event)" [title]="skill"> {{ skill }} </button>
                 </div>    
                         
               </div>

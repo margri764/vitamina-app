@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { EmployeeService } from 'src/app/protected/services/employee/employee.service';
 
 @Component({
   selector: 'app-wrong-action-message',
@@ -15,7 +16,8 @@ export class WrongActionMessageComponent implements OnInit {
   constructor( 
               private dialogRef : MatDialogRef<WrongActionMessageComponent>,
               @Inject(MAT_DIALOG_DATA) private data: any,
-              private router : Router
+              private router : Router,
+              private employeeService : EmployeeService
               )
    { }
 
@@ -26,6 +28,7 @@ export class WrongActionMessageComponent implements OnInit {
 
   continue(){
     this.confirm = true;
+    this.employeeService.askNoAvailableEmployee$.emit(true);
     setTimeout(()=>{ this.dialogRef.close() },300);
 
     if(this.msg === "Internal Server Error. Sorry, something went wrong on our server. Please try again later"){
@@ -33,6 +36,11 @@ export class WrongActionMessageComponent implements OnInit {
       return
     }
     
+  }
+
+  close(){
+    this.dialogRef.close();
+    this.employeeService.askNoAvailableEmployee$.emit(false)
   }
 
 }

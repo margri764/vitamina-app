@@ -44,21 +44,21 @@ const _authReducer = createReducer(initialState,
 
 
     on(editEmployeeProjectTime, (state, { updatedProjectTime }) => {
-      
-      const index = state.projectTime.findIndex(employee => employee.id === updatedProjectTime.id);
+      const updatedTime = updatedProjectTime.time;
+      const updatedId = updatedProjectTime.id;
     
-      if (index === -1) {
-        return state;
-      }
+      const updatedProjectTimeArray = state.projectTime.map(employee => {
+        if (employee.id === updatedId) {
+          // Si es el elemento que deseas actualizar, crea una copia con la propiedad 'time' actualizada
+          return { ...employee, time: updatedTime };
+        }
+        // Si no es el elemento que deseas actualizar, devuelve el empleado sin cambios
+        return employee;
+      });
     
-      const newState = { ...state };
-    
-      const editedEmployee = { ...state.projectTime[index], time: updatedProjectTime.time };
-    
-      newState.projectTime[index] = editedEmployee;
-    
-      return newState;
+      return { ...state, projectTime: updatedProjectTimeArray };
     })
+    
     
 );
 

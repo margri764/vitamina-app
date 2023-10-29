@@ -30,21 +30,23 @@
              
                     <span class="font" fxFlex="100" style="margin-top: 20px; font-size: 1.7em; text-align: start; font-weight: bold; line-height:30px;"> Project Scope</span>        
                       
-                        <mat-form-field appearance="outline"  fxFlex="49" class="mt-20 font" >		
+                        <mat-form-field appearance="outline"  fxFlex="51" class="mt-20 font" >		
                             <mat-label>Project´s name</mat-label>
                             <input matInput type="text" required formControlName="name">
                         </mat-form-field> 
+
+                        
+                        <mat-form-field appearance="outline"  fxFlex="51" class="mt-10 font" >		
+                          <mat-label>Duration /hs</mat-label>
+                          <input matInput type="text" required formControlName="duration">
+                        </mat-form-field> 
+                        <mat-error *ngIf="validField('duration')" class="font" fxFlex="100"> Please enter a positive value with up to two decimal places. </mat-error>
 
                         <mat-form-field appearance="outline"  fxFlex="100" class="mt-10 font" >
                           <mat-label>Description</mat-label>
                           <textarea matInput style="height: 80px;"></textarea>
                         </mat-form-field>
 
-                        <mat-form-field appearance="outline"  fxFlex="49" class="mt-20 font" >		
-                          <mat-label>Duration /hs</mat-label>
-                          <input matInput type="text" required formControlName="duration">
-                        </mat-form-field> 
-                        <mat-error *ngIf="validField('duration')" class="font" fxFlex="100"> Please enter a positive value with up to two decimal places. </mat-error>
 
                 <span class="font" fxFlex="100" style="margin-top: 20px; font-size: 1.5em; text-align: start; font-weight: bold; line-height:30px;"> Main features</span>   
         
@@ -71,49 +73,62 @@
 
                       <span class="font" style=" font-size: 1.5em; text-align: start; font-weight: bold; line-height:30px;" > Select Related skills</span>   
 
-                      <div fxLayout="row wrap" fxLayoutAlign="center center" class="font" style="margin-left: 20px; font-size: 1em; width: 60px; " [ngClass]="selection ? 'btnMenuClicked':'btnMenu'"  (click)="openDialogSkills()">Go <i class="material-symbols-outlined notranslate" >     chevron_right
+                      <div fxLayout="row wrap" fxLayoutAlign="center center" class="font" style="margin-left: 20px; font-size: 1em; width: 60px; cursor: pointer;" [ngClass]="selection ? 'btnMenuClicked':'btnMenu'"  (click)="openDialogSkills()">Go <i class="material-symbols-outlined notranslate" >     chevron_right
                       </i>  </div>
                   </div>
 
                                 
-                          <div fxLayout="row wrap"  fxLayoutAlign.xs="start center"  fxLayoutAlign="center center" fxFlex="100" class="font" style="margin-top: 10px;"   *ngFor="let item of projectSkills; let i = index"      (mouseenter)="showDeleteIcon[i] = true"
+                          <div fxLayout="row wrap"  fxLayoutAlign.xs="start center"  fxLayoutAlign="center center" fxFlex="100" class="font" style="margin-top: 10px;"   *ngFor="let item of projectSkills; let i = index" (mouseenter)="showDeleteIcon[i] = true"
                           (mouseleave)="showDeleteIcon[i] = false">
 
                             <div fxLayout="row wrap" fxLayoutAlign="space-between center"  fxFlex="100"  class="fs-4 boxSelection"
                         >
                                 <div fxLayout="row wrap" fxLayoutAlign="start center"  fxFlex="90"   >
                                   <span class="material-symbols-outlined notranslate">done </span>
-                                    <span  style="cursor: pointer; text-align: start; margin-left: 15px; font-size: 0.8em;" fxFlex="80">{{ item |capitalizeFirstLetter}}</span>
+                                    <span  style="text-align: start; margin-left: 15px; font-size: 0.8em;" >{{ item |capitalizeFirstLetter}}</span>
                                 </div>  
-                                <span *ngIf="showDeleteIcon[i]" (click)="deleteSkill(item)"> 
-                                  <i class="material-symbols-outlined notranslate" style="cursor: pointer; color: red;">delete</i>
-                                </span>
+                                  <i class="material-symbols-outlined notranslate" style="cursor: pointer; color: red; font-size: 1.4em;" *ngIf="showDeleteIcon[i]" (click)="deleteSkill(item)">delete</i>
                             </div>   
                         </div>
               </form>
 
                 <div>
                     <button mat-button matStepperPrevious > <span class="font"> Back  </span></button>
-                    <button mat-button matStepperNext>  <span class="font"> Next  </span></button>
+                    <button mat-button matStepperNext>  <span class="font" (click)="suggestEmployeeBySkill()"> Next  </span></button>
                 </div>
             </mat-step>
 
 
             <mat-step>
-              <ng-template matStepLabel > <span class="font">Asign Employee</span></ng-template>
+              <ng-template matStepLabel > <span class="font" (click)="suggestEmployeeBySkill()">Assign Employees</span></ng-template>
 
               <div  style="width: 100%; " >
                 <app-search-employee fxFlex="100" ></app-search-employee>
               </div>
-              <div  style="margin-top: 40px;  width: 100%; " >
 
-              <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 20px;" >
+              <div  fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 40px;" >
 
-                <span class="font" style="font-size: 1.3em; text-align: start;  font-weight: bold;"> Suggested Employees with the Best Matching Skills</span>
+                  <!-- start no items -->
+                  <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" *ngIf="noSuggestedEmployees"  >
+                      
+                      <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" class="whiteframe notFound"  >
+                        <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="90"   >
+                            <span class="material-icons" style="color: white;"> error </span>
+                            <span class="font " style="color: white; text-align: center; margin-left: 20px; font-size: 0.8em;"> No employees found with the required skills.
+                            </span>
+                          </div>
+                          <span class="material-icons" style="color: white; text-align: end; transform: scale(0.8); cursor: pointer;" (click)="closeNotMatching()"> close </span>
+                      </div>
+                  </div>
+                  <!-- end no items -->
 
-                <span class="material-icons-outlined notranslate" style="color: green; margin-left: 10px;" (click)="suggestEmployeeBySkill()">refresh</span>
-  
-              </div>
+                      <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 20px; " >
+
+                          <span class="font" style="font-size: 1.3em; text-align: start;  font-weight: bold;"> Suggested Employees with the Best Matching Skills</span>
+
+                          <span class="material-icons-outlined notranslate" style="color: green; margin-left: 10px;" (click)="suggestEmployeeBySkill()">refresh</span>
+          
+                      </div>
 
             
               </div>
@@ -176,6 +191,10 @@
                         <b fxFlex="80">Hourly rate:</b> &nbsp; {{time.hourly_rate}} 
                   </li>
                 </ul>
+              </div>
+
+              <div>
+                <span> hs to assign {{getTotalHs()}}</span>
               </div>
 
               <div style="margin-top: 40px;">

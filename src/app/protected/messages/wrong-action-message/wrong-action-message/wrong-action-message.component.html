@@ -12,10 +12,17 @@
 
 <div  fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex="100" style="margin-top: 10px;">
 
-   <button mat-raised-button  [ngClass]="confirm ? 'btnMenuClicked':'btnMenu'" fxFlex="70" (click)="continue()">
-      <i class="material-symbols-outlined notranslate">login</i> 
-      &nbsp; Continue
-  </button>
+      
+    <div  fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="80" style="margin-top: 20px;">
+        <button mat-raised-button  [ngClass]="!confirm ? 'btnMenuClicked':'btnMenu'"  fxFlex="48" (click)="close()">
+             No
+            </button>
+        <button mat-raised-button  [ngClass]="confirm ? 'btnMenuClicked':'btnMenu'" fxFlex="48" (click)="continue()" style="font-size: 0.9em;">
+        <i class="material-symbols-outlined notranslate" style="transform: scale(1.3);">login</i> 
+        &nbsp; Continue anyway
+        </button>
+    </div>
+  
 </div>
 
 </div>

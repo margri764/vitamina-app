@@ -10,8 +10,10 @@ import { environment } from 'src/environments/environment';
 export class EmployeeService {
 
     updateEditingEmployee$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
-     authDelSkill$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
-     authDelEmployee$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+    authDelSkill$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+    authDelEmployee$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+    askNoAvailableEmployee$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  
 
   
     // token : string = '';

@@ -61,6 +61,15 @@ export class ProjectSkillsComponent implements OnInit,OnDestroy {
     // toDo!!!
     //si entro aca desde las notificaciones el "body" con los datos basicos del empleado tengo q guardarlos en algun lugar (esto esta xq puedo crear los datos generales y mas tarde querer agregar las skill y el rate)
 
+    this.store.select('auth')
+    .pipe(
+      filter( ({projectSkills})=>  projectSkills != null && projectSkills.length != 0),
+    ).subscribe(
+      ({projectSkills})=>{
+        this.selectedSkills = projectSkills;
+        this.arrSkills = projectSkills;
+      })
+
 
 
     this.body = this.data;
@@ -75,25 +84,21 @@ export class ProjectSkillsComponent implements OnInit,OnDestroy {
     const target = event.target as HTMLElement;
   
     if (target.classList.contains('skillSelected')) {
-
       target.classList.remove('skillSelected');
-
       const index = this.arrSkills.indexOf(skill);
       if (index !== -1) {
-        console.log(index);
         this.arrSkills.splice(index, 1);
       }
     } else {
       target.classList.add('skillSelected');
-      this.isSkillSelected = !this.isSkillSelected;
+      this.isSkillSelected = true;
       this.isCategorySelected = false;
       this.isSelectedSkill = false;
-
-      this.arrSkills.push(skill);
+      this.arrSkills = [...this.arrSkills, skill];
     }
 
     this.showButton = true;
-    this.selectedSkills = this.arrSkills;
+    this.selectedSkills=  this.arrSkills;
   }
 
   selectCategory( category:any , event: MouseEvent){
@@ -104,7 +109,6 @@ export class ProjectSkillsComponent implements OnInit,OnDestroy {
     this.isCategorySelected = true;
     this.skills = category.skillList;
   }
-
 
   saveSkills(event: MouseEvent){
 
@@ -127,12 +131,15 @@ export class ProjectSkillsComponent implements OnInit,OnDestroy {
   }
 
   deleteSkill(skill:any){   
-    console.log(this.selectedSkills);
 
     this.selectedSkills= this.selectedSkills.filter( (item:any)=> item !== skill);
     this.arrSkills = []
-    console.log(this.selectedSkills);
- 
+    
+    const button = document.querySelector(`button.skillSelected[title="${skill}"]`);
+    if (button) {
+      button.classList.remove('skillSelected');
+    }
+  
   }
 
   delSkill(){
@@ -142,7 +149,6 @@ export class ProjectSkillsComponent implements OnInit,OnDestroy {
     this.isSelectedSkill = true;
     this.showDelSkill = !this.showDelSkill;
   }
-
 
   onInput(event: Event) {
     this.isSkillSelected = false;
@@ -158,7 +164,6 @@ export class ProjectSkillsComponent implements OnInit,OnDestroy {
     this.isSelectedSkill = false;
     this.isRateSelected = true;
   }
-
 
   getAllSkillCategories(){
 
@@ -190,11 +195,7 @@ export class ProjectSkillsComponent implements OnInit,OnDestroy {
     this.confirm = true;
     console.log(this.selectedSkills);
     this.store.dispatch(authActions.setProjectSkills({projectSkills : this.selectedSkills}))
-
-
-    setTimeout(()=>{ this.close() },700)
-
-
+    setTimeout(()=>{ this.close() },300)
    
   }
 

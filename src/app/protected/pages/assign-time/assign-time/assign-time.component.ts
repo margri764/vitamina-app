@@ -5,8 +5,9 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { ValidatorService } from 'src/app/protected/services/validator/validator.service';
 import * as authActions from 'src/app/auth.actions';
-import { Subscription, filter } from 'rxjs';
+import { Subscription, filter, take } from 'rxjs';
 import { WrongActionMessageComponent } from 'src/app/protected/messages/wrong-action-message/wrong-action-message/wrong-action-message.component';
+import { EmployeeService } from 'src/app/protected/services/employee/employee.service';
 
 @Component({
   selector: 'app-assign-time',
@@ -19,6 +20,8 @@ export class AssignTimeComponent implements OnInit, OnDestroy {
   confirm: boolean = false;
   employee: any;
   authSubscription! : Subscription;
+  foundEmployee: any;
+  editing: boolean = false;
 
 
   constructor(
@@ -27,8 +30,8 @@ export class AssignTimeComponent implements OnInit, OnDestroy {
               @Inject(MAT_DIALOG_DATA) public data: any,
               private validatorService : ValidatorService,
               private store : Store<AppState>,
-              private dialog : MatDialog
-              // private employeeService : EmployeeService,
+              private dialog : MatDialog,
+              private employeeService : EmployeeService,
               // private errorService : ErrorService,
 
   ) 
@@ -39,55 +42,71 @@ export class AssignTimeComponent implements OnInit, OnDestroy {
 
   }
   
+  projectTime: any;
 
   ngOnInit(): void {
 
     this.employee = this.data;
     console.log(this.employee);
 
+
     this.authSubscription =this.store.select('auth')
     .pipe(
       filter( ({projectSkills})=>  projectSkills != null && projectSkills.length != 0),
     ).subscribe(
       ({projectTime})=>{
-        this.searchEmployeeId(projectTime);
+        this.projectTime = projectTime;
+        // this.searchEmployeeId(projectTime);
 
       })
 
-      
- 
+      this.searchEmployeeId();
 
   }
 
-  foundEmployee: any;
-  editing: boolean = false;
 
   // with this I manage the employee´s time editing 
-  searchEmployeeId(projectTime: any) {
+  searchEmployeeId() {
 
     if(!this.employee.availability){
 
-        this.openGenericMsgAlert('This employee in not available. ')
-        this.close();
-      return
-    }
+        this.openGenericMsgAlert('This employee is not available, do you want continue anyway?');
+
+        this.employeeService.askNoAvailableEmployee$.pipe(
+          take(1)
+        ).subscribe ( (auth)=>{
+          if(!auth){
+            this.close();
+          }else{
+            const idToSearch = this.employee._id;
+            this.foundEmployee = this.projectTime.find((item:any) => item.id === idToSearch);
+            if (this.foundEmployee !== undefined) {
+              this.myForm.get('time')?.setValue(this.foundEmployee.time);
+              this.editing = true;
+            } else{
+              return
+            }
+          }
+        })
+    }else{
 
     const idToSearch = this.employee._id;
-    this.foundEmployee = projectTime.find((item:any) => item.id === idToSearch);
+    this.foundEmployee = this.projectTime.find((item:any) => item.id === idToSearch);
     if (this.foundEmployee !== undefined) {
       this.myForm.get('time')?.setValue(this.foundEmployee.time);
       this.editing = true;
     } else{
       return
     }
-  }
+   }
+}
   
 
   onSaveForm(){
 
     const numeroDecimal = this.myForm.get('time')?.value;
     
-    if ( this.myForm.invalid ||numeroDecimal == '') {
+    if ( this.myForm.invalid || numeroDecimal == '') {
       this.myForm.markAllAsTouched();
       return;
     }
@@ -106,10 +125,10 @@ export class AssignTimeComponent implements OnInit, OnDestroy {
 
     }else{
       // editing
-      const updatedProjectTime = { id, name, hourly_rate,time };
+      const updatedProjectTime = { id, name, hourly_rate, time };
 
-      this.store.dispatch(
-        authActions.editEmployeeProjectTime({ updatedProjectTime }) );
+
+      this.store.dispatch( authActions.editEmployeeProjectTime({ updatedProjectTime }) );
           
           setTimeout(() => {
             this.close();
@@ -136,8 +155,8 @@ export class AssignTimeComponent implements OnInit, OnDestroy {
       let height : string = '';
   
       if(screen.width >= 800) {
-        width = "350px"
-        height ="280px";
+        width = "600px"
+        height ="310px";
       }
   
       this.dialog.open(WrongActionMessageComponent, {
@@ -158,8 +177,6 @@ export class AssignTimeComponent implements OnInit, OnDestroy {
     this.dialogRef.close();
   }
 
-
-  
   ngOnDestroy(): void {
     if(this.authSubscription){
       this.authSubscription.unsubscribe();
