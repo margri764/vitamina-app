@@ -25,6 +25,9 @@ export const setEmployeeProjectTime = createAction( '[Auth] setEmployeeProjectTi
     props<{ projectTime: ProjectTime [] }>()
 );
 
+export const editEmployeeProjectTime = createAction( '[Auth] EditEmployeeProjectTime',
+    props<{ updatedProjectTime: ProjectTime }>()
+  );
 
 
 

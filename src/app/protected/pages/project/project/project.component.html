@@ -26,7 +26,7 @@
               <ng-template matStepLabel > <span class="font">Project Scope</span></ng-template>
 
 
-              <form [formGroup]="secondFormGroup" fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" style="margin-top: 30px; border: 1px solid rgb(197, 197, 197); border-radius: 10px; padding: 10px;">
+              <form [formGroup]="secondFormGroup" fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" style="margin-top: 30px; border: 1px solid rgb(230, 230, 230); border-radius: 10px; padding: 10px;" class="whiteframe">
              
                     <span class="font" fxFlex="100" style="margin-top: 20px; font-size: 1.7em; text-align: start; font-weight: bold; line-height:30px;"> Project Scope</span>        
                       
@@ -40,6 +40,12 @@
                           <textarea matInput style="height: 80px;"></textarea>
                         </mat-form-field>
 
+                        <mat-form-field appearance="outline"  fxFlex="49" class="mt-20 font" >		
+                          <mat-label>Duration /hs</mat-label>
+                          <input matInput type="text" required formControlName="duration">
+                        </mat-form-field> 
+                        <mat-error *ngIf="validField('duration')" class="font" fxFlex="100"> Please enter a positive value with up to two decimal places. </mat-error>
+
                 <span class="font" fxFlex="100" style="margin-top: 20px; font-size: 1.5em; text-align: start; font-weight: bold; line-height:30px;"> Main features</span>   
         
                 <mat-form-field appearance="outline" fxFlex="100" class="fs-4" style="margin-top: 30px;">
@@ -48,7 +54,8 @@
                 </mat-form-field>
                    
                   
-                  <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" class="font boxSelection" *ngFor="let feature of arrFeatures" style="margin-top: 6px;">
+                  <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" class="font boxSelection" *ngFor="let feature of arrFeatures; let i = index" style="margin-top: 6px;" (mouseenter)="showDeleteIconFeature[i] = true"
+                  (mouseleave)="showDeleteIconFeature[i] = false">
 
                   
                     <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="90" >
@@ -56,7 +63,7 @@
                       <span class="feature-text">{{ feature }}</span>
                     </div>
                     <div fxLayout="row wrap" fxLayoutAlign="end center" fxFlex="10">
-                      <span class="material-symbols-outlined notranslate cursor" style="color: red;" (click)="delFeature(feature)"> highlight_off </span>
+                      <span class="material-symbols-outlined notranslate cursor" style="color: red;" *ngIf="showDeleteIconFeature[i]" (click)="delFeature(feature)"> delete </span>
                     </div>
                   </div>
 
@@ -64,8 +71,8 @@
 
                       <span class="font" style=" font-size: 1.5em; text-align: start; font-weight: bold; line-height:30px;" > Select Related skills</span>   
 
-                      <button mat-raised-button class="font" style="margin-left: 20px; " [ngClass]="selection ? 'btnMenuClicked':'btnMenu'"  (click)="openDialogSkills()">Go <i class="material-symbols-outlined notranslate" style="font-size: 25px;">     chevron_right
-                      </i>  </button>
+                      <div fxLayout="row wrap" fxLayoutAlign="center center" class="font" style="margin-left: 20px; font-size: 1em; width: 60px; " [ngClass]="selection ? 'btnMenuClicked':'btnMenu'"  (click)="openDialogSkills()">Go <i class="material-symbols-outlined notranslate" >     chevron_right
+                      </i>  </div>
                   </div>
 
                                 
@@ -83,11 +90,12 @@
                                 </span>
                             </div>   
                         </div>
-                      </form>
-                      <div>
-                          <button mat-button matStepperPrevious > <span class="font"> Back  </span></button>
-                          <button mat-button matStepperNext>  <span class="font"> Next  </span></button>
-                      </div>
+              </form>
+
+                <div>
+                    <button mat-button matStepperPrevious > <span class="font"> Back  </span></button>
+                    <button mat-button matStepperNext>  <span class="font"> Next  </span></button>
+                </div>
             </mat-step>
 
 
@@ -141,9 +149,7 @@
                                           <div class="icon" [routerLink]="['../view-employee/',element._id, ]">
                                               <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57);"> edit </span>
                                           </div>
-                                          <div class="icon" (click)="deleteEmployee(element)" style="margin-left: 3px;">
-                                              <span class="material-symbols-outlined notranslate cursor" style="color: red;"> delete </span>
-                                          </div>
+                                        
                                           <div class="icon" (click)="openDialogAssignTime(element)" style="margin-left: 3px;">
                                             <span class="material-symbols-outlined notranslate cursor" style="color: green;"> settings </span>
                                         </div>

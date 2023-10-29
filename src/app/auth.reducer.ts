@@ -1,5 +1,5 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { setEmployeeProjectTime, setProjectSkills, setTempEmployee, setUser,  unSetEmployeeProjectTime,  unSetProjectSkills,  unSetTempEmployee, unSetUser } from './auth.actions';
+import { editEmployeeProjectTime, setEmployeeProjectTime, setProjectSkills, setTempEmployee, setUser,  unSetEmployeeProjectTime,  unSetProjectSkills,  unSetTempEmployee, unSetUser } from './auth.actions';
 import { User } from './protected/models/user.models';
 
 type ProjectTime = {
@@ -43,6 +43,22 @@ const _authReducer = createReducer(initialState,
     on( unSetEmployeeProjectTime, state => ({ ...state, projectTime: []  })),  
 
 
+    on(editEmployeeProjectTime, (state, { updatedProjectTime }) => {
+      
+      const index = state.projectTime.findIndex(employee => employee.id === updatedProjectTime.id);
+    
+      if (index === -1) {
+        return state;
+      }
+    
+      const newState = { ...state };
+    
+      const editedEmployee = { ...state.projectTime[index], time: updatedProjectTime.time };
+    
+      newState.projectTime[index] = editedEmployee;
+    
+      return newState;
+    })
     
 );
 

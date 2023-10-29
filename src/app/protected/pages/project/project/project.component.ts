@@ -11,6 +11,7 @@ import { ProjectSkillsComponent } from 'src/app/protected/messages/project-skill
 import { AskGenericDeleteComponent } from 'src/app/protected/messages/ask-generic-delete/ask-generic-delete/ask-generic-delete.component';
 import { saveDataSS } from 'src/app/protected/Storage';
 import { AssignTimeComponent } from '../../assign-time/assign-time/assign-time.component';
+import { ValidatorService } from 'src/app/protected/services/validator/validator.service';
 
 @Component({
   selector: 'app-project',
@@ -24,37 +25,34 @@ export class ProjectComponent implements OnInit {
 
   isLinear = false;
    myForm!: FormGroup;
+   firstFormGroup!: FormGroup;
+   secondFormGroup!: FormGroup;
+   
   isLoading: boolean = false;
   confirm: boolean = false;
   selection: boolean = false;
   projectSkills: any []=[];
-  showDeleteIcon: boolean[] = new Array(this.projectSkills.length).fill(false);
-  employees : any [] = [];
   arrFeatures : any [] = [];
+  showDeleteIcon: boolean[] = new Array(this.projectSkills.length).fill(false);
+  showDeleteIconFeature: boolean[] = new Array(this.arrFeatures.length).fill(false);
+  employees : any [] = [];
   arrProjectTime : any [] =[];
 
 
-  firstFormGroup = this.fb.group({
-    firstCtrl: ['', Validators.required],
-  });
-  secondFormGroup = this.fb.group({
-    name: ['', ],
-    features: ['',],
-  });
+
   
   constructor(
               private fb : FormBuilder,
               private employeeService : EmployeeService,
               private dialog : MatDialog,
               private store : Store <AppState>,
+              private validatorService : ValidatorService
               // private authService : AuthService,
               // private errorService : ErrorService,
   ) {
 
 
-      this.myForm = this.fb.group({
-        firstCtrl: ['', Validators.required],
-      });
+
    
    }
 
@@ -73,6 +71,19 @@ export class ProjectComponent implements OnInit {
 
       })
 
+      this.myForm = this.fb.group({
+        // firstCtrl: ['', Validators.required],
+      });
+
+      this.firstFormGroup = this.fb.group({
+        // firstCtrl: ['', Validators.required],
+      });
+
+      this.secondFormGroup = this.fb.group({
+        name: ['', ],
+        features: [''],
+        duration:  [ '', [this.validatorService.positiveNumberWithDecimals()] ]
+      });
 
   }
 
@@ -121,11 +132,12 @@ export class ProjectComponent implements OnInit {
 
 
   onEnterKey(event: Event) {
+    event.stopPropagation();
 
     const newFeature = this.secondFormGroup.get('features')?.value;
-
-    if (event instanceof KeyboardEvent && event.key === 'Enter') {
     
+    if (event instanceof KeyboardEvent && event.key === 'Enter') {
+      
       this.arrFeatures.push(newFeature);
       this.secondFormGroup.controls['features'].setValue('');
     }
@@ -149,6 +161,10 @@ export class ProjectComponent implements OnInit {
         });
   }
 
+  validField( field: string ) {
+    return this.secondFormGroup.controls[field].errors && this.secondFormGroup.controls[field].touched;
+}
+
 
   getProjectTime( projectTime:any){
     if(!projectTime) return;
@@ -160,17 +176,9 @@ export class ProjectComponent implements OnInit {
   openDialogSkills(){
 
       this.selection = true;
-      let width = "";
-      let height ="";
 
-        if(screen.width >= 800) {
-          width = "600px";
-          height ="520px";
-        }
       this.dialog.open(ProjectSkillsComponent, {
-        // data: body,
-        // width: `${width}`|| "",
-        // height:`${height}`|| "",
+ 
         panelClass:"custom-modalbox-responsive", 
       });
   }
@@ -182,7 +190,7 @@ export class ProjectComponent implements OnInit {
 
     if(screen.width >= 800) {
       width = "600px";
-      height = "260px";
+      height = "280px";
     }
       this.dialog.open(AssignTimeComponent, {
         data: employee,
