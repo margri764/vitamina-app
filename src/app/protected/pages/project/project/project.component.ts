@@ -34,11 +34,14 @@ export class ProjectComponent implements OnInit {
   selection: boolean = false;
   projectSkills: any []=[];
   arrFeatures : any [] = [];
+  arrProjectTime : any [] =[];
   showDeleteIcon: boolean[] = new Array(this.projectSkills.length).fill(false);
   showDeleteIconFeature: boolean[] = new Array(this.arrFeatures.length).fill(false);
+  showDelIconAssigEmployee: boolean[] = new Array(this.arrProjectTime.length).fill(false);
   employees : any [] = [];
-  arrProjectTime : any [] =[];
   noSuggestedEmployees: boolean = false;
+  accumProjectTime: number = 0;
+
 
 
   
@@ -80,47 +83,56 @@ export class ProjectComponent implements OnInit {
       this.secondFormGroup = this.fb.group({
         name: ['', ],
         features: [''],
-        duration:  [ '', [this.validatorService.positiveNumberWithDecimals()] ]
+        duration:  [ 100, [this.validatorService.positiveNumberWithDecimals()] ]
       });
 
   }
 
-  deleteEmployee(employee : any){
+  // deleteEmployee(employee : any){
 
-    let width : string = '';
-    let height : string = '';
+  //   let width : string = '';
+  //   let height : string = '';
 
-    if(screen.width >= 800) {
-      width = "400px";
-      height = "250px";
+  //   if(screen.width >= 800) {
+  //     width = "400px";
+  //     height = "250px";
   
-    }
-      this.dialog.open(AskGenericDeleteComponent, {
-        data: employee.name,
-        width: `${width}`|| "",
-        height:`${height}`|| "",
-        panelClass:"custom-modalbox-edit",
-      });
+  //   }
+  //     this.dialog.open(AskGenericDeleteComponent, {
+  //       data: employee.name,
+  //       width: `${width}`|| "",
+  //       height:`${height}`|| "",
+  //       panelClass:"custom-modalbox-edit",
+  //     });
   
-      this.employeeService.authDelEmployee$.pipe(
-        take(1)
-      ).subscribe( (auth: any)=> { // el ask-edit dispara ui boolean si se elige CONTINUAR con la acción
-        this.isLoading = true;
-        if(auth){
-          this.employeeService.deleteEmployeeById(employee._id, employee).subscribe( 
-            ({success})=>{
-              if(success){
-              // this.getInitialEmployees();
-              this.isLoading = false;
-              }
-            })
-        }
-      })
+  //     this.employeeService.authDelEmployee$.pipe(
+  //       take(1)
+  //     ).subscribe( (auth: any)=> { // el ask-edit dispara ui boolean si se elige CONTINUAR con la acción
+  //       this.isLoading = true;
+  //       if(auth){
+  //         this.employeeService.deleteEmployeeById(employee._id, employee).subscribe( 
+  //           ({success})=>{
+  //             if(success){
+  //             // this.getInitialEmployees();
+  //             this.isLoading = false;
+  //             }
+  //           })
+  //       }
+  //     })
     
-  }
+  // }
   
 
   onSaveForm(){
+
+  }
+
+  deleteAssignedEmployee( employee:any){
+
+    const id = employee.id;
+    console.log(id);
+    this.store.dispatch( authActions.deleteAssignedEmployee({ id }) );
+    this.arrProjectTime = this.arrProjectTime.filter( (item:any)=> item.id !== id)
 
   }
 
@@ -170,18 +182,18 @@ closeNotMatching(){
   this.noSuggestedEmployees = false;
 }
 
+
  getTotalHs(){
 
-  if (!this.arrProjectTime || this.arrProjectTime.length === 0) {
-    return 0;
-  }
+  // if (!this.arrProjectTime || this.arrProjectTime.length === 0) {
+  //   return ;
+  // }
 
   const duration = this.secondFormGroup.get('duration')?.value;
-  console.log(duration);
 
-  const accumProjectTime = this.arrProjectTime.reduce((total, time) => total + time.time, 0);
+  this.accumProjectTime = this.arrProjectTime.reduce((total, time) => total + time.time, 0);
   
-  const total = duration - accumProjectTime; 
+  const total = duration - this.accumProjectTime; 
   
   return total 
 

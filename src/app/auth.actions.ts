@@ -1,10 +1,11 @@
 import { createAction, props } from "@ngrx/store";
 
 type ProjectTime = {
-    id: string,
+    _id: string,
     name: string,
     hourly_rate: number
     time: number;
+    availability: true
   };
   
 
@@ -28,6 +29,11 @@ export const setEmployeeProjectTime = createAction( '[Auth] setEmployeeProjectTi
 export const editEmployeeProjectTime = createAction( '[Auth] EditEmployeeProjectTime',
     props<{ updatedProjectTime: ProjectTime }>()
   );
+
+  export const deleteAssignedEmployee = createAction( '[Auth] deleteAssignedEmployee',
+    props<{ id: string }>()
+  );
+
 
 
 

@@ -124,17 +124,15 @@
 
             
             <div fxLayout="row wrap" fxLayoutAlign="end center" fxFlex="100" style="margin-top: 18px;">
-                <div class="icon mr-10" (click)="deleteClient(clientFound)" >
-                    <span class="material-symbols-outlined notranslate cursor" style="color: red;"> delete </span>
-                </div>
-                
-                <div class="icon mr-10"  (click)="editClient(clientFound)">
-                    <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57);"> edit </span>
-                </div>
-
+          
+               
                 <div class="icon"  (click)="close()" style="margin-right: 10px;">
                     <span class="material-symbols-outlined notranslate cursor" > close </span>
                 </div>
+                <div class="icon mr-10"  (click)="selectClient(clientFound)">
+                    <span class="material-symbols-outlined notranslate cursor" style="color: green;"> done  </span>
+                </div>
+
             </div>
             
         </div>

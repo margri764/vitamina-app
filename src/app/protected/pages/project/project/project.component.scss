@@ -1,4 +1,47 @@
 
+.duration{
+    width: 240px; 
+    height: 55px; 
+    position: relative; 
+    display: flex; 
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+
+    .material-symbols-outlined{
+      font-size: 38px; 
+      color: white;
+    }
+}
+
+.squareIcon{
+    width: 53px; 
+    height: 53px; 
+    position: absolute; 
+    border: 2px solid white;
+    left: 20px; 
+    bottom: 30px; 
+    border-radius: 4px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+
+.hours{
+    font-size: 2em; 
+    text-align: center; 
+    width: 100%; 
+    font-weight: bold;
+}
+
+.hoursText{
+    font-size: 0.9em; 
+    text-align: center; 
+    width: 100%; 
+    color: gray; 
+    margin-top: 10px;
+}
+
 .frame{
   color: white !important;
   background-color: white;
@@ -148,6 +191,35 @@
 }
 
   @media only screen and (max-width: 574px) {
+
+    .duration{
+      width: 250px; 
+      height: 55px; 
+      border: 1px solid red;
+      box-sizing: border-box;
+      .material-symbols-outlined{
+        font-size: 28px; 
+      }
+
+  }
+  
+  .squareIcon{
+      width: 30px; 
+      height: 30px; 
+      left: 2px; 
+      bottom: 43px; 
+  
+  }
+
+  .hours{
+    font-size: 1.5em; 
+    margin-top: 10px;
+  }
+
+  .hoursText{
+    font-size: 0.7em; 
+    text-align: center; 
+}
   
     .mainIcon{
         width: 40px;

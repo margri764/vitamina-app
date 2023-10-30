@@ -1,12 +1,13 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { editEmployeeProjectTime, setEmployeeProjectTime, setProjectSkills, setTempEmployee, setUser,  unSetEmployeeProjectTime,  unSetProjectSkills,  unSetTempEmployee, unSetUser } from './auth.actions';
+import { deleteAssignedEmployee, editEmployeeProjectTime, setEmployeeProjectTime, setProjectSkills, setTempEmployee, setUser,  unSetEmployeeProjectTime,  unSetProjectSkills,  unSetTempEmployee, unSetUser } from './auth.actions';
 import { User } from './protected/models/user.models';
 
 type ProjectTime = {
-  id: string,
+  _id: string,
   name: string,
-  hourly_rate: number
-  time: number;
+  hourly_rate: number,
+  time: number,
+  availability: true
 };
 
 
@@ -45,10 +46,10 @@ const _authReducer = createReducer(initialState,
 
     on(editEmployeeProjectTime, (state, { updatedProjectTime }) => {
       const updatedTime = updatedProjectTime.time;
-      const updatedId = updatedProjectTime.id;
+      const updatedId = updatedProjectTime._id;
     
       const updatedProjectTimeArray = state.projectTime.map(employee => {
-        if (employee.id === updatedId) {
+        if (employee._id === updatedId) {
           // Si es el elemento que deseas actualizar, crea una copia con la propiedad 'time' actualizada
           return { ...employee, time: updatedTime };
         }
@@ -57,8 +58,14 @@ const _authReducer = createReducer(initialState,
       });
     
       return { ...state, projectTime: updatedProjectTimeArray };
-    })
+    }),
     
+    on(deleteAssignedEmployee, (state, { id }) => {
+    
+      const updatedProjectTimeArray = state.projectTime.filter(employee => employee._id !== id);
+  
+      return { ...state, projectTime: updatedProjectTimeArray };
+    })
     
 );
 

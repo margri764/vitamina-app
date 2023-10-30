@@ -168,5 +168,10 @@ export class SearchClientComponent implements OnInit {
 
     // search
 
+    selectClient( client:any){ffff
+
+
+    }
+
 
 }

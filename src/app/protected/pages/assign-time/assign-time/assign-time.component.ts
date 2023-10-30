@@ -22,7 +22,7 @@ export class AssignTimeComponent implements OnInit, OnDestroy {
   authSubscription! : Subscription;
   foundEmployee: any;
   editing: boolean = false;
-
+  projectTime: any;
 
   constructor(
               private fb: FormBuilder,
@@ -33,7 +33,6 @@ export class AssignTimeComponent implements OnInit, OnDestroy {
               private dialog : MatDialog,
               private employeeService : EmployeeService,
               // private errorService : ErrorService,
-
   ) 
   { 
     this.myForm = this.fb.group({
@@ -42,7 +41,6 @@ export class AssignTimeComponent implements OnInit, OnDestroy {
 
   }
   
-  projectTime: any;
 
   ngOnInit(): void {
 
@@ -79,7 +77,7 @@ export class AssignTimeComponent implements OnInit, OnDestroy {
             this.close();
           }else{
             const idToSearch = this.employee._id;
-            this.foundEmployee = this.projectTime.find((item:any) => item.id === idToSearch);
+            this.foundEmployee = this.projectTime.find((item:any) => item._id === idToSearch);
             if (this.foundEmployee !== undefined) {
               this.myForm.get('time')?.setValue(this.foundEmployee.time);
               this.editing = true;
@@ -91,7 +89,7 @@ export class AssignTimeComponent implements OnInit, OnDestroy {
     }else{
 
     const idToSearch = this.employee._id;
-    this.foundEmployee = this.projectTime.find((item:any) => item.id === idToSearch);
+    this.foundEmployee = this.projectTime.find((item:any) => item._id === idToSearch);
     if (this.foundEmployee !== undefined) {
       this.myForm.get('time')?.setValue(this.foundEmployee.time);
       this.editing = true;
@@ -113,10 +111,11 @@ export class AssignTimeComponent implements OnInit, OnDestroy {
     this.confirm = true;
 
     const time = parseFloat(numeroDecimal);
-    const id = this.employee._id;
+    const _id = this.employee._id;
     const hourly_rate = this.employee.hourly_rate;
     const name = this.employee.name;
-    const projectTime = { id, name, hourly_rate, time };
+    const availability = this.employee.availability
+    const projectTime = { _id, name, hourly_rate, time, availability };
 
     if(!this.editing){
       
@@ -125,7 +124,7 @@ export class AssignTimeComponent implements OnInit, OnDestroy {
 
     }else{
       // editing
-      const updatedProjectTime = { id, name, hourly_rate, time };
+      const updatedProjectTime = { _id, name, hourly_rate, time, availability };
 
 
       this.store.dispatch( authActions.editEmployeeProjectTime({ updatedProjectTime }) );
