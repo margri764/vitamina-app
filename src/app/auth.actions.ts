@@ -18,6 +18,10 @@ export const setTempEmployee = createAction( '[Auth] setTempEmployee',
     props<{ employee: any }>()
 );
 
+export const setClient = createAction( '[Auth] setClient',
+    props<{ client: any }>()
+);
+
 export const setProjectSkills = createAction( '[Auth] setProjectSkills',
     props<{ projectSkills: any [] }>()
 );
@@ -44,3 +48,4 @@ export const unSetUser = createAction('[Auth] unSetUser');
 export const unSetTempEmployee = createAction('[Auth] unSetTempEmployee');
 export const unSetProjectSkills = createAction('[Auth] unSetProjectSkills');
 export const unSetEmployeeProjectTime = createAction( '[Auth] unSetEmployeeProjectTime');
+export const unSetClient = createAction( '[Auth] unSetClient');

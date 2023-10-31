@@ -7,6 +7,7 @@ import { AppState } from 'src/app/app.reducer';
 import { ViewProjectComponent } from 'src/app/protected/messages/view-project/view-project/view-project.component';
 import { AuthService } from 'src/app/protected/services/auth/auth.service';
 import { ErrorService } from 'src/app/protected/services/error/error.service';
+import * as authActions from 'src/app/auth.actions';
 
 @Component({
   selector: 'app-search-client',
@@ -168,7 +169,11 @@ export class SearchClientComponent implements OnInit {
 
     // search
 
-    selectClient( client:any){ffff
+    setClient:boolean = false;
+    selectClient( client:any){
+
+      this.store.dispatch(authActions.setClient( {client} ));
+      this.setClient = true;
 
 
     }

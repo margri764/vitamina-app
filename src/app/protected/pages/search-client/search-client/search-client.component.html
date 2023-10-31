@@ -60,7 +60,7 @@
      <!-- start result search cards -->
      <div  fxLayout="row wrap"  fxLayoutAlign="center start"  fxFlex="100" style="margin-top: 40px;" *ngIf="isClientFound">
 
-        <div fxLayout="row wrap"  fxLayoutAlign="space-between center" style="margin-bottom: 30px;  padding: 10px; background-color: white;" fxFlex="100" class="whiteframe" >
+        <div fxLayout="row wrap"  fxLayoutAlign="space-between center" style="margin-bottom: 30px;  padding: 10px; background-color: white;" fxFlex="100" [ngClass]="setClient ? 'frameSelected' : 'whiteframe'" >
 
     
             <div fxLayout="row wrap"  fxLayoutAlign="space-between center"  fxFlex="100" style="margin-top: 20px; padding: 10px;">

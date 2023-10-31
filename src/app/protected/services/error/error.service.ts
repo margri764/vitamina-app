@@ -143,6 +143,7 @@ export class ErrorService {
           localStorage.removeItem("logged");
           localStorage.removeItem("user");
           this.store.dispatch(authActions.unSetUser());
+          this.store.dispatch(authActions.unSetClient());
           this.store.dispatch(authActions.unSetProjectSkills());
           this.store.dispatch(authActions.unSetEmployeeProjectTime());
           this.router.navigateByUrl('login'); 
@@ -187,6 +188,13 @@ export class ErrorService {
 
   openDialogBackendDown(){
 
+    let width : string = '';
+    let height : string = '';
+
+    if(screen.width >= 800) {
+      width = "350px"
+      height ="450px";
+    }
     this.dialog.open(ErrorBackendDownComponent,{
       width: `${this.width}`|| "",
       height:`${this.height}`|| "",

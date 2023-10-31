@@ -8,6 +8,7 @@ import { ClientComponent } from './protected/pages/client/client/client.componen
 import { ViewEmployeeComponent } from './protected/pages/view-employee/view-employee/view-employee.component';
 import { EmployeeComponent } from './protected/pages/employee/employee/employee.component';
 import { ProjectComponent } from './protected/pages/project/project/project.component';
+import { CreateProjectComponent } from './protected/pages/create-project/create-project/create-project.component';
 
 
 const routes: Routes = [
@@ -33,6 +34,9 @@ const routes: Routes = [
 
   {
     path: 'projects-managment',  component: ProjectComponent
+  },
+  {
+    path: 'create-project',  component: CreateProjectComponent
   },
   {
     path: 'login',  component: LoginComponent

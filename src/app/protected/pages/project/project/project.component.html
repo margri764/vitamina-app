@@ -1,263 +1,185 @@
 
 
-<div  fxLayout="row wrap"  fxLayoutAlign="center start" >
+<div  fxLayout="row wrap"  fxLayoutAlign="center start" fxFlex="100" (scroll)="onScroll($event)" class="scroll" style="background-color: rgb(233, 233, 233)">
     
-    <div  fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex.xs="98" fxFlex.sm="95" fxFlex="75">
+  <div  fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex.xs="98" fxFlex.sm="95" fxFlex="75" >
 
-          <mat-stepper [linear]="isLinear" #stepper style=" margin-top: 40px; margin-bottom: 40px; width: 100%;">
-
-              <mat-step [stepControl]="firstFormGroup">
-                <form [formGroup]="firstFormGroup">
-                  <ng-template matStepLabel > <span class="font">Select Client</span></ng-template>
-                
-                  <div  style="margin-top: 40px;  width: 100%; " >
-                    <app-search-client fxFlex="100" ></app-search-client>
-                  </div>
-                
-                  <div>
-
-                    <button mat-button matStepperNext class="font" style="margin-top: 40px;">Next</button>
-                  </div>
-                </form>
-              </mat-step>
-              
-              <mat-step [stepControl]="secondFormGroup"  >
-                <ng-template matStepLabel > <span class="font">Project Scope</span></ng-template>
+      <div  style=" align-items: center; display: flex; justify-content: start center; height: 50px; width: 100%; margin-top: 40px;" >
 
 
-                <form [formGroup]="secondFormGroup" fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" style="margin-top: 30px; border: 1px solid rgb(230, 230, 230); border-radius: 10px; padding: 10px;" class="whiteframe">
-              
-                      <span class="font" fxFlex="100" style="margin-top: 20px; font-size: 1.7em; text-align: start; font-weight: bold; line-height:30px;"> Project Scope</span>        
-                        
-                          <mat-form-field appearance="outline"  fxFlex="51" class="mt-20 font" >		
-                              <mat-label>Project´s name</mat-label>
-                              <input matInput type="text" required formControlName="name">
-                          </mat-form-field> 
-
-                          
-                          <mat-form-field appearance="outline"  fxFlex="51" class="mt-10 font" >		
-                            <mat-label>Duration /hs</mat-label>
-                            <input matInput type="text" required formControlName="duration">
-                          </mat-form-field> 
-                          <mat-error *ngIf="validField('duration')" class="font" fxFlex="100"> Please enter a positive value with up to two decimal places. </mat-error>
-
-                          <mat-form-field appearance="outline"  fxFlex="100" class="mt-10 font" >
-                            <mat-label>Description</mat-label>
-                            <textarea matInput style="height: 80px;"></textarea>
-                          </mat-form-field>
-
-
-                  <span class="font" fxFlex="100" style="margin-top: 20px; font-size: 1.5em; text-align: start; font-weight: bold; line-height:30px;"> Main features</span>   
-          
-                  <mat-form-field appearance="outline" fxFlex="100" class="fs-4" style="margin-top: 30px;">
-                    <mat-label> add feature</mat-label>
-                      <input matInput type="text" formControlName="features" (keyup.enter)="onEnterKey($event)">
+              <form  [formGroup]="myForm" autocomplete="off" style="height: 50px;" > 
+                  <mat-form-field  appearance="outline" class="font "  >
+                      <input type="text" matInput  placeholder="Search project"  name="itemSearch" formControlName="itemSearch"  >
+                      <mat-icon matSuffix style="transform:scale(1.5); color: rgb(37, 150, 190); margin-right: 10px;" >search</mat-icon>
                   </mat-form-field>
-                    
-                    
-                    <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" class="font boxSelection" *ngFor="let feature of arrFeatures; let i = index" style="margin-top: 6px;" (mouseenter)="showDeleteIconFeature[i] = true"
-                    (mouseleave)="showDeleteIconFeature[i] = false">
-
-                    
-                      <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="90" >
-                        <span class="material-symbols-outlined notranslate cursor" style="color: green;"> done </span> &nbsp;
-                        <span class="feature-text">{{ feature }}</span>
-                      </div>
-                      <div fxLayout="row wrap" fxLayoutAlign="end center" fxFlex="10">
-                        <span class="material-symbols-outlined notranslate cursor" style="color: red;" *ngIf="showDeleteIconFeature[i]" (click)="delFeature(feature)"> delete </span>
-                      </div>
-                    </div>
-
-                    <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 20px; margin-bottom: 30px;" >
-
-                        <span class="font" style=" font-size: 1.5em; text-align: start; font-weight: bold; line-height:30px;" > Select Related skills</span>   
-
-                        <div fxLayout="row wrap" fxLayoutAlign="center center" class="font" style="margin-left: 20px; font-size: 1em; width: 60px; cursor: pointer;" [ngClass]="selection ? 'btnMenuClicked':'btnMenu'"  (click)="openDialogSkills()">Go <i class="material-symbols-outlined notranslate" >     chevron_right
-                        </i>  </div>
-                    </div>
-
-                                  
-                            <div fxLayout="row wrap"  fxLayoutAlign.xs="start center"  fxLayoutAlign="center center" fxFlex="100" class="font" style="margin-top: 10px;"   *ngFor="let item of projectSkills; let i = index" (mouseenter)="showDeleteIcon[i] = true"
-                            (mouseleave)="showDeleteIcon[i] = false">
-
-                              <div fxLayout="row wrap" fxLayoutAlign="space-between center"  fxFlex="100"  class="fs-4 boxSelection"
-                          >
-                                  <div fxLayout="row wrap" fxLayoutAlign="start center"  fxFlex="90"   >
-                                    <span class="material-symbols-outlined notranslate">done </span>
-                                      <span  style="text-align: start; margin-left: 15px; font-size: 0.8em;" >{{ item |capitalizeFirstLetter}}</span>
-                                  </div>  
-                                    <i class="material-symbols-outlined notranslate" style="cursor: pointer; color: red; font-size: 1.4em;" *ngIf="showDeleteIcon[i]" (click)="deleteSkill(item)">delete</i>
-                              </div>   
-                          </div>
-                </form>
-
-                  <div>
-                      <button mat-button matStepperPrevious > <span class="font"> Back  </span></button>
-                      <button mat-button matStepperNext>  <span class="font" (click)="suggestEmployeeBySkill();  getTotalHs()"> Next  </span></button>
-                  </div>
-              </mat-step>
-
-              <mat-step>
-                <ng-template matStepLabel > <span class="font" (click)="suggestEmployeeBySkill(); getTotalHs()">Assign Employees</span></ng-template>
-
-                <div  style="width: 100%; " >
-                  <app-search-employee fxFlex="100" ></app-search-employee>
-                </div>
-
-                <div  fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 40px;" >
-
-                    <!-- start no items -->
-                    <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" *ngIf="noSuggestedEmployees"  >
-                        
-                        <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" class="whiteframe notFound"  >
-                          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="90"   >
-                              <span class="material-icons" style="color: white;"> error </span>
-                              <span class="font " style="color: white; text-align: center; margin-left: 20px; font-size: 0.8em;"> No employees found with the required skills.
-                              </span>
-                            </div>
-                            <span class="material-icons" style="color: white; text-align: end; transform: scale(0.8); cursor: pointer;" (click)="closeNotMatching()"> close </span>
-                        </div>
-                    </div>
-                    <!-- end no items -->
+              </form>
 
 
-                   <div  style="margin-top: 40px; display: flex; justify-content: space-between; width: 100%;" >
+          <div fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="40" style="margin-left: 20px;">
+              <div fxLayout="row wrap"  fxLayoutAlign="center center"  style=" background-color: rgb(37, 150, 190); border-radius: 7px; height: 50px; padding: 15px; margin-top: 9px; cursor: pointer;"  class="whiteframe" routerLink="../create-project" >
+                  <span class="material-symbols-outlined notranslate" style="color: white; transform: scale(1);" > add </span> &nbsp;  &nbsp;
+                  <span class="font" style="color: white;"> Create Project</span>
+              </div>
+          </div>  
+      </div>  
 
-                      <div class="font whiteframe duration" style="background-color: rgb(226, 165, 43, 0.3);">
-                          <div class="squareIcon" style="background-color: rgb(226, 165, 43);">
-                              <span class="material-symbols-outlined notranslate" >schedule</span>
-                          </div>
-                          <span class="font hours" >{{secondFormGroup.get('duration')?.value}}</span>
-                          <span class="font hoursText" >Project duration</span>
-                      </div>
+      <!-- start no items -->
+      <div fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex="100" *ngIf="noMatches">
+          
+          <div fxLayout="row wrap" fxLayoutAlign="space-betweencenter"  class="fs-4 whiteframe notFound" >
+             <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="90"   >
+                <span class="material-icons" style="color: white;"> error </span>
+                <span class="font " style="color: white; text-align: center; margin-left: 20px; font-size: 1em;">Project not found...</span>
+              </div>
+              <span class="material-icons" style="color: white; text-align: end; transform: scale(0.8); cursor: pointer;" (click)="closeNoMatch()"> close </span>
+          </div>
+      </div>
+      <!-- end no items -->
 
-                      <div class="font whiteframe duration" style="margin-left: 30px; background-color: rgb(137, 41, 227, 0.3);" >
-                          <div class="squareIcon" style="background-color: blueviolet;">
-                            <span class="material-symbols-outlined notranslate" style="font-size: 38px; color: white;">more_time</span>
-                        </div>
-                        <span class="font hours" >{{accumProjectTime}}</span>
-                        <span class="font hoursText" >Assigned hours</span>
-                      </div>
 
-                      <div class="font whiteframe duration" style="margin-left: 30px; background-color: rgb(6, 6, 255, 0.3);" >
-                        <div class="squareIcon" style="background-color: blue;">
-                          <span class="material-symbols-outlined notranslate" style="font-size: 38px; color: white;">history_toggle_off</span>
-                      </div>
-                      <span class="font hours" >{{getTotalHs()}}</span>
-                      <span class="font hoursText">Remaining hours</span>
-                    </div>
-                  </div>
-
-           
-
-               
-
-                    <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 50px; " >
-                        <span class="font" style="font-size: 1.3em; text-align: start;  font-weight: bold;"> Suggested Employees with the Best Matching Skills</span>
-                    </div>
-
+      <!-- start suggested    -->
+      <div fxLayout="row wrap"  fxLayoutAlign.xs="start center" fxLayoutAlign="center center"  fxFlex="100" *ngIf="mostrarSugerencias" style="margin-top: 20px;" >
               
-                </div>
-    
-                <!-- start table -->
-                  <div class="example-container mat-elevation-z8 font" style="background-color: white; border-radius: 10px; margin-top: 18px;">
-        
-                    <table mat-table [dataSource]="dataTableActive"  >
-                    
-                            <ng-container matColumnDef="name"  >
-                                <th mat-header-cell *matHeaderCellDef > Name </th>
-                                <td mat-cell *matCellDef="let element" > {{element.name}} </td>
-                            </ng-container>
-        
-                            <ng-container matColumnDef="state" >
-                                <th mat-header-cell *matHeaderCellDef> State</th>
-                                <td mat-cell *matCellDef="let element" >
-                                    <span class="material-icons notranslate" style="transform: scale(1); color: green; margin-left: 0px;"  *ngIf="element.availability">check_circle</span> 
-                                    <span class="material-icons-outlined notranslate" style="transform: scale(1); color: gray; margin-left: 0px;" *ngIf="!element.availability"> do_not_disturb_on  </span>
-                                </td>
-                            </ng-container>
-        
-                            <ng-container matColumnDef="rate" >
-                                <th mat-header-cell *matHeaderCellDef> Hourly Rate (U$S)</th>
-                                <td mat-cell *matCellDef="let element" > {{element.hourly_rate}}
-                                </td>
-                            </ng-container>
-        
-                            <ng-container matColumnDef="action"  >
-                                <th mat-header-cell *matHeaderCellDef >Action</th>
-                                <td mat-cell *matCellDef="let element" > 
-                                    <div style="display: flex; justify-content:center; " >
-                                            <div class="icon" [routerLink]="['../view-employee/',element._id, ]">
-                                                <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57);"> edit </span>
-                                            </div>
-                                          
-                                            <div class="icon" (click)="openDialogAssignTime(element)" style="margin-left: 3px;">
-                                              <span class="material-symbols-outlined notranslate cursor" style="color: green;"> settings </span>
-                                          </div>
-                                    </div>
-        
-                                  
-                            </td>
+          <div fxLayout="row wrap"  fxLayoutAlign="center center"  fxFlex="100" *ngIf="spinner" style="margin-top: 30px;">
+              <mat-spinner diameter="48"></mat-spinner>
+          </div>
                       
-                            </ng-container>
-        
-        
-                            <tr mat-header-row *matHeaderRowDef="displayedColumns "></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                    </table>
-        
-                  </div> 
-                <!-- end table -->
+          <div fxLayout="row wrap"  fxLayoutAlign.xs="start center"  fxLayoutAlign="center center" fxFlex="100" class="font" style="margin-top: 3px;"  *ngFor="let item of suggested" >
 
+              <div fxLayout="row wrap" fxLayoutAlign="space-between center"  fxFlex="100"  class="fs-4 boxSelection" >
+                 <div fxLayout="row wrap" fxLayoutAlign="start center"  fxFlex="90"   >
+                    <mat-radio-button class="example-margin" (click)="Search(item)"></mat-radio-button>
+                    <span  style="cursor: pointer; text-align: start; margin-left: 15px; font-size: 0.8em;" fxFlex="80">{{ item.client.company_name | capitalizeFirstLetter}}</span>
+                 </div>  
+                 <div fxLayout="row wrap" fxLayoutAlign="end center"  fxFlex="10" >
+                      <span class="material-symbols-outlined notranslate" style="transform: scale(1); color: rgb(37, 150, 190); margin-left: 0px;" [ngClass]="item.client.previous_projects.length != 0 ? 'material-icons' : 'material-symbols-outlined notranslate'" >work</span> 
+                  </div>    
+              </div>   
 
-                <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 50px; " >
-                  <span class="font" style="font-size: 1.3em; text-align: start;  font-weight: bold;"> Assigned Employees </span>
+          </div>
+      </div>
+      <!-- end suggested    -->
+
+      <!-- start result search cards -->
+      <div  fxLayout="row wrap"  fxLayoutAlign="center start"  fxFlex="100" style="margin-top: 40px;" *ngIf="isProjectFound">
+
+          <div fxLayout="row wrap"  fxLayoutAlign="space-between center" style="margin-bottom: 30px;  padding: 10px; background-color: white;" fxFlex="100" class="whiteframe" >
+
+      
+              <div fxLayout="row wrap"  fxLayoutAlign="space-between center"  fxFlex="100" style="margin-top: 20px; padding: 10px;">
+
+                  <div fxLayout="row wrap"  fxLayoutAlign="start center"  fxFlex="100" >
+                      <span class="material-symbols-outlined notranslate" style=" transform: scale(1.3);color: rgb(135, 135, 135); "> person </span> &nbsp; &nbsp;&nbsp;
+                 
+                      <div style="display: flex; align-items: start; justify-content: center;" class="font" >
+
+                        <span [ngStyle]="phone ? {'font-size':'0.9em'}:{'font-size':'1.2em'}"> {{projectFound.client.company_name | capitalizeFirstLetter }} </span> &nbsp; 
+                          <span  [ngStyle]="phone ? {'font-size':'0.7em'}:{'font-size':'1em'}" style="color: gray;" > ({{projectFound.project_scope.name | capitalizeFirstLetter }}) </span>
+                        
+                      </div>    
+                  </div>
+
+                  <!-- <div fxLayout="row wrap"  fxLayoutAlign="end center" fxLayoutAlign.xs="start center" fxFlex.xs="100" fxFlex="50" style="margin-top: 20px;" class="font"> -->
+                      <!-- <span class="material-symbols-outlined notranslate" style=" transform: scale(1.3);color: rgb(135, 135, 135); "> schedule </span> &nbsp; &nbsp;&nbsp; -->
+                     <!-- <span  [ngStyle]="phone ? {'font-size':'0.7em'}:{'font-size':'1em'}"> {{projectFound.createdAt}} </span> -->
+                   <!-- </div> -->
+
+                   <div fxLayout="row wrap"  fxLayoutAlign="start center" fxFlex.xs="100" fxFlex="50" style="margin-top: 20px;">
+
+                    <span class="font" style="font-size: 1.8em;"> I'm still working on this content.. </span>
+                       <!-- <span class="material-symbols-outlined notranslate" style=" transform: scale(1.5);color: rgb(135, 135, 135);"> factory </span> &nbsp; &nbsp;&nbsp;
+                      <span style="font-size: 1.1em;  font-family: poppins-light;"> {{projectFound.industry_type| capitalizeFirstLetter }} </span> -->
+                    </div>
+                
               </div>
 
-                <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100">
-
-                    <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" class="font boxSelection "*ngFor="let time of arrProjectTime; let i = index" style="margin-top: 40px; padding: 20px; z-index: 999;"    (mouseleave)="showDelIconAssigEmployee[i] = false" (mouseenter)="showDelIconAssigEmployee[i] = true">
-
-                      <div fxLayout="row wrap" fxLayoutAlign="center center" fxFlex="80" >
-                          <span style="text-align: start; width: 100%; margin-top: 10px;"><b >Employee:</b> &nbsp; {{time.name}} </span>
-                          <span style="text-align: start; width: 100%; margin-top: 10px;"><b >Assigned hours:</b> &nbsp; {{time.time}} </span>
-                          <span style="text-align: start; width: 100%; margin-top: 10px;"><b >Hourly rate:</b> &nbsp; {{time.hourly_rate}} </span>
-                          <span style="text-align: start; width: 100%; margin-top: 10px;"><b >Total U$S:</b> &nbsp; {{time.hourly_rate * time.time}} </span>
-                      </div>  
-
-                      <div fxLayout="row wrap" fxLayoutAlign="end center" fxFlex="20" *ngIf="showDelIconAssigEmployee[i]" >
-                          <div class="icon">
-                             <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57)" (click)="openDialogAssignTime(time)"> edit </span>
-                          </div>
-
-                          <div class="icon" style="margin-left: 7px;">
-                              <span class="material-symbols-outlined notranslate cursor" style="color: red; " (click)="deleteAssignedEmployee(time)"> delete </span>
-                          </div>
-                      </div>
+              
+              <div fxLayout="row wrap" fxLayoutAlign="end center" fxFlex="100" style="margin-top: 18px;">
+                  <div class="icon mr-10" (click)="deleteClient(projectFound)" >
+                      <span class="material-symbols-outlined notranslate cursor" style="color: red;"> delete </span>
+                  </div>
+                  
+                  <div class="icon mr-10"  (click)="editClient(projectFound)">
+                      <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57);"> edit </span>
                   </div>
 
-                </div>
+                  <div class="icon"  (click)="close()" style="margin-right: 10px;">
+                      <span class="material-symbols-outlined notranslate cursor" > close </span>
+                  </div>
+              </div>
+              
+          </div>
+      
+      </div>
+      <!-- end result search cards -->
 
-            
-
-                <div style="margin-top: 40px;">
-                  <button mat-button matStepperPrevious > <span class="font"> Back  </span></button>
-                  <button mat-button matStepperNext>  <span class="font"> Next  </span></button>
-                  <!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
-                </div>
-              </mat-step>
-          </mat-stepper>
+      <!-- start table -->
+        <div class="example-container mat-elevation-z8 font" style="background-color: white; border-radius: 10px; margin-top: 40px;">
+          <table mat-table [dataSource]="dataTableActive"  >
           
-    </div>
+                      
+                  <!-- Name Column -->
+                  <ng-container matColumnDef="client" sticky >
+                      <th mat-header-cell *matHeaderCellDef > Client </th>
+                      <td mat-cell *matCellDef="let element" > {{element.client.company_name}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="projectName"  >
+                      <th mat-header-cell *matHeaderCellDef > Project name </th>
+                      <td mat-cell *matCellDef="let element"  > <span style="text-align: start;">  {{element.project_scope.name}} </span> </td>
+                  </ng-container>
+
           
+                  <!-- Comment Column -->
+                  <ng-container matColumnDef="state" >
+                      <th mat-header-cell *matHeaderCellDef> State</th>
+                      <td mat-cell *matCellDef="let element" > <span style="text-align: start;"> {{element.state}} </span> </td>
+                  </ng-container>
+
+                  <!-- <ng-container matColumnDef="projects" >
+                      <th mat-header-cell *matHeaderCellDef> Projects</th>
+                      <td mat-cell *matCellDef="let element"  > 
+                              <ul style="padding-left: 10px">
+                                <li *ngFor="let project of element.previous_projects" style="cursor: pointer; color: blue; margin-left: 0px !important;" (click)="viewProject(project)">
+                                  {{ project.project_scope.name }}
+                                </li>
+                              </ul>
+                       </td>
+                  </ng-container> -->
+                  
+                  <!-- img Column -->
+                  <ng-container matColumnDef="action"  >
+                      <th mat-header-cell *matHeaderCellDef >Action</th>
+                      <td mat-cell *matCellDef="let element" > 
+                          <div style="display: flex; justify-content:center; " >
+                                  <div class="icon" (click)="editClient(element)">
+                                      <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57);"> edit </span>
+                                  </div>
+                                  <div class="icon" (click)="deleteClient(element)" style="margin-left: 3px;">
+                                      <span class="material-symbols-outlined notranslate cursor" style="color: red;"> delete </span>
+                                  </div>
+                          </div>
+
+                         
+                  </td>
+             
+                  </ng-container>
 
 
-        
- 
-       </div> 
-    
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+
+
+
+
+        </div> 
+      <!-- end table -->
+
+     </div> 
   
- <div *ngIf="isLoading" class="loading-overlay">
-    <mat-spinner diameter="80"></mat-spinner>
+
+<div *ngIf="isLoading" class="loading-overlay">
+  <mat-spinner diameter="80"></mat-spinner>
 </div>
 

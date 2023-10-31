@@ -86,13 +86,17 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
             this.labelHeader = "Employee";
      break;  
 
-     case '/employee-list':
+    case '/employee-list':
             this.labelHeader = "Employees";
      break;  
 
-     case '/projects-managment':
+    case '/projects-managment':
       this.labelHeader = "Project managment";
-    break;  
+     break;  
+
+    case '/create-project':
+      this.labelHeader = "Create project";
+     break;  
 
     default:  this.labelHeader = "";
     break;

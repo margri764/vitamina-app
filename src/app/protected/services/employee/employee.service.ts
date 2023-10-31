@@ -3,6 +3,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Project } from '../../interfaces/project';
 
 @Injectable({
   providedIn: 'root'
@@ -139,6 +140,17 @@ export class EmployeeService {
             return res} )
     );
   }
+
+  createProject( body : Project ){
+
+    return this.http.post<any>(`${this.baseUrl}api/project/createProject`, body)
+  .pipe(
+    map( res =>{ 
+          console.log('from service createProject', res)
+            return res} )
+    );
+  }
+
 
 
 

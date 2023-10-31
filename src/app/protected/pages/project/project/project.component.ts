@@ -1,18 +1,17 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, HostListener, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Store } from '@ngrx/store';
-import { Subject, debounceTime, filter, take } from 'rxjs';
-import { AppState } from 'src/app/app.reducer';
 import { AuthService } from 'src/app/protected/services/auth/auth.service';
+import { Subject, Subscription, debounceTime, take } from 'rxjs';
 import { ErrorService } from 'src/app/protected/services/error/error.service';
-import { EmployeeService } from 'src/app/protected/services/employee/employee.service';
-import { ProjectSkillsComponent } from 'src/app/protected/messages/project-skills/project-skills/project-skills.component';
-import { AskGenericDeleteComponent } from 'src/app/protected/messages/ask-generic-delete/ask-generic-delete/ask-generic-delete.component';
-import { saveDataSS } from 'src/app/protected/Storage';
-import { AssignTimeComponent } from '../../assign-time/assign-time/assign-time.component';
-import { ValidatorService } from 'src/app/protected/services/validator/validator.service';
-import * as authActions from 'src/app/auth.actions';
+import { PageEvent } from '@angular/material/paginator';
+import { AppState } from 'src/app/app.reducer';
+import { Store } from '@ngrx/store';
+import { MatAccordion } from '@angular/material/expansion';
+import { CookieService } from 'ngx-cookie-service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ViewProjectComponent } from 'src/app/protected/messages/view-project/view-project/view-project.component';
+import { ProjectService } from 'src/app/protected/services/project/project.service';
+
 
 @Component({
   selector: 'app-project',
@@ -21,222 +20,314 @@ import * as authActions from 'src/app/auth.actions';
 })
 export class ProjectComponent implements OnInit {
 
-  displayedColumns: string[] = ['name', 'state','rate','action'];
+  @HostListener('window:scroll') onScroll(e: Event): void {
+    const scrollPosition = window.innerHeight + window.scrollY;
+    const contentHeight = document.body.offsetHeight;
+    if(this.phone){
+       if (scrollPosition >= contentHeight - 100 && !this.isLoading) {
+         this.loadInfiniteScroll();
+       }
+    }
+ }
+
+// start search
+  @Output() onDebounce: EventEmitter<string> = new EventEmitter();
+  @Output() onEnter   : EventEmitter<string> = new EventEmitter();
+  debouncer: Subject<string> = new Subject();
+
+
+  displayedColumns: string[] = ['client', 'projectName', 'state','action'];
   dataTableActive : any ;
-
-  isLinear = false;
-   myForm!: FormGroup;
-   firstFormGroup!: FormGroup;
-   secondFormGroup!: FormGroup;
-   
-  isLoading: boolean = false;
-  confirm: boolean = false;
-  selection: boolean = false;
-  projectSkills: any []=[];
-  arrFeatures : any [] = [];
-  arrProjectTime : any [] =[];
-  showDeleteIcon: boolean[] = new Array(this.projectSkills.length).fill(false);
-  showDeleteIconFeature: boolean[] = new Array(this.arrFeatures.length).fill(false);
-  showDelIconAssigEmployee: boolean[] = new Array(this.arrProjectTime.length).fill(false);
-  employees : any [] = [];
-  noSuggestedEmployees: boolean = false;
-  accumProjectTime: number = 0;
-
-
-
   
-  constructor(
-              private fb : FormBuilder,
-              private employeeService : EmployeeService,
-              private dialog : MatDialog,
-              private store : Store <AppState>,
-              private validatorService : ValidatorService,
-              private errorService : ErrorService,
-              // private authService : AuthService,
-  ) {
+  myForm! : FormGroup;
+  noMatches : boolean = false;
 
-   
-   }
+  itemSearch : string = '';
+  mostrarSugerencias: boolean = false;
+  sugested : string= "";
+  suggested : any[] = [];
+  spinner : boolean = false;
+  fade : boolean = false;
+  search : boolean = true;
+  product  : any[] = [];
+// end search
+
+  projects : any []=[];
+  isLoading : boolean = false;
+  arrProject : any []=[];
+  projectFound : any = null;
+  isProjectFound : boolean = false;
+  labelNoFinded : boolean = false;
+  phone : boolean = false;
+
+  // paginator
+  length = 50;
+  pageSize = 10;
+  pageIndex = 1;
+  pageSizeOptions = [5, 10, 25];
+  hidePageSize = false;
+  showPageSizeOptions = true;
+  showFirstLastButtons = true;
+  disabled = false;
+  pageEvent!: PageEvent;
+  // paginator
+
+  // accordion
+  @ViewChild(MatAccordion)  accordion!: MatAccordion;
+  panelOpenState = false;
+  showLabelTempOrder : boolean = false;
+  articleSuscription!: Subscription;
+  alert : string = '';
+  toogle : boolean = false;
+  hidden : boolean = false;
+  login : boolean = false;
+  // accordion
+
+  height : string = '';
+  width : string = '';
+
+  constructor(
+              private authService : AuthService,
+              private dialog : MatDialog,
+              private errorService : ErrorService,
+              private projectService : ProjectService,
+              private store : Store <AppState>,
+              private cookieService : CookieService,
+              private fb : FormBuilder,
+
+
+  ) { 
+        
+  // if(getDataSS("logged") === true || getDataLS("logged") == true){
+  //   this.cookieService.get('token');
+  //   this.login = true;
+  // }
+    (screen.width <= 800) ? this.phone = true : this.phone = false;
+
+    this.myForm = this.fb.group({
+      itemSearch:  [ '',  ],
+    });   
+  }
+
 
   ngOnInit(): void {
-
-    this.errorService.closeIsLoading$.subscribe( emmited => {if(emmited)this.isLoading = false})
-
-    this.store.select('auth')
-    .pipe(
-      filter( ({projectSkills})=>  projectSkills != null && projectSkills.length != 0),
-    ).subscribe(
-      ({projectSkills, projectTime})=>{
-        this.projectSkills = projectSkills;
-        this.getProjectTime(projectTime);
-
-      })
-
-      this.myForm = this.fb.group({
-        // firstCtrl: ['', Validators.required],
-      });
-
-      this.firstFormGroup = this.fb.group({
-        // firstCtrl: ['', Validators.required],
-      });
-
-      this.secondFormGroup = this.fb.group({
-        name: ['', ],
-        features: [''],
-        duration:  [ 100, [this.validatorService.positiveNumberWithDecimals()] ]
-      });
-
-  }
-
-  // deleteEmployee(employee : any){
-
-  //   let width : string = '';
-  //   let height : string = '';
-
-  //   if(screen.width >= 800) {
-  //     width = "400px";
-  //     height = "250px";
-  
-  //   }
-  //     this.dialog.open(AskGenericDeleteComponent, {
-  //       data: employee.name,
-  //       width: `${width}`|| "",
-  //       height:`${height}`|| "",
-  //       panelClass:"custom-modalbox-edit",
-  //     });
-  
-  //     this.employeeService.authDelEmployee$.pipe(
-  //       take(1)
-  //     ).subscribe( (auth: any)=> { // el ask-edit dispara ui boolean si se elige CONTINUAR con la acción
-  //       this.isLoading = true;
-  //       if(auth){
-  //         this.employeeService.deleteEmployeeById(employee._id, employee).subscribe( 
-  //           ({success})=>{
-  //             if(success){
-  //             // this.getInitialEmployees();
-  //             this.isLoading = false;
-  //             }
-  //           })
-  //       }
-  //     })
+    this.errorService.closeIsLoading$.subscribe( (emmited)=>{ if(emmited){this.isLoading = false}});
+    this.authService.updateEditingUser$.subscribe( (emmited)=>{ if(emmited){this.isLoading = true; this.getInitialProject()} })
     
-  // }
-  
+    this.getInitialProject();
 
-  onSaveForm(){
-
-  }
-
-  deleteAssignedEmployee( employee:any){
-
-    const id = employee.id;
-    console.log(id);
-    this.store.dispatch( authActions.deleteAssignedEmployee({ id }) );
-    this.arrProjectTime = this.arrProjectTime.filter( (item:any)=> item.id !== id)
-
-  }
-
-  deleteSkill( skill:any){
-    this.projectSkills= this.projectSkills.filter( (item:any)=> item !== skill);
-    this.store.dispatch(authActions.setProjectSkills({projectSkills : this.projectSkills}))
-  }
-
-  onEnterKey(event: Event) {
-    event.stopPropagation();
-
-    const newFeature = this.secondFormGroup.get('features')?.value;
+     
+        this.myForm.get('itemSearch')?.valueChanges.subscribe(newValue => {
+          this.itemSearch = newValue;
     
-    if (event instanceof KeyboardEvent && event.key === 'Enter') {
-      
-      this.arrFeatures.push(newFeature);
-      this.secondFormGroup.controls['features'].setValue('');
-    }
-  }
-
-  delFeature( feature:any ){
-    this.arrFeatures= this.arrFeatures.filter( (item:any)=> item !== feature);
-  }
-  
-
-  suggestEmployeeBySkill(){
-
-      this.isLoading = true;
-
-      this.employeeService.suggestEmployeeBySkill(this.projectSkills).subscribe( 
-        ( {success, employees})=>{
-          if(success){
-            this.employees = employees;
-            this.dataTableActive = employees;
-            this.isLoading = false;
-          }else if(employees.length === 0){
-            this.noSuggestedEmployees = true;
+           console.log(this.myForm.get('itemSearch')?.value);
+          if(this.itemSearch !== ''){
+             this.teclaPresionada();
+          }else{
+            this.suggested = [];
+            this.spinner= false;
           }
+        });
+    
+        this.debouncer
+        .pipe(debounceTime(400))
+        .subscribe( valor => {
+    
+          this.sugerencias(valor);
         });
   }
 
-validField( field: string ) {
-    return this.secondFormGroup.controls[field].errors && this.secondFormGroup.controls[field].touched;
-}
+ getInitialProject(){
+  this.isLoading = true;
 
-closeNotMatching(){
-  this.noSuggestedEmployees = false;
-}
-
-
- getTotalHs(){
-
-  // if (!this.arrProjectTime || this.arrProjectTime.length === 0) {
-  //   return ;
-  // }
-
-  const duration = this.secondFormGroup.get('duration')?.value;
-
-  this.accumProjectTime = this.arrProjectTime.reduce((total, time) => total + time.time, 0);
-  
-  const total = duration - this.accumProjectTime; 
-  
-  return total 
-
-
-
+  this.projectService.getAllProjects(this.pageIndex, this.pageSize).subscribe(
+    ({projects, pagination})=>{
+      this.projects = projects;
+      this.dataTableActive = projects;
+      this.isLoading = false;
+      this.length = pagination.total_reg;
+    })
 }
 
 
-  getProjectTime( projectTime:any){
-    if(!projectTime) return;
-    this.arrProjectTime = projectTime;
-    this.getTotalHs();
+visibility(){
+  this.toogle = !this.toogle
+}
 
+viewProject( project:any){
+  console.log(project);
+  if(screen.width >= 800) {
+    this.width = "600px";
+    this.height = "650px";
   }
 
-  openDialogSkills(){
+    this.dialog.open(ViewProjectComponent, {
+      data:  project,
+      width: `${this.width}`|| "",
+      height:`${this.height}`|| "",
+      panelClass:"custom-modalbox-edit",
+    });
+}
 
-      this.selection = true;
 
-      this.dialog.open(ProjectSkillsComponent, {
- 
-        panelClass:"custom-modalbox-responsive", 
-      });
-  }
+loadInfiniteScroll(){
+  // this.pageIndex++;
+  // this.authService.getClientsPaginator(this.pageIndex, this.pageSize).subscribe(
+  //   ({lients, pagination})=>{
+  //     this.lients = [...this.lients, ...lients];
+  //     this.dataTableActive = lients;
+  //     this.isLoading = false;
+  //     this.length = pagination.total_reg;
+  //   })
+}
 
-  openDialogAssignTime( employee:any ){
+handlePageEvent(e: PageEvent) {
 
-    let width : string = '';
-    let height : string = '';
 
-    if(screen.width >= 800) {
-      width = "600px";
-      height = "310px";
+  this.pageEvent = e;
+  this.length = e.length;
+  this.pageSize = e.pageSize;
+  this.pageIndex = e.pageIndex;
+  this.isLoading= true;
+
+    if(this.pageIndex === 0){
+      this.isLoading = false;
+      return
     }
-      this.dialog.open(AssignTimeComponent, {
-        data: employee,
-        width: `${width}`|| "",
-        height:`${height}`|| "",
-        panelClass:"custom-modalbox-edit",
-      });
+
+    this.projectService.getAllProjects(this.pageIndex, this.pageSize,).subscribe(
+      ({projects})=>{
+        this.projects = projects;
+        this.dataTableActive = projects;
+        this.isLoading = false
+      })
+}
+
+deleteClient(client : any){
+
+  if(screen.width >= 800) {
+    this.width = "600px";
+    this.height = "510px";
+  }
+
+    // this.dialog.open(AskDelcustomerComponent, {
+    //   data:  customer.archivarComo,
+    //   width: `${this.width}`|| "",
+    //   height:`${this.height}`|| "",
+    //   panelClass:"custom-modalbox-edit",
+    // });
+
+    // this.errorService.authDelCustomer$.pipe(
+    //   take(1)
+    // ).subscribe( (auth)=> { // el ask-edit dispara ui boolean si se elige CONTINUAR con la acción
+      
+    //   if(auth){
+    //     this.authService.deletecustomerById(customer.id).subscribe( 
+    //       ()=>{})
+    //   }
+    // })
+  
+}
+
+editClient(client: any){
+
+  if(screen.width >= 800) {
+    this.width = "600px";
+    this.height ="720px";
+  }
+
+  // this.dialog.open(EditcustomerComponent, {
+  //   data: customer,
+  //   width: `${this.width}`|| "",
+  //   height:`${this.height}`|| "",
+  //   panelClass:"custom-modalbox-NoMoreComponent", 
+  // });
+
+}
+
+
+
+addClient(){
+
+  if(screen.width >= 800) {
+    this.width = "600px";
+    this.height ="770px";
+  }
+
+  // this.dialog.open(NewcustomerComponent, {
+  //   width: `${this.width}`|| "",
+  //   height:`${this.height}`|| "",
+  //   panelClass:"custom-modalbox-NoMoreComponent", 
+  // });
+}
+
+   // search
+close(){
+  this.mostrarSugerencias = false;
+  this.itemSearch = '';
+  this.suggested = [];
+  this.spinner= false;
+  this.myForm.get('itemSearch')?.setValue('');
+  this.noMatches = false;
+  this.projectFound= null;
+  this.isProjectFound = false;
+}
+
+
+
+
+teclaPresionada(){
+  this.noMatches = false;
+  this.debouncer.next( this.itemSearch );  
+};
+
+
+sugerencias(value : string){
+    this.spinner = true;
+    this.itemSearch = value;
+    this.mostrarSugerencias = true;  
+    const valueSearch = value.toUpperCase();
+    this.projectService.searchProjectByClient(valueSearch)
+    .subscribe ( ({projects} )=>{
+      if(projects.length !== 0){
+        // this.arrArticlesSugested = articulos;
+        this.suggested = projects.splice(0,10);
+        console.log(this.suggested);
+          this.spinner = false;
+        }else{
+          this.spinner = false;
+          this.noMatches = true;
+          this.myForm.get('itemSearch')?.setValue('');
+        }
+      }
+    )
+}
+  
+Search( item: any ){
+  setTimeout(()=>{
+    this.mostrarSugerencias = true;
+    this.spinner = false;
+    this.fade = false;
+    this.projectFound = item;
+    this.isProjectFound = true;
+    this.myForm.get('itemSearch')?.setValue('');
+    this.suggested = [];
+    this.noMatches = false;
+  },500)
+}
+  // search
+
+
+  closeNoMatch(){
+    this.noMatches = false;
   }
 
 
-  
+ngOnDestroy(): void {
+  if (this.articleSuscription) {
+    this.articleSuscription.unsubscribe();
+  }
+}
+
 
 }
