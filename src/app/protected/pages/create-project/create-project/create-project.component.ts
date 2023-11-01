@@ -12,6 +12,8 @@ import { ValidatorService } from 'src/app/protected/services/validator/validator
 import * as authActions from 'src/app/auth.actions';
 import { Project } from 'src/app/protected/interfaces/project';
 import { GenericSuccessComponent } from 'src/app/protected/messages/generic-success/generic-success/generic-success.component';
+import { ProjectService } from 'src/app/protected/services/project/project.service';
+import { log } from 'console';
 
 @Component({
   selector: 'app-create-project',
@@ -54,6 +56,7 @@ export class CreateProjectComponent implements OnInit {
               private store : Store <AppState>,
               private validatorService : ValidatorService,
               private errorService : ErrorService,
+              private projectService : ProjectService
               // private authService : AuthService,
   ) {
 
@@ -72,6 +75,7 @@ export class CreateProjectComponent implements OnInit {
         this.projectSkills = projectSkills;
         this.getProjectTime(projectTime);
         this.client = client;
+        this.getTotal();
 
       })
 
@@ -96,6 +100,7 @@ export class CreateProjectComponent implements OnInit {
 
     const name = this.secondFormGroup.get('name')?.value
     const duration = this.secondFormGroup.get('duration')?.value
+    console.log(name, duration, this.secondFormGroup.invalid, this.projectSkills.length);
 
     if( name === ''|| duration === '' || this.secondFormGroup.invalid || this.projectSkills.length === 0){
       this.isProjectScope = false;
@@ -109,11 +114,14 @@ export class CreateProjectComponent implements OnInit {
   onSaveForm(){
 
     let employee: any [] = [];
+    
+    this.confirm = true;
 
     this.arrProjectTime.map( (item:any)=>{ employee.push(item._id)});
     const duration: any[] = this.arrProjectTime.map((item: any) => ({
       employee: item._id,
-      assigned_hours: item.time
+      assigned_hours: item.time,
+      hourly_rate: item.hourly_rate
     }));
     
     const project_scope = {
@@ -129,18 +137,38 @@ export class CreateProjectComponent implements OnInit {
                             employee,
                             project_scope,
                             duration
-      
-                          }
+                           }
     console.log(body);
 
     this.employeeService.createProject(body).subscribe(
       ( {success} )=>{
         if(success){
-
           this.openDialogSuccesss("Project created successfully!");
+          this.resetProject();
+          this.projectService.emitSuccessProject$.subscribe( 
+            (auth)=>{
+              if(auth){
+                location.reload();
+              }
+            })
 
         }
       })
+
+  }
+
+  resetProject(){
+
+    this.secondFormGroup.get('name')?.setValue('');
+    this.secondFormGroup.get('duration')?.setValue('');
+    this.secondFormGroup.get('description')?.setValue('');
+    this.arrProjectTime = [];
+    this.projectSkills = [];
+    this.employees = [];
+    this.dataTableActive= [];
+    this.store.dispatch(authActions.unSetClient());
+    this.store.dispatch(authActions.unSetProjectSkills());
+    this.store.dispatch(authActions.unSetEmployeeProjectTime());
 
   }
 
@@ -158,7 +186,6 @@ export class CreateProjectComponent implements OnInit {
     this.store.dispatch(authActions.setProjectSkills({projectSkills : this.projectSkills}))
   }
 
-  mainFeatures: any []=[]; 
 
   onEnterKey(event: Event) {
     event.stopPropagation();
@@ -183,6 +210,7 @@ export class CreateProjectComponent implements OnInit {
 
       this.employeeService.suggestEmployeeBySkill(this.projectSkills).subscribe( 
         ( {success, employees})=>{
+          this.checkProjectScope();
           if(success){
             this.employees = employees;
             this.dataTableActive = employees;
@@ -201,78 +229,84 @@ closeNotMatching(){
   this.noSuggestedEmployees = false;
 }
 
-
- getTotalHs(){
+getTotalHs(){
 
   // if (!this.arrProjectTime || this.arrProjectTime.length === 0) {
   //   return ;
   // }
  let total = 0;
   const duration = this.secondFormGroup.get('duration')?.value;
-
-
   this.accumProjectTime = this.arrProjectTime.reduce((total, time) => total + time.time, 0);
   
    total = duration - this.accumProjectTime; 
   
   return total 
 
+}
 
+total: number = 0;
+
+getTotal(){
+
+  if(this.arrProjectTime.length === 0){
+    return 0
+  }
+ this.total = this.arrProjectTime.reduce((total, employee) => total + (employee.hourly_rate * employee.time), 0);
+
+  return this.total;
+}
+
+getProjectTime( projectTime:any){
+  if(!projectTime) return;
+  this.arrProjectTime = projectTime;
+  this.getTotalHs();
 
 }
 
+openDialogSkills(){
 
-  getProjectTime( projectTime:any){
-    if(!projectTime) return;
-    this.arrProjectTime = projectTime;
-    this.getTotalHs();
+    this.selection = true;
 
+    this.dialog.open(ProjectSkillsComponent, {
+
+      panelClass:"custom-modalbox-responsive", 
+    });
+}
+
+openDialogAssignTime( employee:any ){
+
+  let width : string = '';
+  let height : string = '';
+
+  if(screen.width >= 800) {
+    width = "600px";
+    height = "310px";
   }
+    this.dialog.open(AssignTimeComponent, {
+      data: employee,
+      width: `${width}`|| "",
+      height:`${height}`|| "",
+      panelClass:"custom-modalbox-edit",
+    });
+}
 
-  openDialogSkills(){
+openDialogSuccesss( body:any ){
 
-      this.selection = true;
-
-      this.dialog.open(ProjectSkillsComponent, {
- 
-        panelClass:"custom-modalbox-responsive", 
-      });
-  }
-
-  openDialogAssignTime( employee:any ){
-
-    let width : string = '';
-    let height : string = '';
+  let width = "";
+  let height ="";
 
     if(screen.width >= 800) {
-      width = "600px";
-      height = "310px";
+      width = "400px";
+      height ="300px";
     }
-      this.dialog.open(AssignTimeComponent, {
-        data: employee,
-        width: `${width}`|| "",
-        height:`${height}`|| "",
-        panelClass:"custom-modalbox-edit",
-      });
-  }
-
-  openDialogSuccesss( body:any ){
-
-    let width = "";
-    let height ="";
-
-      if(screen.width >= 800) {
-        width = "400px";
-        height ="300px";
-      }
-    
-      this.dialog.open(GenericSuccessComponent, {
-        data: body,
-        width: `${width}`|| "",
-        height:`${height}`|| "",
-        panelClass:"custom-modalbox-NoMoreComponent", 
-      });
-  }
+  
+    this.dialog.open(GenericSuccessComponent, {
+      data: body,
+      width: `${width}`|| "",
+      height:`${height}`|| "",
+      panelClass:"custom-modalbox-NoMoreComponent", 
+    });
+}
 
   
 

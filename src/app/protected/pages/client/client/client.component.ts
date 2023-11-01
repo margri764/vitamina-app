@@ -9,7 +9,6 @@ import { Store } from '@ngrx/store';
 import { MatAccordion } from '@angular/material/expansion';
 import { CookieService } from 'ngx-cookie-service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ViewProjectComponent } from 'src/app/protected/messages/view-project/view-project/view-project.component';
 
 @Component({
   selector: 'app-client',
@@ -153,18 +152,18 @@ visibility(){
 }
 
 viewProject( project:any){
-  console.log(project);
-  if(screen.width >= 800) {
-    this.width = "600px";
-    this.height = "650px";
-  }
+  // console.log(project);
+  // if(screen.width >= 800) {
+  //   this.width = "600px";
+  //   this.height = "650px";
+  // }
 
-    this.dialog.open(ViewProjectComponent, {
-      data:  project,
-      width: `${this.width}`|| "",
-      height:`${this.height}`|| "",
-      panelClass:"custom-modalbox-edit",
-    });
+  //   this.dialog.open(ViewProjectComponent, {
+  //     data:  project,
+  //     width: `${this.width}`|| "",
+  //     height:`${this.height}`|| "",
+  //     panelClass:"custom-modalbox-edit",
+  //   });
 }
 
 

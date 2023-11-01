@@ -9,19 +9,23 @@ import { ViewEmployeeComponent } from './protected/pages/view-employee/view-empl
 import { EmployeeComponent } from './protected/pages/employee/employee/employee.component';
 import { ProjectComponent } from './protected/pages/project/project/project.component';
 import { CreateProjectComponent } from './protected/pages/create-project/create-project/create-project.component';
+import { SkillsComponent } from './protected/pages/skills/skills/skills.component';
+import { ViewProjectComponent } from './protected/pages/view-project/view-project/view-project.component';
 
 
 const routes: Routes = [
   
 
-
-  
   {
     path: 'settings',  component: SettingsComponent
   },
 
   {
     path: 'view-employee/:id',  component: ViewEmployeeComponent
+  },
+
+  {
+    path: 'view-project/:id',  component: ViewProjectComponent
   },
   {
     path: 'client-list',  component: ClientComponent,
@@ -31,9 +35,11 @@ const routes: Routes = [
   {
     path: 'employee-list',  component: EmployeeComponent
   },
-
   {
     path: 'projects-managment',  component: ProjectComponent
+  },
+  {
+    path: 'skills-managment',  component: SkillsComponent
   },
   {
     path: 'create-project',  component: CreateProjectComponent

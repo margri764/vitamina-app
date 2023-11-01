@@ -1,0 +1,54 @@
+.square{
+    width: 200px; 
+    height: 100px; 
+    position: relative; 
+    display: flex; 
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+
+    .material-symbols-outlined{
+      font-size: 38px; 
+      color: white;
+    }
+}
+
+.squareIcon{
+    width: 53px; 
+    height: 53px; 
+    position: absolute; 
+    border: 2px solid white;
+    left: 10px;
+    bottom: 67px; 
+    border-radius: 4px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+
+.hours{
+    font-size: 2em; 
+    text-align: center; 
+    width: 100%; 
+    font-weight: bold;
+}
+
+.icons{
+    width: 54px; 
+    height: 54px; 
+    display: flex; 
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+    border-radius: 7px;
+    background-color: rgb(96, 152, 236);;
+
+    box-shadow: 1px 1px 5px 0px rgba(115,115,115,0.75);
+    -webkit-box-shadow: 1px 1px 5px 0px rgba(115,115,115,0.75);
+    -moz-box-shadow: 1px 1px 5px 0px rgba(115,115,115,0.75);
+    .material-symbols-outlined{
+      font-size: 38px; 
+      color: white;
+    }
+}
+

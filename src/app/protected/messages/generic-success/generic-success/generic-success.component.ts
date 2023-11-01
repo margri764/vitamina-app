@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { ProjectService } from 'src/app/protected/services/project/project.service';
 
 @Component({
   selector: 'app-generic-success',
@@ -14,7 +15,8 @@ export class GenericSuccessComponent implements OnInit {
   
   constructor(
                 @Inject(MAT_DIALOG_DATA) public data: any,
-                private dialogRef : MatDialogRef<GenericSuccessComponent>
+                private dialogRef : MatDialogRef<GenericSuccessComponent>,
+                private projectService : ProjectService
   ) { }
 
   ngOnInit(): void {
@@ -23,6 +25,7 @@ export class GenericSuccessComponent implements OnInit {
 
   continue(){
     this.confirm = true;
+    this.projectService.emitSuccessProject$.emit(true);
       setTimeout(()=>{
         this.dialogRef.close();
       }, 300)

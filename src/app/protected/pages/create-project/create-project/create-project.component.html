@@ -52,9 +52,9 @@
 
                   <span class="font" fxFlex="100" style="margin-top: 20px; font-size: 1.5em; text-align: start; font-weight: bold; line-height:30px;"> Main features</span>   
           
-                  <mat-form-field appearance="outline" fxFlex="100" class="fs-4" style="margin-top: 30px;">
+                  <mat-form-field appearance="outline" fxFlex="100" class="font" style="margin-top: 30px;">
                     <mat-label> add feature</mat-label>
-                      <input matInput type="text"  formControlName="features" (keyup.enter)="onEnterKey($event)">
+                      <input matInput type="text"  formControlName="features" (keyup.enter)="onEnterKey($event)" >
                   </mat-form-field>
                 
                     
@@ -108,8 +108,10 @@
 
               </mat-step>
 
-              <mat-step (click)="suggestEmployeeBySkill(); getTotalHs(); checkProjectScope()">
-                <ng-template matStepLabel > <span class="font" (click)="suggestEmployeeBySkill(); getTotalHs(); checkProjectScope()">Assign Employees</span></ng-template>
+              <mat-step >
+                <ng-template matStepLabel > 
+                    <span class="font" (click)="suggestEmployeeBySkill(); getTotalHs();" >Assign Employees</span>
+                </ng-template>
 
                 <div fxLayout="row wrap" fxLayoutAlign="center center" fxFlex="100" *ngIf="isProjectScope">
 
@@ -224,9 +226,9 @@
                         <!-- end table -->
 
 
-                        <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 50px; " >
-                        <span class="font" style="font-size: 1.3em; text-align: start;  font-weight: bold;"> Assigned Employees </span>
-                    </div>
+                        <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 50px;" *ngIf="arrProjectTime.length !== 0" >
+                             <span class="font" style="font-size: 1.3em; text-align: start;  font-weight: bold;"> Assigned Employees </span>
+                        </div>
 
                         <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100">
 
@@ -251,17 +253,34 @@
                         </div>
 
                         </div>
-                        <div class="font whiteframe" style="font-size: 1.2em; padding: 10px; width: 80px;" (click)="onSaveForm()">Enviar</div>
+
+                        <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100"  style="margin-top: 50px;" *ngIf="this.arrProjectTime.length !== 0">
+
+                            <div class="font whiteframe duration" style=" background-color: rgb(1, 140, 1, 0.3);" >
+                                <div class="squareIcon" style="background-color: green; left: 5px;">
+                                    <span class="material-symbols-outlined notranslate" style="font-size: 38px; color: white;">paid</span>
+                                </div>
+                                <span class="font hours" style="font-size: 1.7em;">{{total| currency }}</span>
+                                <span class="font hoursText" >Total</span>
+                            </div>
+                            
+                        </div>
+
+
+                        <div fxLayout="row wrap" fxLayoutAlign="center center" fxFlex="100" style="margin-top: 30px;" *ngIf="this.arrProjectTime.length !== 0">
+
+                            <div fxLayout="row wrap" fxLayoutAlign="center center"lass="font whiteframe" style="font-size: 1.2em; padding: 10px; width: 180px; height: 60px;" (click)="onSaveForm()"  [ngClass]="confirm ? 'btnMenuClicked':'btnMenu'">Create project</div>
+
+                        </div>
 
                         <div style="margin-top: 40px;">
                         <button mat-button matStepperPrevious > <span class="font"> Back  </span></button>
-                        <button mat-button matStepperNext>  <span class="font"> Next  </span></button>
-                        <!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
+                        <button mat-button matStepperNext>  <span class="font" (click)="suggestEmployeeBySkill(); getTotalHs();" > Next  </span></button>
                         </div>
                 </div>       
                 
                 <div *ngIf="!isProjectScope" fxLayout="row wrap" fxLayoutAlign="center center" fxFlex="100" style="margin-top: 100px; margin-bottom: 100px; padding: 20px;" class="whiteframe">
-                    <span class="font" style="font-size: 1.7em; text-align: center; display: flex; line-height: 30px;"> Please fill all fields  in step number two first!</span>
+                    <span class="font" style="font-size: 1.7em; text-align: center; display: flex; line-height: 30px;"> Please fill all fields in step number two first!</span>
                </div>
 
               </mat-step>

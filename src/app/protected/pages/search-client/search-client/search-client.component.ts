@@ -1,10 +1,9 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatAccordion } from '@angular/material/expansion';
 import { Store } from '@ngrx/store';
 import { Subject, Subscription, debounceTime } from 'rxjs';
 import { AppState } from 'src/app/app.reducer';
-import { ViewProjectComponent } from 'src/app/protected/messages/view-project/view-project/view-project.component';
 import { AuthService } from 'src/app/protected/services/auth/auth.service';
 import { ErrorService } from 'src/app/protected/services/error/error.service';
 import * as authActions from 'src/app/auth.actions';
@@ -14,13 +13,14 @@ import * as authActions from 'src/app/auth.actions';
   templateUrl: './search-client.component.html',
   styleUrls: ['./search-client.component.scss']
 })
-export class SearchClientComponent implements OnInit {
+export class SearchClientComponent implements OnInit, OnDestroy {
 
 
   @Output() onDebounce: EventEmitter<string> = new EventEmitter();
   @Output() onEnter   : EventEmitter<string> = new EventEmitter();
   debouncer: Subject<string> = new Subject();
 
+  authSubscription! : Subscription;
   // start search
   myForm! : FormGroup;
   noMatches : boolean = false;
@@ -65,12 +65,16 @@ export class SearchClientComponent implements OnInit {
     });  
   }
 
+  
+
+
   ngOnInit(): void {
+
+          
 
            this.myForm.get('itemSearch')?.valueChanges.subscribe(newValue => {
             this.itemSearch = newValue;
       
-             console.log(this.myForm.get('itemSearch')?.value);
             if(this.itemSearch !== ''){
                this.teclaPresionada();
             }else{
@@ -97,19 +101,19 @@ export class SearchClientComponent implements OnInit {
 
   viewProject( project:any){
 
-    let width : string = '';
-    let height : string = '';
-    if(screen.width >= 800) {
-      width = "600px";
-      height = "650px";
-    }
+    // let width : string = '';
+    // let height : string = '';
+    // if(screen.width >= 800) {
+    //   width = "600px";
+    //   height = "650px";
+    // }
   
-      this.dialog.open(ViewProjectComponent, {
-        data:  project,
-        width: `${width}`|| "",
-        height:`${height}`|| "",
-        panelClass:"custom-modalbox-edit",
-      });
+    //   this.dialog.open(ViewProjectComponent, {
+    //     data:  project,
+    //     width: `${width}`|| "",
+    //     height:`${height}`|| "",
+    //     panelClass:"custom-modalbox-edit",
+    //   });
   }
 
   // search
@@ -174,8 +178,13 @@ export class SearchClientComponent implements OnInit {
 
       this.store.dispatch(authActions.setClient( {client} ));
       this.setClient = true;
+    }
 
-
+    ngOnDestroy(): void {
+      if(this.authSubscription){
+        this.authSubscription.unsubscribe();
+  
+      }
     }
 
 

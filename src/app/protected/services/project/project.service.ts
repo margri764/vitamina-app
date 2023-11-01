@@ -14,6 +14,8 @@ export class ProjectService {
   @Injectable({
     providedIn: 'root'
   })
+
+  emitSuccessProject$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   
       private baseUrl = environment.baseUrl;
     
@@ -25,7 +27,7 @@ export class ProjectService {
     { 
     }
 
-    getAllProjects( from : any, to : any ){
+    getAllProjects( from : any=1, to : any = 200){
       return this.http.get<any>(`${this.baseUrl}api/project/getAllProjects?p=${from}&r=${to}`)
     .pipe(
       map( res =>{ 
@@ -39,6 +41,15 @@ export class ProjectService {
     .pipe(
       map( res =>{ 
             console.log('from service searchProjectByClient', res)
+              return res} )
+      );
+    }
+
+    getProjectById( id : any ){
+      return this.http.get<any>(`${this.baseUrl}api/project/getProject/${id}`)
+    .pipe(
+      map( res =>{ 
+            console.log('from service getProjectById', res)
               return res} )
       );
     }

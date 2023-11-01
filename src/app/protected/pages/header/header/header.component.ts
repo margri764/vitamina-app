@@ -75,7 +75,10 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
 
   if (url.startsWith('/view-employee')) {
    this.url = '/view-employee';
+  }else if(url.startsWith('/view-project')){
+    this.url = '/view-project';
   } 
+
   switch (url) {
 
     case '/client-list':
@@ -85,6 +88,10 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
     case '/view-employee':
             this.labelHeader = "Employee";
      break;  
+
+    case '/view-project':
+      this.labelHeader = "Project";
+    break;  
 
     case '/employee-list':
             this.labelHeader = "Employees";
@@ -96,6 +103,10 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
 
     case '/create-project':
       this.labelHeader = "Create project";
+     break;  
+
+    case '/skills-managment':
+      this.labelHeader = "Skills managment";
      break;  
 
     default:  this.labelHeader = "";

@@ -1,0 +1,104 @@
+
+
+<div  fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex="100" >
+    
+    <div  fxLayout="row wrap"  fxLayoutAlign="center start" fxFlex.xs="98" fxFlex.sm="95" fxFlex="75" style="background: #f6f6f6; height: 100%; margin-bottom: 100px;" >
+
+        <div  fxLayout="row wrap"  fxLayoutAlign="space-between start" fxFlex="95" style=" margin-top: 100px; padding: 40px 20px 40px 20px; " class="whiteframe">
+
+            <div  fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="35" >
+            
+                <span class="font" style="font-size: 2.5em; text-align: start; font-weight: bold; display: flex; justify-content: start;margin-top: 7px; line-height: 40px;"> {{project?.project_scope.name}}</span>
+                
+                <span class="font" style="font-size: 1em; text-align: start; margin-top: 15px; color: gray;">{{project?.client.company_name}}</span>
+
+                <span class="font" style="font-size: 1em; text-align: start; margin-top: 15px; color: gray; width: 100%;">{{project?.createdAt | date}}</span>
+            </div>
+            
+            <div  fxLayout="row wrap"  fxLayoutAlign="end start" fxFlex="65" >
+
+                <div class="font whiteframe square" style="background-color: rgb(210, 79, 210, 0.3); margin-right: 10px;" >
+                    <div class="squareIcon" style="background-color: rgb(210, 79, 210); ">
+                        <span class="material-symbols-outlined notranslate" style="font-size: 38px; color: white;">paid</span>
+                    </div>
+                    <span class="font hours">{{total}}</span>
+                    <span class="font " style="margin-top: 7px;">total U$S</span>
+                </div>
+
+                <div class="font whiteframe square" style=" background-color: rgb(1, 140, 1, 0.3);" >
+                    <div class="squareIcon" style="background-color: green; ">
+                        <span class="material-symbols-outlined notranslate" style="font-size: 38px; color: white;">alarm_on</span>
+                    </div>
+                    <span class="font hours">{{duration}}</span>
+                    <span class="font " style="margin-top: 7px;">duration hs</span>
+                </div>
+
+              
+            </div>
+        </div>
+
+        <div  fxLayout="row wrap"  fxLayoutAlign="space-between start" fxFlex="95" style=" margin-top: 50px; padding: 40px 20px 40px 20px; " class="whiteframe">
+            <div  fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="100" style="">
+                <div class="icons">
+                    <span class="material-symbols-outlined notranslate" style="font-size: 38px; color: white;">list_alt</span>
+                </div>
+                <span class="font" style="font-size: 1.8em; text-align: start; font-weight: bold; display: flex; justify-content: start;margin-top: 17px; margin-left: 20px;"> Description</span>
+            </div>
+
+            <span class="font" style="font-size: 1em; text-align: start; margin-top: 30px;">{{project?.project_scope.description}}</span>
+            
+        </div>
+
+        <div  fxLayout="row wrap"  fxLayoutAlign="space-between start" fxFlex="95" style=" margin-top: 50px; padding: 40px 20px 40px 20px; " class="whiteframe">
+            <div  fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="100" style="">
+                <div class="icons">
+                    <span class="material-symbols-outlined notranslate" style="font-size: 38px; color: white;">star</span>
+                </div>
+                <span class="font" style="font-size: 1.8em; text-align: start; font-weight: bold; display: flex; justify-content: start;margin-top: 17px; margin-left: 20px;"> Features</span>
+            </div>
+
+            <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="100" style="" >
+                <ng-container *ngFor="let feature of project?.project_scope.main_features">
+                    <div style="margin-top: 30px; text-align: start; " class="font" fxFlex="100" >
+                      {{ feature }}
+                    </div>
+                  
+                  </ng-container>
+            </div>
+            
+        </div>
+
+        <div  fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="95" style=" margin-top: 50px; padding: 40px 20px 40px 20px; " class="whiteframe">
+
+            <div  fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="100" style="">
+                <div class="icons">
+                    <span class="material-symbols-outlined notranslate" style="font-size: 38px; color: white;">work</span>
+                </div>
+                <span class="font" style="font-size: 1.8em; text-align: start; font-weight: bold; display: flex; justify-content: start;margin-top: 17px; margin-left: 20px;"> Employees assigned</span>
+            </div>
+
+            <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="100" style="" >
+                <ng-container *ngFor="let employee of project?.duration">
+                    <div style="margin-top: 30px; text-align: start; cursor: pointer; color: blue; text-decoration: underline;" class="font" fxFlex="50" [routerLink]="['../../view-employee/', employee.employee._id]">
+                      {{ employee.employee.name }}
+                    </div>
+                    <div style="margin-top: 30px; text-align: end;" class="font" fxFlex="50">
+                      {{ employee.assigned_hours }} hs assigned
+                    </div>
+                  </ng-container>
+            </div>
+
+
+   
+      
+       
+
+
+    </div>
+</div>
+
+<div *ngIf="isLoading" style="margin-top: 30px;" class="loading-overlay">
+    <mat-spinner diameter="80"></mat-spinner>
+  </div>
+  
+    

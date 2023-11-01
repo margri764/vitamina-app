@@ -9,9 +9,9 @@ import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 import { EditEmployeeSkillsComponent } from '../../EmployeeEdit/edit-employee-skills/edit-employee-skills/edit-employee-skills.component';
 import { take } from 'rxjs';
 import { AskDelSkillComponent } from 'src/app/protected/messages/ask-del-skill/ask-del-skill/ask-del-skill.component';
-import { ViewProjectComponent } from 'src/app/protected/messages/view-project/view-project/view-project.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EditEmployeeRateComponent } from 'src/app/protected/EmployeeEdit/edit-employee-rate/edit-employee-rate/edit-employee-rate.component';
+import { ViewProjectComponent } from '../../view-project/view-project/view-project.component';
 
 @Component({
   selector: 'app-view-employee',
@@ -164,18 +164,18 @@ export class ViewEmployeeComponent implements OnInit {
   }
 
   viewProject( project:any){
-    console.log(project);
-    if(screen.width >= 800) {
-      this.width = "600px";
-      this.height = "650px";
-    }
+    // console.log(project);
+    // if(screen.width >= 800) {
+    //   this.width = "600px";
+    //   this.height = "650px";
+    // }
   
-      this.dialog.open(ViewProjectComponent, {
-        data:  project,
-        width: `${this.width}`|| "",
-        height:`${this.height}`|| "",
-        panelClass:"custom-modalbox-edit",
-      });
+    //   this.dialog.open(ViewProjectComponent, {
+    //     data:  project,
+    //     width: `${this.width}`|| "",
+    //     height:`${this.height}`|| "",
+    //     panelClass:"custom-modalbox-edit",
+    //   });
   }
 
   openDialogName( employee:any){

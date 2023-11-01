@@ -9,7 +9,6 @@ import { Store } from '@ngrx/store';
 import { MatAccordion } from '@angular/material/expansion';
 import { CookieService } from 'ngx-cookie-service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ViewProjectComponent } from 'src/app/protected/messages/view-project/view-project/view-project.component';
 import { EmployeeService } from 'src/app/protected/services/employee/employee.service';
 import { AddEmployeeComponent } from '../../add-employee/add-employee/add-employee.component';
 import { AddSkillRateComponent } from '../../add-skill-rate/add-skill-rate/add-skill-rate.component';

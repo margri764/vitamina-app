@@ -13,10 +13,8 @@
         
   </div>
 
-
-
             
-  <form  [formGroup]="myForm"  fxLayout="row wrap" fxLayoutAlign="center center" fxFlex.xs="90" fxFlex.sm="60" fxFlex="30" style="  margin-top: calc(100vh - 85vh); border: 1px solid rgb(197, 197, 197); border-radius: 10px; padding: 10px;">     
+  <form  [formGroup]="myForm"  fxLayout="row wrap" fxLayoutAlign="center center" fxFlex.xs="90" fxFlex.sm="60" fxFlex="30" style="  margin-top: calc(100vh - 85vh);   background-color: white;" class="whiteframe">     
       
     <mat-form-field appearance="outline"  fxFlex="90" class="mt-10 font " >		
         <mat-label>User</mat-label>
@@ -57,7 +55,7 @@
 
 
       
-      <button type="button" fxLayout="row wrap" fxLayoutAlign="center center" [ngClass]="confirm ? 'btnMenuClicked':'btnMenu'" style="margin-top: 80px; margin-bottom: 40px;" fxFlex="90"  (click)="onSaveForm()">  Ingresar
+      <button type="button" fxLayout="row wrap" fxLayoutAlign="center center" [ngClass]="confirm ? 'btnMenuClicked':'btnMenu'" style="margin-top: 80px; margin-bottom: 40px;" fxFlex="90"  (click)="onSaveForm()">  Sign In
       </button>
 
   </form>
