@@ -8,11 +8,14 @@
 
             <div  fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="35" >
             
-                <span class="font" style="font-size: 2.5em; text-align: start; font-weight: bold; display: flex; justify-content: start;margin-top: 7px; line-height: 40px;"> {{project?.project_scope.name}}</span>
+                <span class="font" style="font-size: 2.5em; text-align: start; font-weight: bold; display: flex; justify-content: start;margin-top: 7px; line-height: 40px; width: 100%;"> {{project?.project_scope.name}}</span>
                 
-                <span class="font" style="font-size: 1em; text-align: start; margin-top: 15px; color: gray;">{{project?.client.company_name}}</span>
+                <span class="font" style="font-size: 1em; text-align: start; margin-top: 5px; color: gray;">{{project?.client.company_name}}</span>
 
-                <span class="font" style="font-size: 1em; text-align: start; margin-top: 15px; color: gray; width: 100%;">{{project?.createdAt | date}}</span>
+               <div  fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="100" >
+                    <span class="font" style="font-size: 1em; text-align: start; margin-top: 15px; color: gray; width: 50%;">{{project?.createdAt | date}}</span>
+                    <span class="font" style="font-size: 1em; text-align: start; margin-top: 15px; color: gray; width: 50%;">{{project?.state }}</span>
+               </div>    
             </div>
             
             <div  fxLayout="row wrap"  fxLayoutAlign="end start" fxFlex="65" >
@@ -50,7 +53,7 @@
         </div>
 
         <div  fxLayout="row wrap"  fxLayoutAlign="space-between start" fxFlex="95" style=" margin-top: 50px; padding: 40px 20px 40px 20px; " class="whiteframe">
-            <div  fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="100" style="">
+            <div  fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="100" style="margin-bottom: 15px;">
                 <div class="icons">
                     <span class="material-symbols-outlined notranslate" style="font-size: 38px; color: white;">star</span>
                 </div>
@@ -59,7 +62,7 @@
 
             <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="100" style="" >
                 <ng-container *ngFor="let feature of project?.project_scope.main_features">
-                    <div style="margin-top: 30px; text-align: start; " class="font" fxFlex="100" >
+                    <div style="margin-top: 10px; text-align: start; " class="font" fxFlex="100" >
                       {{ feature }}
                     </div>
                   
@@ -94,7 +97,35 @@
        
 
 
-    </div>
+        </div>
+
+        <div  fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="95" style=" margin-top: 50px; padding: 40px 20px 40px 20px; " class="whiteframe">
+
+            <div  fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="100" style="">
+                <div class="icons">
+                    <span class="material-symbols-outlined notranslate" style="font-size: 38px; color: white;">settings</span>
+                </div>
+                <span class="font" style="font-size: 1.8em; text-align: start; font-weight: bold; display: flex; justify-content: start;margin-top: 17px; margin-left: 20px;"> Actions</span>
+            </div>
+
+            <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="100" style="" >
+             
+                <span class="font" style="font-size: 1em; text-align: start; margin-top: 30px;  width: 100%;" *ngIf="project.state === 'Created'"> <b>This project hasn't been sent yet. Do you want to send it to the client now? </b></span>
+            </div>
+
+
+            <div fxLayout="row wrap" fxLayoutAlign="start " fxFlex="100" style="padding: 20px;" >
+                <button mat-raised-button  [ngClass]="confirm ? 'btnMenuClicked':'btnMenu'" style="min-width: 80px; height: 40px !important ;" (click)="sendProject()">  Send
+                </button>
+            </div>    
+        
+
+   
+      
+       
+
+
+        </div>
 </div>
 
 <div *ngIf="isLoading" style="margin-top: 30px;" class="loading-overlay">

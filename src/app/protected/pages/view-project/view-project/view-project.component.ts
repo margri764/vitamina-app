@@ -15,6 +15,7 @@ project: any;
 duration: number = 0;
 total: number = 0;
 isLoading : boolean = false;
+confirm: boolean = false;
 
 
   constructor(
@@ -61,8 +62,11 @@ isLoading : boolean = false;
     this.duration = this.project.duration.reduce((total: any, employee: any ) => total + employee.assigned_hours, 0);
   
     this.total = this.project.duration.reduce((total: any, employee: any ) => total + (employee.assigned_hours * employee.hourly_rate), 0);
+  }
 
-  
+  sendProject(){
+    this.confirm = true;
+
   }
 
 }

@@ -80,27 +80,30 @@ export class CreateProjectComponent implements OnInit {
       })
 
       this.myForm = this.fb.group({
-        // firstCtrl: ['', Validators.required],
+   
       });
 
       this.firstFormGroup = this.fb.group({
-        // firstCtrl: ['', Validators.required],
+        // date1: [''],
+
       });
 
       this.secondFormGroup = this.fb.group({
         name: ['', ],
         features: [''],
+        date: [''],
         description: [''],
         duration:  [ '', [this.validatorService.positiveNumberWithDecimals()] ]
       });
 
   }
 
+
+
   checkProjectScope(){
 
     const name = this.secondFormGroup.get('name')?.value
     const duration = this.secondFormGroup.get('duration')?.value
-    console.log(name, duration, this.secondFormGroup.invalid, this.projectSkills.length);
 
     if( name === ''|| duration === '' || this.secondFormGroup.invalid || this.projectSkills.length === 0){
       this.isProjectScope = false;
@@ -123,11 +126,19 @@ export class CreateProjectComponent implements OnInit {
       assigned_hours: item.time,
       hourly_rate: item.hourly_rate
     }));
+
+    let estimatedDeliveryDate : any;
+    const selectedDate = this.secondFormGroup.get('date')?.value;
+    
+    if (selectedDate) {
+      estimatedDeliveryDate = selectedDate.toISOString();
+    }
     
     const project_scope = {
                             name: this.secondFormGroup.get('name')?.value,
                             description: this.secondFormGroup.get('description')?.value,
-                            main_features: this.arrFeatures
+                            main_features: this.arrFeatures,
+                            estimatedDeliveryDate
                           }
 
     const client = this.client._id;

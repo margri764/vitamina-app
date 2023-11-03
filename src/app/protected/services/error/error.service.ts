@@ -48,11 +48,6 @@ export class ErrorService {
 
   getError(error : any) {
 
-    // // si se cae el back
-    // if (error.error instanceof ProgressEvent) {
-    //   // this.logout();
-    //   // this.launchMaintenance();
-    // }
 
     if (error.status === 401 && error.error.message === "Token expired") {
       localStorage.removeItem('logged');
@@ -88,7 +83,6 @@ export class ErrorService {
       // this.closeIsLoading$.emit(true);
       return of(null);
     }
-
 
 
     
@@ -127,6 +121,7 @@ export class ErrorService {
 
     if (error.statusText === "Unknown Error" ) {
       this.closeIsLoading$.emit(true);
+     
       this.openGenericMsgAlert('Internal Server Error. Sorry, something went wrong on our server. Please try again later')
       return of(null);
     }
@@ -208,7 +203,7 @@ export class ErrorService {
 
     if(screen.width >= 800) {
       width = "350px"
-      height ="450px";
+      height ="350px";
     }
 
     this.dialog.open(WrongActionMessageComponent, {

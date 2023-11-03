@@ -7,8 +7,7 @@ export interface Project {
       name: string;
       description: string;
       main_features: string[];
-      objectives?: string[];
-      constraints?: string[];
+      estimatedDeliveryTime?: string[];
     };
     duration: {
       employee: string;

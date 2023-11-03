@@ -27,22 +27,37 @@
 
                 <div fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex="100"*ngIf="client">
 
-                  <form [formGroup]="secondFormGroup" fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" style="margin-top: 30px; border: 1px solid rgb(230, 230, 230); border-radius: 10px; padding: 10px;" class="whiteframe">
+                  <form [formGroup]="secondFormGroup" fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" style="margin-top: 30px; border: 1px solid rgb(230, 230, 230); border-radius: 10px; padding: 40px;" class="whiteframe">
               
                       <span class="font" fxFlex="100" style="margin-top: 20px; font-size: 1.7em; text-align: start; font-weight: bold; line-height:30px;"> Project Scope</span>        
                         
-                          <mat-form-field appearance="outline"  fxFlex="51" class="mt-20 font" >		
+                          <mat-form-field appearance="outline"  fxFlex="49" class="mt-20 font" >		
                               <mat-label>Project´s name</mat-label>
                               <input matInput type="text" required formControlName="name">
                           </mat-form-field> 
-                          <mat-error *ngIf="validField('name')" class="font" fxFlex="100"> Please set a name. </mat-error>
+                          <mat-error *ngIf="validField('name')" class="font" fxFlex="100"> Please set a name. </mat-error> <br>
 
                           
-                          <mat-form-field appearance="outline"  fxFlex="51" class="mt-10 font" >		
-                            <mat-label>Duration /hs</mat-label>
-                            <input matInput type="text" required formControlName="duration">
-                          </mat-form-field> 
-                          <mat-error *ngIf="validField('duration')" class="font" fxFlex="100"> Please enter a positive value with up to two decimal places. </mat-error>
+                         <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="100" class="mt-10 font">
+                         
+                            <mat-form-field appearance="outline"  fxFlex="49"class=font  >		
+                                <mat-label>Duration /hs</mat-label>
+                                <input matInput type="text" required formControlName="duration">
+                            </mat-form-field> 
+                            <mat-error *ngIf="validField('duration')" class="font" fxFlex="100"> Please enter a positive value with up to two decimal places. </mat-error>
+
+                            <mat-form-field  appearance="outline" fxFlex="49">
+                                <mat-label class="font">Select delivery time</mat-label>
+                                <input matInput [matDatepicker]="picker" formControlName="date">
+                                <mat-datepicker-toggle matSuffix [for]="picker">
+                                  <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                              </mat-form-field>
+                             
+                         
+                        </div>  
+                  
 
                           <mat-form-field appearance="outline"  fxFlex="100" class="mt-10 font" >
                             <mat-label>Description</mat-label>
