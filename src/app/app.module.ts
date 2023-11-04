@@ -69,6 +69,9 @@ import { environment } from 'src/environments/environment';
 import { AskSendProposalComponent } from './protected/messages/ask-send-proposal/ask-send-proposal/ask-send-proposal.component';
 import { ConfirmProposalComponent } from './protected/pages/confirm-proposal/confirm-proposal/confirm-proposal.component';
 import { ReviewProposalComponent } from './protected/pages/review-proposal/review-proposal/review-proposal.component';
+import { AcceptMessageProposalComponent } from './protected/messages/accept-proposal-message/accept-message-proposal/accept-message-proposal.component';
+import { ReviewMessageProposalComponent } from './protected/messages/review-proposal-message/review-message-proposal/review-message-proposal.component';
+import { ReviewProposalMessagComponent } from './protected/messages/review-proposal-message/review-proposal-messag/review-proposal-messag.component';
 
 
 
@@ -116,7 +119,10 @@ import { ReviewProposalComponent } from './protected/pages/review-proposal/revie
     SkillsComponent,
     AskSendProposalComponent,
     ConfirmProposalComponent,
-    ReviewProposalComponent
+    ReviewProposalComponent,
+    AcceptMessageProposalComponent,
+    ReviewMessageProposalComponent,
+    ReviewProposalMessagComponent
   ],
   imports: [
     BrowserModule,

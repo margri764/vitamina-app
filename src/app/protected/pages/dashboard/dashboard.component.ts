@@ -25,11 +25,6 @@ import { MantainMessageComponent } from '../../messages/maintain-message/mantain
 
 export class DashboardComponent implements OnInit, OnDestroy {
 
-
-
-
-
-
 @ViewChild(MatAccordion)  accordion!: MatAccordion;
 
 userSubscription!:Subscription;
@@ -48,6 +43,7 @@ login : boolean = false;
 phone : boolean = false;
 isLoading : boolean = false;
 cookie : boolean= false;
+dontShowNotifications: boolean = false;
 
 constructor(
               private store : Store <AppState>,
@@ -68,9 +64,7 @@ constructor(
       // this.router.navigateByUrl('/login')
     }
 
-    
-
-  (screen.width <= 600) ? this.phone = true : this.phone = false;
+    (screen.width <= 600) ? this.phone = true : this.phone = false;
 
   }
 
@@ -82,10 +76,6 @@ visibility(){
 ngOnInit(): void {
   this.checkSessionStorage();
   
-// this.isLoading = true;
-
-
-
   this.userSubscription = this.store.select('auth')
   .pipe(
     filter( ({user})=>  user != null && user != undefined),

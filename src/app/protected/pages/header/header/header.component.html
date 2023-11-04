@@ -5,9 +5,9 @@
                 <span class="font cursor fs-5" fxFlex="80">{{labelHeader}}</span>
         </div>
 
-        <div fxLayout="row wrap"  fxLayoutAlign="center center"  fxFlex="60" >
+        <div fxLayout="row wrap"  fxLayoutAlign="center center"  fxFlex="60"  >
 
-                <div fxLayout="row wrap"  fxLayoutAlign="end center"  fxFlex="100" >
+                <div fxLayout="row wrap"  fxLayoutAlign="end center"  fxFlex="100" *ngIf="!donShowNotifications">
 
                     <button  mat-mini-fab color="custom-color"  style="margin-right: 10px;" routerLink="/pedidos-temporales">
                         <mat-icon class="material-symbols-outlined notranslate" [matBadge]="alert" matBadgeColor="warn" [matBadgeHidden]="hidden">notifications</mat-icon>

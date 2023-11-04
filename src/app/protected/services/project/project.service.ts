@@ -67,10 +67,21 @@ export class ProjectService {
 
     sendProposal( id:any, action:string ){
 
-      return this.http.get<any>(`${this.baseUrl}api/proposal/createProposal/${id}?action=${action}`)
+      return this.http.post<any>(`${this.baseUrl}api/proposal/createProposal/${id}?action=${action}`, null)
     .pipe(
       map( res =>{ 
             console.log('from service sendProposal', res)
+              return res} )
+      );
+    }
+    
+
+    setProjectState( projectId:any, state:string ){
+
+      return this.http.patch<any>(`${this.baseUrl}api/project/projectState/${projectId}?state=${state}`, null)
+    .pipe(
+      map( res =>{ 
+            console.log('from service projectState', res)
               return res} )
       );
     }

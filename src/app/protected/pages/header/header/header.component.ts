@@ -7,6 +7,7 @@ import { Subscription, filter } from 'rxjs';
 import { AppState } from 'src/app/app.reducer';
 import { ErrorService } from 'src/app/protected/services/error/error.service';
 import { OrderService } from 'src/app/protected/services/order/order.service';
+import { AuthService } from 'src/app/protected/services/auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -33,6 +34,7 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
  labelHeader : string = '';
  path : string = '/home';
  user: any | undefined;
+ donShowNotifications:boolean = false;
 
   constructor(
                private store : Store <AppState>,
@@ -40,6 +42,7 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
                private cdRef: ChangeDetectorRef,
                private location : Location,
                private router : Router,
+               private authService : AuthService,
                private orderService : OrderService
   ) { 
         
@@ -72,12 +75,20 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
  }
 
  updateLabelHeader( url : string){
+  this.donShowNotifications = false;
 
   if (url.startsWith('/view-employee')) {
    this.url = '/view-employee';
   }else if(url.startsWith('/view-project')){
     this.url = '/view-project';
-  } 
+  }else if(url.startsWith('/confirm-proposal')){
+    this.url = '/confirm-proposal';
+    this.donShowNotifications = true;
+  }else if(url.startsWith('/review-proposal')){
+    this.url = '/review-proposal';
+    this.donShowNotifications = true;
+
+  }
 
   switch (url) {
 
@@ -101,6 +112,14 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
       this.labelHeader = "Project managment";
      break;  
 
+    case '/confirm-proposal':
+      this.labelHeader = "Confirm proposal";
+     break;  
+
+     case '/review-proposal':
+      this.labelHeader = "Review proposal";
+     break;  
+
     case '/create-project':
       this.labelHeader = "Create project";
      break;  
@@ -120,9 +139,9 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
  navigate(){
 
    
-   if (this.path.startsWith('/view-employee')) {
-     this.url = '/view-employee';
-    } 
+  //  if (this.path.startsWith('/view-employee')) {
+  //    this.url = '/view-employee';
+  //   } 
     
     switch (this.path) {
       case '/view-employee':
@@ -130,6 +149,12 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
                  
                   this.location.back()
        break;
+
+       case '/review-proposal':
+       case '/confirm-proposal':
+                   
+         break;
+       
          
                  
           default: this.router.navigateByUrl('/home');

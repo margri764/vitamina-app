@@ -1,0 +1,26 @@
+<div fxLayout="row wrap" fxLayoutAlign="center start" fxFlex="100" class="pd-10 ">
+  
+    <button  mat-mini-fab  style="background-color: green; height: 80px; width: 80px; margin-top: 15px;">
+        <mat-icon class="material-symbols-outlined notranslate" style="transform: scale(2);"> contact_support </mat-icon>
+   </button>
+
+    <div fxLayout="row wrap" fxLayoutAlign="center" fxFlex="100" class="pd-10 mt-40" >
+        <span class="font" fxFlex="100" style="line-height: 1.2em; text-align: center; font-size: 1.3em;"> <b>Would you like to review anything regarding our proposal? </b> </span>        
+        <span class="font fs-3" fxFlex="100" style="margin-top: 15px; text-align: center; color: green; font-weight: bold;"> We will contact you soon.  </span>        
+    </div>
+
+    <div  fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex="100" class="mb-20">
+
+        <button mat-raised-button  [ngClass]="!confirm ? 'btnMenuClicked':'btnMenu'" fxFlex="40" (click)="closeComponent()" style="margin-top: 15px; margin-right: 3px;">
+            <i class="material-symbols-outlined notranslate" style="transform: scale(1.3);">close</i> 
+            &nbsp; no
+        </button>
+        <button mat-raised-button  [ngClass]="confirm ? 'btnMenuClicked':'btnMenu'" fxFlex="40" (click)="continue()" style="margin-top: 15px; margin-left: 3px;">
+            <i class="material-symbols-outlined notranslate" style="transform: scale(1.3);">done</i> 
+            &nbsp; yes, please
+        </button>
+    </div>
+
+
+</div>
+

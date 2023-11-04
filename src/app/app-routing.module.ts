@@ -12,6 +12,7 @@ import { CreateProjectComponent } from './protected/pages/create-project/create-
 import { SkillsComponent } from './protected/pages/skills/skills/skills.component';
 import { ViewProjectComponent } from './protected/pages/view-project/view-project/view-project.component';
 import { ConfirmProposalComponent } from './protected/pages/confirm-proposal/confirm-proposal/confirm-proposal.component';
+import { ReviewProposalComponent } from './protected/pages/review-proposal/review-proposal/review-proposal.component';
 
 
 const routes: Routes = [
@@ -25,7 +26,7 @@ const routes: Routes = [
     path: 'confirm-proposal/:code',  component: ConfirmProposalComponent
   },
   {
-    path: 'review-proposal/:code',  component: ConfirmProposalComponent
+    path: 'review-proposal/:code',  component: ReviewProposalComponent
   },
 
   {

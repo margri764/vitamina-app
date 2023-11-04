@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GenericSuccessComponent } from 'src/app/protected/messages/generic-success/generic-success/generic-success.component';
 import { ProjectService } from 'src/app/protected/services/project/project.service';
 
@@ -22,7 +22,7 @@ export class ViewProjectComponent implements OnInit, AfterViewInit  {
   isLoading : boolean = false;
   confirm: boolean = false;
   element:any;
-
+  submittedDate: string='';
 
   constructor(
                private activatedRoute : ActivatedRoute,
@@ -43,7 +43,6 @@ export class ViewProjectComponent implements OnInit, AfterViewInit  {
 
   }
 
-
   ngAfterViewInit() {
       this.scrollToTop();
   }
@@ -60,7 +59,6 @@ export class ViewProjectComponent implements OnInit, AfterViewInit  {
     
   }
 
-
   getProyectById( id:string ){
     this.isLoading = true;
       this.projectService.getProjectById(id).subscribe( 
@@ -74,7 +72,6 @@ export class ViewProjectComponent implements OnInit, AfterViewInit  {
         })
   }
 
-  submittedDate: string='';
 
   submmitedProposalDate(){
 
