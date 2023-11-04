@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ErrorService } from 'src/app/protected/services/error/error.service';
 
 @Component({
   selector: 'app-generic-message',
@@ -12,7 +13,8 @@ export class GenericMessageComponent implements OnInit {
   confirm : boolean = false; 
   constructor(
               @Inject(MAT_DIALOG_DATA) public data: any,
-              private dialogRef : MatDialogRef<GenericMessageComponent>
+              private dialogRef : MatDialogRef<GenericMessageComponent>,
+              private errorService : ErrorService
 
   ) { }
 
@@ -23,6 +25,7 @@ export class GenericMessageComponent implements OnInit {
 
   continue(){
     this.confirm = true;
+    this.errorService.authContinueGenericSuccess$.emit(true);
     setTimeout(()=>{this.dialogRef.close()},200)
     
   }

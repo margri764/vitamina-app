@@ -141,15 +141,7 @@ export class EmployeeService {
     );
   }
 
-  createProject( body : Project ){
-
-    return this.http.post<any>(`${this.baseUrl}api/project/createProject`, body)
-  .pipe(
-    map( res =>{ 
-          console.log('from service createProject', res)
-            return res} )
-    );
-  }
+ 
 
 
 

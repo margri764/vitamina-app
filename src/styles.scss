@@ -1,13 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
+html, 
 body { margin: 0;
        font-family: "Helvetica Neue", sans-serif;
        overflow-x: hidden;
        overflow-y: auto;
-      //  background-color: rgb(252, 252, 252);
-      background-color: rgb(233, 233, 233);
-       
+        background-color: rgb(233, 233, 233);
+        
 }
 
 @font-face {

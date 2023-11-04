@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map } from 'rxjs';
@@ -16,6 +16,7 @@ export class ProjectService {
   })
 
   emitSuccessProject$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  authSendProposal$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   
       private baseUrl = environment.baseUrl;
     
@@ -25,6 +26,16 @@ export class ProjectService {
                     private router : Router,
                   )
     { 
+    }
+
+    createProject( body : Project, action:string ){
+
+      return this.http.post<any>(`${this.baseUrl}api/project/createProject?action=${action}`, body)
+    .pipe(
+      map( res =>{ 
+            console.log('from service createProject', res)
+              return res} )
+      );
     }
 
     getAllProjects( from : any=1, to : any = 200){
@@ -45,11 +56,21 @@ export class ProjectService {
       );
     }
 
-    getProjectById( id : any ){
+    getProjectById( id:any ){
       return this.http.get<any>(`${this.baseUrl}api/project/getProject/${id}`)
     .pipe(
       map( res =>{ 
             console.log('from service getProjectById', res)
+              return res} )
+      );
+    }
+
+    sendProposal( id:any, action:string ){
+
+      return this.http.get<any>(`${this.baseUrl}api/proposal/createProposal/${id}?action=${action}`)
+    .pipe(
+      map( res =>{ 
+            console.log('from service sendProposal', res)
               return res} )
       );
     }

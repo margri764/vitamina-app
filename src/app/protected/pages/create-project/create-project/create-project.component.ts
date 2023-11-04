@@ -1,8 +1,8 @@
-import { Component, OnInit,  } from '@angular/core';
+import { Component, OnDestroy, OnInit,  } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { filter } from 'rxjs';
+import { Subscription, filter } from 'rxjs';
 import { AppState } from 'src/app/app.reducer';
 import { ErrorService } from 'src/app/protected/services/error/error.service';
 import { EmployeeService } from 'src/app/protected/services/employee/employee.service';
@@ -14,13 +14,15 @@ import { Project } from 'src/app/protected/interfaces/project';
 import { GenericSuccessComponent } from 'src/app/protected/messages/generic-success/generic-success/generic-success.component';
 import { ProjectService } from 'src/app/protected/services/project/project.service';
 import { log } from 'console';
+import { AskSendProposalComponent } from 'src/app/protected/messages/ask-send-proposal/ask-send-proposal/ask-send-proposal.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-project',
   templateUrl: './create-project.component.html',
   styleUrls: ['./create-project.component.scss']
 })
-export class CreateProjectComponent implements OnInit {
+export class CreateProjectComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[] = ['name', 'state','rate','action'];
   dataTableActive : any ;
@@ -29,7 +31,7 @@ export class CreateProjectComponent implements OnInit {
    myForm!: FormGroup;
    firstFormGroup!: FormGroup;
    secondFormGroup!: FormGroup;
-   
+   private projectSubscription!: Subscription; 
   isLoading: boolean = false;
   confirm: boolean = false;
   selection: boolean = false;
@@ -56,12 +58,13 @@ export class CreateProjectComponent implements OnInit {
               private store : Store <AppState>,
               private validatorService : ValidatorService,
               private errorService : ErrorService,
-              private projectService : ProjectService
+              private projectService : ProjectService,
+              private router : Router
               // private authService : AuthService,
   ) {
-
    
    }
+
 
   ngOnInit(): void {
 
@@ -151,17 +154,26 @@ export class CreateProjectComponent implements OnInit {
                            }
     console.log(body);
 
-    this.employeeService.createProject(body).subscribe(
-      ( {success} )=>{
+    this.projectService.createProject(body, 'create').subscribe(
+      ( {success, project} )=>{
         if(success){
           this.openDialogSuccesss("Project created successfully!");
           this.resetProject();
-          this.projectService.emitSuccessProject$.subscribe( 
+
+          this.projectSubscription = this.projectService.emitSuccessProject$.subscribe( 
             (auth)=>{
               if(auth){
-                location.reload();
+                setTimeout(()=>{ this.openDialogSendProject("Do you want send the proposal?") },400)
               }
             })
+
+          this.projectService.authSendProposal$.subscribe( (emmited)=>{ 
+            if(emmited){
+            this.router.navigateByUrl(`/view-project/${project._id}`)
+            }else if(!emmited){
+              location.reload();
+            }
+          } )
 
         }
       })
@@ -213,7 +225,6 @@ export class CreateProjectComponent implements OnInit {
   delFeature( feature:any ){
     this.arrFeatures= this.arrFeatures.filter( (item:any)=> item !== feature);
   }
-  
 
   suggestEmployeeBySkill(){
 
@@ -318,6 +329,31 @@ openDialogSuccesss( body:any ){
       panelClass:"custom-modalbox-NoMoreComponent", 
     });
 }
+
+openDialogSendProject( body:any ){
+
+  let width = "";
+  let height ="";
+
+    if(screen.width >= 800) {
+      width = "400px";
+      height ="220px";
+    }
+  
+    this.dialog.open(AskSendProposalComponent, {
+      data: body,
+      width: `${width}`|| "",
+      height:`${height}`|| "",
+      panelClass:"custom-modalbox-NoMoreComponent", 
+    });
+}
+
+ngOnDestroy(): void {
+  if (this.projectSubscription) {
+    this.projectSubscription.unsubscribe();
+  }
+}
+
 
   
 

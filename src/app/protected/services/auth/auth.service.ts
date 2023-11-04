@@ -154,4 +154,13 @@ getClientById( id : any ){
   );
 }
 
+getClientByCode( code : any ){
+  return this.http.get<any>(`${this.baseUrl}api/client/getClientByCode/${code}`)
+.pipe(
+  map( res =>{ 
+        console.log('desde service getClientByCode', res)
+          return res} )
+  );
+}
+
 }

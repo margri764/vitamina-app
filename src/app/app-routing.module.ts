@@ -11,6 +11,7 @@ import { ProjectComponent } from './protected/pages/project/project/project.comp
 import { CreateProjectComponent } from './protected/pages/create-project/create-project/create-project.component';
 import { SkillsComponent } from './protected/pages/skills/skills/skills.component';
 import { ViewProjectComponent } from './protected/pages/view-project/view-project/view-project.component';
+import { ConfirmProposalComponent } from './protected/pages/confirm-proposal/confirm-proposal/confirm-proposal.component';
 
 
 const routes: Routes = [
@@ -18,6 +19,13 @@ const routes: Routes = [
 
   {
     path: 'settings',  component: SettingsComponent
+  },
+
+  {
+    path: 'confirm-proposal/:code',  component: ConfirmProposalComponent
+  },
+  {
+    path: 'review-proposal/:code',  component: ConfirmProposalComponent
   },
 
   {

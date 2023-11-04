@@ -29,6 +29,7 @@ export class ErrorService {
   close$ = new BehaviorSubject<boolean>(false) //quiero a ce cierren todos los modals cuando se produce un error de servidor 
   authDelTempOrder$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   authDelClient$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  authContinueGenericSuccess$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   closeIsLoading$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   labelInvalidCredential$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   labelInvalidCode$ : EventEmitter<boolean> = new EventEmitter<boolean>; // en las
@@ -104,14 +105,6 @@ export class ErrorService {
       return of(null);
     }
 
-    if (error.status === 400 && error.error.success === false) {
-      this.openGenericMsgAlert(error.error.error);
-      this.closeIsLoading$.emit(true);
-
-      return of(null);
-  }
-    
-
     if (error.status === 400) {
         this.openGenericMsgAlert(error.error.message);
         this.closeIsLoading$.emit(true);
@@ -172,8 +165,6 @@ export class ErrorService {
 
 
   openDialogLogin() {
-
-
     this.dialog.open(LoginMessageComponent,{
       width: `${this.width}`|| "",
       height:`${this.height}`|| "",
@@ -196,6 +187,7 @@ export class ErrorService {
       panelClass:"custom-modalbox-message",
     });
   }
+
   openGenericMsgAlert(msg : string){
 
     let width : string = '';

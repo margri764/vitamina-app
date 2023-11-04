@@ -66,6 +66,9 @@ import { CapitalizeFirstLetterPipe } from './protected/pipes/CapitalizeFirstLett
 
 
 import { environment } from 'src/environments/environment';
+import { AskSendProposalComponent } from './protected/messages/ask-send-proposal/ask-send-proposal/ask-send-proposal.component';
+import { ConfirmProposalComponent } from './protected/pages/confirm-proposal/confirm-proposal/confirm-proposal.component';
+import { ReviewProposalComponent } from './protected/pages/review-proposal/review-proposal/review-proposal.component';
 
 
 
@@ -110,7 +113,10 @@ import { environment } from 'src/environments/environment';
     ProjectSkillsComponent,
     AssignTimeComponent,
     CreateProjectComponent,
-    SkillsComponent
+    SkillsComponent,
+    AskSendProposalComponent,
+    ConfirmProposalComponent,
+    ReviewProposalComponent
   ],
   imports: [
     BrowserModule,

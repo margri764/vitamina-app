@@ -125,11 +125,11 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
     } 
     
     switch (this.path) {
-      case '/view-employee':  
-                  // this.router.navigateByUrl('/client-list');
-                  // this.router.navigateByUrl('/employee-list');
+      case '/view-employee':
+      case'/view-project':  
+                 
                   this.location.back()
-            break;
+       break;
          
                  
           default: this.router.navigateByUrl('/home');

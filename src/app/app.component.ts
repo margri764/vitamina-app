@@ -38,7 +38,6 @@ export class AppComponent implements OnInit {
               private errorService : ErrorService
 
   ){
-    
 
     const token = this.cookieService.get('token');
     const userLS = getDataLS('user');
