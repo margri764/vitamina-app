@@ -17,6 +17,7 @@ export class ProjectService {
 
   emitSuccessProject$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   authSendProposal$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  closeClientFeedback$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   
       private baseUrl = environment.baseUrl;
     
@@ -85,6 +86,18 @@ export class ProjectService {
               return res} )
       );
     }
+
+    clientReview( body:any, projectId:any, update:string ){
+
+      return this.http.put<any>(`${this.baseUrl}api/project/updateProject/${projectId}?update=${update}`, body)
+    .pipe(
+      map( res =>{ 
+            console.log('from service clientReview', res)
+              return res} )
+      );
+    }
+
+
     
   
   

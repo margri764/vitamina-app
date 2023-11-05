@@ -26,6 +26,7 @@ export class GenericSuccessComponent implements OnInit {
   continue(){
     this.confirm = true;
     this.projectService.emitSuccessProject$.emit(true);
+    this.projectService.closeClientFeedback$.emit(true);
       setTimeout(()=>{
         this.dialogRef.close();
       }, 300)

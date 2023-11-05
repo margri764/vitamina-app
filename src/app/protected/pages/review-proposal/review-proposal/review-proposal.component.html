@@ -1,34 +1,41 @@
 
-<div  fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex="100" >
+<div  fxLayout="row wrap"  fxLayoutAlign="center start" style="height: 100%;" >
 
-        <div  fxLayout="row wrap"  fxLayoutAlign="center start" fxFlex.xs="98" fxFlex.sm="95" fxFlex="75" style="background: #f6f6f6; height: 100vh; margin-bottom: 100px;" >
+        <div  fxLayout="row wrap"  fxLayoutAlign="center start" fxFlex.xs="98" fxFlex.sm="95" fxFlex="75" style="background: white; height: 100%;" >
 
-            <div fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex="70">
+            <div fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex="70" class="mt-40"  >
              
-                <span class="font" style="font-size: 1em; text-align: start; margin-top: 100px; line-height: 30px; " > <b>We value your suggestions and feedback! We want to provide you with the best service possible, and your input is crucial. If you have any ideas, suggestions, or changes you'd like to propose, please share them below. We're here to listen and improve.</b></span>
+                <span class="font" style="font-size: 1.1em; text-align: start;  line-height: 30px; " >We value your suggestions and feedback! We want to provide you with the best service possible, and your input is crucial. If you have any ideas, suggestions, or changes you'd like to propose, please share them below. We're here to listen and improve.</span>
                 
             </div>
 
-            <form  [formGroup]="myForm"  fxLayout="row wrap" fxLayoutAlign="center center" fxFlex="70" style="margin-top: 60px;">     
+            <form  [formGroup]="myForm"  fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="70" style="margin-top: 60px;">     
                 <mat-form-field appearance="outline"  fxFlex="100" class="mt-10 font" >
                     <mat-label>What would you like to change?</mat-label>
-                    <textarea matInput style="height: 120px;" formControlName="description"></textarea>
+                    <textarea matInput style="height: 120px;"required formControlName="clientFeedback"></textarea>
                   </mat-form-field>
+
+                  <mat-error  fxLayout="row wrap" fxLayoutAlign="start center"*ngIf ="validField ('clientFeedback')" style="font-size: 1em;" class="font "> Required  </mat-error> 
 
                 <!-- <mat-form-field appearance="outline"  fxFlex="100" class="mt-10 font " >		
                     <mat-label>What would you like to change?</mat-label>
                     <input matInput type="text" required formControlName="review">
                 </mat-form-field>  -->
-                <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="97" style="margin-top: 30px;"  >
+                <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 30px;"  >
                     <button mat-raised-button  [ngClass]="confirm ? 'btnMenuClicked':'btnMenu'" (click)="onSave()" style="width: 180px; height: 40px;"> Send
                         
                     </button>
                 </div>    
             </form> 
+         
             
-          
-    
-    
-
+            <div fxLayout="row wrap"  fxLayoutAlign="end center"  fxFlex="95" style=" position: absolute; bottom: 20px; ">
+                <img src="assets/logo-vit.png" alt="logo principal" class="logoWidth" >
+            </div> 
         </div>
+
 </div>
+
+<div *ngIf="isLoading" style="margin-top: 30px;" class="loading-overlay">
+    <mat-spinner diameter="80"></mat-spinner>
+  </div>

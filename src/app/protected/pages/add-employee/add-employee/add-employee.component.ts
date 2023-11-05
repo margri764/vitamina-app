@@ -9,7 +9,6 @@ import { AddSkillRateComponent } from '../../add-skill-rate/add-skill-rate/add-s
 import { AppState } from 'src/app/app.reducer';
 import { Store } from '@ngrx/store';
 import * as authActions from 'src/app/auth.actions';
-import { GenericSuccessComponent } from 'src/app/protected/messages/generic-success/generic-success/generic-success.component';
 
 @Component({
   selector: 'app-add-employee',

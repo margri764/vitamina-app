@@ -324,6 +324,7 @@ openDialogSuccesss( body:any ){
   
     this.dialog.open(GenericSuccessComponent, {
       data: body,
+      disableClose: true,
       width: `${width}`|| "",
       height:`${height}`|| "",
       panelClass:"custom-modalbox-NoMoreComponent", 

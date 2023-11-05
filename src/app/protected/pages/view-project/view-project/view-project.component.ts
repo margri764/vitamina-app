@@ -128,6 +128,7 @@ export class ViewProjectComponent implements OnInit, AfterViewInit  {
     
       this.dialog.open(GenericSuccessComponent, {
         data: body,
+        disableClose: true,
         width: `${width}`|| "",
         height:`${height}`|| "",
         panelClass:"custom-modalbox-NoMoreComponent", 
