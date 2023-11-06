@@ -72,6 +72,8 @@ import { ReviewProposalComponent } from './protected/pages/review-proposal/revie
 import { AcceptMessageProposalComponent } from './protected/messages/accept-proposal-message/accept-message-proposal/accept-message-proposal.component';
 import { ReviewMessageProposalComponent } from './protected/messages/review-proposal-message/review-message-proposal/review-message-proposal.component';
 import { ReviewProposalMessagComponent } from './protected/messages/review-proposal-message/review-proposal-messag/review-proposal-messag.component';
+import { AddClientComponent } from './protected/pages/add-client/add-client/add-client.component';
+import { UpdateClientComponent } from './protected/pages/update-client/update-client/update-client.component';
 
 
 
@@ -122,7 +124,9 @@ import { ReviewProposalMessagComponent } from './protected/messages/review-propo
     ReviewProposalComponent,
     AcceptMessageProposalComponent,
     ReviewMessageProposalComponent,
-    ReviewProposalMessagComponent
+    ReviewProposalMessagComponent,
+    AddClientComponent,
+    UpdateClientComponent
   ],
   imports: [
     BrowserModule,

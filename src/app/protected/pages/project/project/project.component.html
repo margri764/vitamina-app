@@ -121,7 +121,7 @@
                   <!-- Name Column -->
                   <ng-container matColumnDef="client" sticky >
                       <th mat-header-cell *matHeaderCellDef > Client </th>
-                      <td mat-cell *matCellDef="let element" style="cursor: pointer;" [routerLink]="['../view-project/',element._id ]"> {{element.client.company_name}} </td>
+                      <td mat-cell *matCellDef="let element" style="cursor: pointer;" class="name" [routerLink]="['../view-project/',element._id ]"> {{element.client.company_name}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="projectName"  >

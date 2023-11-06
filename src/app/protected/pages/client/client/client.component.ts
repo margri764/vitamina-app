@@ -9,6 +9,9 @@ import { Store } from '@ngrx/store';
 import { MatAccordion } from '@angular/material/expansion';
 import { CookieService } from 'ngx-cookie-service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { AddClientComponent } from '../../add-client/add-client/add-client.component';
+import { AskGenericDeleteComponent } from 'src/app/protected/messages/ask-generic-delete/ask-generic-delete/ask-generic-delete.component';
+import { UpdateClientComponent } from '../../update-client/update-client/update-client.component';
 
 @Component({
   selector: 'app-client',
@@ -60,7 +63,7 @@ export class ClientComponent implements OnInit {
 
   // paginator
   length = 50;
-  pageSize = 10;
+  pageSize = 100;
   pageIndex = 1;
   pageSizeOptions = [5, 10, 25];
   hidePageSize = false;
@@ -109,7 +112,7 @@ export class ClientComponent implements OnInit {
 
   ngOnInit(): void {
     this.errorService.closeIsLoading$.subscribe( (emmited)=>{ if(emmited){this.isLoading = false}});
-    this.authService.updateEditingUser$.subscribe( (emmited)=>{ if(emmited){this.isLoading = true; this.getInitialClients()} })
+    this.authService.updateEditingUser$.subscribe( (emmited)=>{ if(emmited){this.isLoading = true; this.getInitialClients()} });
     
     this.getInitialClients();
 
@@ -202,43 +205,52 @@ handlePageEvent(e: PageEvent) {
 
 deleteClient(client : any){
 
-  if(screen.width >= 800) {
-    this.width = "600px";
-    this.height = "510px";
-  }
-
-    // this.dialog.open(AskDelcustomerComponent, {
-    //   data:  customer.archivarComo,
-    //   width: `${this.width}`|| "",
-    //   height:`${this.height}`|| "",
-    //   panelClass:"custom-modalbox-edit",
-    // });
-
-    // this.errorService.authDelCustomer$.pipe(
-    //   take(1)
-    // ).subscribe( (auth)=> { // el ask-edit dispara ui boolean si se elige CONTINUAR con la acción
-      
-    //   if(auth){
-    //     this.authService.deletecustomerById(customer.id).subscribe( 
-    //       ()=>{})
-    //   }
-    // })
+    if(screen.width >= 800) {
+      this.width = "400px";
+      this.height = "280px";
+  
+    }
+      this.dialog.open(AskGenericDeleteComponent, {
+        data: client.company_name,
+        disableClose: true,
+        width: `${this.width}`|| "",
+        height:`${this.height}`|| "",
+        panelClass:"custom-modalbox-edit",
+      });
+  
+      this.authService.authDelClient$.pipe(
+        take(1)
+      ).subscribe( (auth: any)=> { // el ask-edit dispara ui boolean si se elige CONTINUAR con la acción
+        this.isLoading = true;
+        if(auth){
+          this.authService.deleteClientById(client._id).subscribe( 
+            ({success})=>{
+              if(success){
+              this.getInitialClients();
+              this.isLoading = false;
+              }
+            })
+        }
+      })
+    
+  
   
 }
 
 editClient(client: any){
 
   if(screen.width >= 800) {
-    this.width = "600px";
-    this.height ="720px";
-  }
+    this.width = "590px";
+    this.height = "510px";
 
-  // this.dialog.open(EditcustomerComponent, {
-  //   data: customer,
-  //   width: `${this.width}`|| "",
-  //   height:`${this.height}`|| "",
-  //   panelClass:"custom-modalbox-NoMoreComponent", 
-  // });
+  }
+    this.dialog.open(UpdateClientComponent, {
+      data: client,
+      disableClose: true,
+      width: `${this.width}`|| "",
+      height:`${this.height}`|| "",
+      panelClass:"custom-modalbox-edit",
+    });
 
 }
 
@@ -247,15 +259,16 @@ editClient(client: any){
 addClient(){
 
   if(screen.width >= 800) {
-    this.width = "600px";
-    this.height ="770px";
+    this.width = "450px";
+    this.height ="520px";
   }
+  this.dialog.open(AddClientComponent, {
+    width: `${this.width}`|| "",
+    height:`${this.height}`|| "",
+    disableClose: true,
+    panelClass:"custom-modalbox-NoMoreComponent", 
+  });
 
-  // this.dialog.open(NewcustomerComponent, {
-  //   width: `${this.width}`|| "",
-  //   height:`${this.height}`|| "",
-  //   panelClass:"custom-modalbox-NoMoreComponent", 
-  // });
 }
 
    // search

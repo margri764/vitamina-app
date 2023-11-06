@@ -202,7 +202,7 @@ export class ErrorService {
       data: msg,
       width: `${width}`|| "",
       height:`${height}`|| "",
-      // disableClose: true,
+      disableClose: true,
       panelClass:"custom-modalbox-NoMoreComponent", 
     });
   

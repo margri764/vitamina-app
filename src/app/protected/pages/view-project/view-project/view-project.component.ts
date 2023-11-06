@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GenericSuccessComponent } from 'src/app/protected/messages/generic-success/generic-success/generic-success.component';
+import { ErrorService } from 'src/app/protected/services/error/error.service';
 import { ProjectService } from 'src/app/protected/services/project/project.service';
 
 @Component({
@@ -28,7 +29,8 @@ export class ViewProjectComponent implements OnInit, AfterViewInit  {
                private activatedRoute : ActivatedRoute,
                private projectService : ProjectService,
                private dialog : MatDialog,
-               private router : Router
+               private router : Router,
+               private errorService : ErrorService
              )
 { 
 
@@ -40,7 +42,7 @@ export class ViewProjectComponent implements OnInit, AfterViewInit  {
 }
 
   ngOnInit(): void {
-
+    this.errorService.closeIsLoading$.subscribe((emmited)=>{if(emmited){this.isLoading = false}})
   }
 
   ngAfterViewInit() {
@@ -67,21 +69,11 @@ export class ViewProjectComponent implements OnInit, AfterViewInit  {
           if(project){
             this.project = project;
             this.getDuration();
-            this.submmitedProposalDate();
           }
         })
   }
 
 
-  submmitedProposalDate(){
-
-      if(this.project.proposal.length !== 0){
-            this.project.proposal.forEach( (item:any)=>{  this.submittedDate = item.submittedDate });
-      }else{
-        return;
-      }
-  
-    }
 
   // getTotal(){
 

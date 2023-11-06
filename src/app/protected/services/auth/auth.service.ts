@@ -19,7 +19,9 @@ import { query } from '@angular/animations';
 export class AuthService {
 
   updateEditingUser$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  updateClientUser$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   showLabelTempOrder$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  authDelClient$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   private labelSubject = new BehaviorSubject<string>(''); // Valor inicial vacío
   label$ = this.labelSubject.asObservable();
 
@@ -107,7 +109,7 @@ getClientsPaginator(from : any, to : any){
 
 updateClientById( body : any, id:any){
                                         
-  return this.http.put<any>(`${this.baseUrl}api/client/${id}`, body)
+  return this.http.put<any>(`${this.baseUrl}api/client/updateClient/${id}`, body)
 .pipe(
   map( res =>{ 
         console.log('desde service updateClientById', res)
@@ -116,25 +118,24 @@ updateClientById( body : any, id:any){
 }
 
 deleteClientById( id:any){
-                   id = "2737";                   
-  return this.http.delete<any>(`${this.baseUrl}api/client(delete/${id}`)
+  return this.http.patch<any>(`${this.baseUrl}api/client/deleteClient/${id}`, null)
 .pipe(
   map( res =>{ 
-        console.log('desde service deleteCulientById', res)
+        console.log('desde service deleteClientById', res)
           return res} )
   );
 }
 
-addNewClient( body : User){
+createClient( body : User){
 
 
-return this.http.post<any>(`${this.baseUrl}api/client`, body)
-.pipe(
-  map( res =>{ 
-         console.log('desde service addNewClient', res)
-  return res} )
-  );
-}
+  return this.http.post<any>(`${this.baseUrl}api/client/createClient`, body)
+  .pipe(
+    map( res =>{ 
+          console.log('desde service createClient', res)
+    return res} )
+    );
+  }
 
 searchClientByName( query :  string ){
   return this.http.get<any>(`${this.baseUrl}api/client/searchClient?querySearch=${query}`)

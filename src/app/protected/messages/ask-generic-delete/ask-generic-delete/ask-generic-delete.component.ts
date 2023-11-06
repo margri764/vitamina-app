@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { AuthService } from 'src/app/protected/services/auth/auth.service';
 import { EmployeeService } from 'src/app/protected/services/employee/employee.service';
 
 @Component({
@@ -15,6 +16,7 @@ export class AskGenericDeleteComponent implements OnInit {
              private employeeService: EmployeeService,
              private dialogRef : MatDialogRef<AskGenericDeleteComponent>,
              @Inject(MAT_DIALOG_DATA) public data: any,
+             private authService : AuthService
   ) { }
 
   ngOnInit(): void {
@@ -28,6 +30,7 @@ export class AskGenericDeleteComponent implements OnInit {
   continue(){
     this.confirm = true;
     this.employeeService.authDelEmployee$.emit(true),
+    this.authService.authDelClient$.emit(true),
     setTimeout( ()=>{
       this.dialogRef.close();
     },500)

@@ -41,6 +41,15 @@
     color: gray; 
     margin-top: 10px;
 }
+.name{
+  transition: all 0.3s ease 0s;
+
+}
+
+  .name:hover{
+    background-color: rgb(37, 150, 190, 0.1);
+  }
+  
 
 .frame{
   color: white !important;
