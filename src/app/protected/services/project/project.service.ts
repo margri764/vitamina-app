@@ -97,6 +97,17 @@ export class ProjectService {
       );
     }
 
+    sendAdminNotification( projectId:any, notification:string ){
+
+      return this.http.post<any>(`${this.baseUrl}api/project/adminNotification/${projectId}?notification=${notification}`, null)
+    .pipe(
+      map( res =>{ 
+            console.log('from service sendAdminNotification', res)
+              return res} )
+      );
+    }
+
+
 
     
   

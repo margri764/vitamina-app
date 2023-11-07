@@ -61,6 +61,7 @@ setProjectState( projectId:string, state:string ){
 
 onSave(){
 
+  // sendAdminNotification( body:any, projectId:any, notification:string ){
   
   if ( this.myForm.invalid ) {
     this.myForm.markAllAsTouched();
@@ -70,9 +71,10 @@ onSave(){
   console.log(this.myForm.value, this.projectId);
 
   this.projectService.clientReview(this.myForm.value, this.projectId, "review").subscribe( 
-    ( {success} )=>{
+    ( {success, project} )=>{
       if(success){
         this.openDialogSuccesss( 'Thank you for your feedback, we will contact you soon.')
+        this.projectService.sendAdminNotification(project._id, "Review")
       }
     })
 
