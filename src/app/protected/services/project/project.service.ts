@@ -89,7 +89,7 @@ export class ProjectService {
 
     clientReview( body:any, projectId:any, update:string ){
 
-      return this.http.put<any>(`${this.baseUrl}api/project/updateProject/${projectId}?update=${update}`, body)
+    return this.http.put<any>(`${this.baseUrl}api/project/updateProject/${projectId}?update=${update}`, body)
     .pipe(
       map( res =>{ 
             console.log('from service clientReview', res)
@@ -98,14 +98,26 @@ export class ProjectService {
     }
 
     sendAdminNotification( projectId:any, notification:string ){
+      console.log(projectId, notification);
 
-      return this.http.post<any>(`${this.baseUrl}api/project/adminNotification/${projectId}?notification=${notification}`, null)
+    return this.http.post<any>(`${this.baseUrl}api/project/adminNotification/${projectId}?notification=${notification}`, null)
     .pipe(
       map( res =>{ 
             console.log('from service sendAdminNotification', res)
               return res} )
       );
     }
+
+
+    getReviewedProjects( from : any=1, to : any = 200){
+      return this.http.get<any>(`${this.baseUrl}api/project/getReviewedProjects?p=${from}&r=${to}`)
+    .pipe(
+      map( res =>{ 
+            console.log('from service getReviewedProjects', res)
+              return res} )
+      );
+    }
+
 
 
 

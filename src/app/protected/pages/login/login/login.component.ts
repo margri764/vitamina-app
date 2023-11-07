@@ -47,9 +47,11 @@ export class LoginComponent implements OnInit, OnDestroy {
                 )
   {
     const token = this.cookieService.get('token');
-    const logged = getDataLS('logged')
+    const logged = getDataLS('logged');
+    const userLS = getDataLS('user');
 
-    if ( (token !== '') && logged) {
+
+    if ( (token !== '') && logged && userLS !== undefined ) {
       this.router.navigateByUrl('/home')
     }
         

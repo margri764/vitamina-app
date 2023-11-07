@@ -68,13 +68,12 @@ onSave(){
     return;
   }
   this.confirm = true;
-  console.log(this.myForm.value, this.projectId);
 
   this.projectService.clientReview(this.myForm.value, this.projectId, "review").subscribe( 
     ( {success, project} )=>{
       if(success){
         this.openDialogSuccesss( 'Thank you for your feedback, we will contact you soon.')
-        this.projectService.sendAdminNotification(project._id, "Review")
+        this.projectService.sendAdminNotification(project._id, "review").subscribe();
       }
     })
 
@@ -83,7 +82,6 @@ onSave(){
 validField( field: string ) {
   return this.myForm.controls[field].errors && this.myForm.controls[field].touched;
 }
-
 
 openDialogSuccesss( body:any ){
 

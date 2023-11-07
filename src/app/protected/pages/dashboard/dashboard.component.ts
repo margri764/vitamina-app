@@ -44,6 +44,7 @@ phone : boolean = false;
 isLoading : boolean = false;
 cookie : boolean= false;
 dontShowNotifications: boolean = false;
+reviewedProjects : any[]=[];
 
 constructor(
               private store : Store <AppState>,
@@ -80,10 +81,17 @@ ngOnInit(): void {
   .pipe(
     filter( ({user})=>  user != null && user != undefined),
   ).subscribe(
-    ({user})=>{
+    ({user, reviewedProjects})=>{
       this.user = user;
       this.login = true;
       this.isLoading = false;
+      this.reviewedProjects = reviewedProjects;
+      if(reviewedProjects.length === 0){
+        this.alert;
+      }else{
+        this.alert = reviewedProjects.length;
+
+      }
     })
 
   

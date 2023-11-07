@@ -109,16 +109,19 @@
             <div [ngStyle]="(toogle) ? {'display':'block'}:{'display':'none'}" style="margin-top: 40px; z-index: 999;" >
 
 
-            <div fxLayout="row wrap" *ngIf="!showLabelTempOrder" fxFlex="100" class="mt-5 whiteframe mt-40 mb-40 background-white">
+            <div fxLayout="row wrap" fxFlex="100" class="mt-5 whiteframe mt-40 mb-40 background-white" *ngIf="reviewedProjects.length === 0" >
                     <span class="material-icons no-translate fc-green">done</span> &nbsp;
-                    <span class="font  ml-20" fxFlex="80"> Sin notificaciones </span>
+                    <span class="font  ml-20" fxFlex="80"> No notifications </span>
             </div>  
              
     
-                <div fxLayout="row wrap" *ngIf="showLabelTempOrder" fxFlex="100" class="mt-5 whiteframe mt-40 mb-40">
+                <div fxLayout="row wrap"  fxFlex="100" class="mt-5 whiteframe mt-40 mb-40" *ngIf="reviewedProjects.length !== 0">
                     <i class="material-symbols-outlined notranslate fc-red" style="font-size: 38px;">error</i> &nbsp;
-                    <span class="font  ml-10" fxFlex="80" style="line-height: 25px;"> Existen pedidos que no han sido enviados!</span>
-                    <span class="font  mt-5" style="color: blue; cursor: pointer; margin-left: 51px;" fxFlex="100" > <b (click)="accordion.openAll(); visibility()" routerLink="/pedidos-temporales" >Resolver</b></span>
+                    <span class="font  ml-10" fxFlex="80" style="line-height: 25px;"> You have projects that have been reviewed by the client</span>
+                    
+                    After completing the management proposal section, I should add a link to access the project.
+
+                    <span class="font  mt-5" style="color: blue; cursor: pointer; margin-left: 51px;" fxFlex="100" > <b (click)="accordion.openAll(); visibility()" routerLink="/pedidos-temporales" >Manage</b></span>
                 </div>   
             </div>
        

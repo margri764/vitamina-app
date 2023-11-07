@@ -8,9 +8,10 @@ import * as authActions from './auth.actions';
 import { LocalStorageService } from './protected/services/localStorage/local-storage.service';
 import { getDataLS, getDataSS, saveDataLS } from './protected/Storage';
 import { CookieService } from 'ngx-cookie-service';
-import { filter, tap } from 'rxjs';
+import { distinctUntilChanged, filter, tap } from 'rxjs';
 import { User } from './protected/models/user.models';
 import { ErrorService } from './protected/services/error/error.service';
+import { ProjectService } from './protected/services/project/project.service';
 
 @Component({
   selector: 'app-root',
@@ -35,7 +36,8 @@ export class AppComponent implements OnInit {
               private orderService : OrderService,
               private cookieService : CookieService,
               private authService : AuthService,
-              private errorService : ErrorService
+              private errorService : ErrorService,
+              private projectService : ProjectService
 
   ){
 
@@ -44,10 +46,10 @@ export class AppComponent implements OnInit {
     const logged = getDataLS("logged"); 
     const loggedSS = getDataSS("logged"); 
 
-    
     if(token !== '' && userLS === undefined){
       this.router.navigateByUrl('/login');
     }
+
     if(logged === undefined && loggedSS === undefined ){
       this.router.navigateByUrl('/login');
     }
@@ -67,10 +69,12 @@ export class AppComponent implements OnInit {
     .pipe(
       // tap(()=>this.isLoading = true),
       filter( ({user})=>  user != null && user != undefined),
+      distinctUntilChanged((prev, curr) => prev.user === curr.user)
     ).subscribe(
       ({user})=>{
         this.user = { nombre:user?.nombre, permisos:user?.permisos} ;
         this.isLoading = false;
+        this.getReviewedProjects();
       })
   
 
@@ -82,6 +86,16 @@ export class AppComponent implements OnInit {
     });
 
 
+  }
+
+  getReviewedProjects(){
+    console.log('aa');
+    this.projectService.getReviewedProjects().subscribe( 
+      ( {success, projects})=>{
+          if(success){
+              this.store.dispatch(authActions.setReviewedProject( {reviewedProjects:projects} ))
+          }
+      })
   }
 
 

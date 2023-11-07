@@ -105,12 +105,23 @@ export class ErrorService {
       return of(null);
     }
 
+        if (error.status === 400 && error.error.errors && Array.isArray(error.error.errors)) {
+        const errors = error.error.errors;
+        const errorMessages = errors.map((errorObj: any) => errorObj.msg);
+        const errorMessage = errorMessages.join("\n");
+        this.openGenericMsgAlert(errorMessage );
+        return of(null);
+      }
+
+    
+
     if (error.status === 400) {
         this.openGenericMsgAlert(error.error.message);
         this.closeIsLoading$.emit(true);
         return of(null);
     }
-      
+
+ 
 
     if (error.statusText === "Unknown Error" ) {
       this.closeIsLoading$.emit(true);
@@ -134,6 +145,7 @@ export class ErrorService {
           this.store.dispatch(authActions.unSetClient());
           this.store.dispatch(authActions.unSetProjectSkills());
           this.store.dispatch(authActions.unSetEmployeeProjectTime());
+          this.store.dispatch(authActions.unSetReviewedProject());
           this.router.navigateByUrl('login'); 
             
   }
