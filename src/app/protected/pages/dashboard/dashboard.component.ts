@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { Router } from '@angular/router';
-import { filter, Subscription } from 'rxjs';
+import { filter, Subscription, take } from 'rxjs';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import * as authActions from 'src/app/auth.actions';
@@ -16,6 +16,8 @@ import { LocalStorageService } from '../../services/localStorage/local-storage.s
 import { GenericMessageComponent } from '../../messages/generic-message/generic-message/generic-message.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MantainMessageComponent } from '../../messages/maintain-message/mantain-message/mantain-message.component';
+import { ProjectService } from '../../services/project/project.service';
+import { AskDontShowComponent } from '../../messages/ask-dont-show/ask-dont-show/ask-dont-show.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -51,6 +53,7 @@ constructor(
               private cookieService : CookieService,
               private errorService : ErrorService,
               private dialog : MatDialog,
+              private projectService : ProjectService,
               private router : Router,
               private authService : AuthService,
               private orderService : OrderService,
@@ -76,7 +79,6 @@ visibility(){
 
 ngOnInit(): void {
   this.checkSessionStorage();
-  
   this.userSubscription = this.store.select('auth')
   .pipe(
     filter( ({user})=>  user != null && user != undefined),
@@ -107,6 +109,53 @@ checkSessionStorage(){
 //     })
 
 }
+
+getReviewedProjects(){
+  this.projectService.getReviewedProjects().subscribe( 
+    ( {success, projects})=>{
+        if(success){
+            this.store.dispatch(authActions.setReviewedProject( {reviewedProjects:projects} ))
+        }
+    })
+}
+
+notification( project:any, action:string){
+
+  if(action === 'dontShow'){
+   
+      this.openAskDonShow();
+  
+      this.projectService.authDontShowAgain$.pipe(
+        take(1)
+      ).subscribe( (auth: any)=> {
+
+        if(auth){
+          this.projectService.sendAdminNotification(project._id, "acceptNotification").subscribe( 
+            ( {success} )=>{
+              if(success){
+                this.getReviewedProjects();
+              }
+            });
+        }
+
+      })
+ }else{
+
+  this.projectService.sendAdminNotification(project._id, "acceptNotification").subscribe( 
+    ( {success} )=>{
+      if(success){
+        this.getReviewedProjects();
+      }
+    });
+
+ }
+
+
+ 
+}
+
+
+
 
 openGenericMessage(msg:string){
   let width : string = '';
@@ -143,17 +192,31 @@ openMantainMessage(){
 
 }
 
+openAskDonShow(){
+  let width : string = '';
+  let height : string = '';
+
+   if(screen.width >= 800) {
+      width = "400px";
+      height = "280px";
+  
+    }
+      this.dialog.open(AskDontShowComponent, {
+        disableClose: true,
+        width: `${width}`|| "",
+        height:`${height}`|| "",
+        panelClass:"custom-modalbox-edit",
+      });
+
+}
 
 logout() {
     this.errorService.logout();
-  }
-  
-
+}
 
 ngOnDestroy(): void {
 
 }
-
 
 
 }

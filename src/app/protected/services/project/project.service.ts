@@ -17,6 +17,7 @@ export class ProjectService {
 
   emitSuccessProject$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   authSendProposal$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  authDontShowAgain$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   closeClientFeedback$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   
       private baseUrl = environment.baseUrl;

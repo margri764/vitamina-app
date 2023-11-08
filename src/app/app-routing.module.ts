@@ -13,6 +13,7 @@ import { SkillsComponent } from './protected/pages/skills/skills/skills.componen
 import { ViewProjectComponent } from './protected/pages/view-project/view-project/view-project.component';
 import { ConfirmProposalComponent } from './protected/pages/confirm-proposal/confirm-proposal/confirm-proposal.component';
 import { ReviewProposalComponent } from './protected/pages/review-proposal/review-proposal/review-proposal.component';
+import { EditProjectComponent } from './protected/pages/edit-project/edit-project/edit-project.component';
 
 
 const routes: Routes = [
@@ -31,6 +32,10 @@ const routes: Routes = [
 
   {
     path: 'view-employee/:id',  component: ViewEmployeeComponent
+  },
+
+  {
+    path: 'edit-project/:id',  component: EditProjectComponent
   },
 
   {

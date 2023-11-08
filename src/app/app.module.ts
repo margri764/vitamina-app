@@ -74,6 +74,8 @@ import { ReviewMessageProposalComponent } from './protected/messages/review-prop
 import { ReviewProposalMessagComponent } from './protected/messages/review-proposal-message/review-proposal-messag/review-proposal-messag.component';
 import { AddClientComponent } from './protected/pages/add-client/add-client/add-client.component';
 import { UpdateClientComponent } from './protected/pages/update-client/update-client/update-client.component';
+import { AskDontShowComponent } from './protected/messages/ask-dont-show/ask-dont-show/ask-dont-show.component';
+import { EditProjectComponent } from './protected/pages/edit-project/edit-project/edit-project.component';
 
 
 
@@ -126,7 +128,9 @@ import { UpdateClientComponent } from './protected/pages/update-client/update-cl
     ReviewMessageProposalComponent,
     ReviewProposalMessagComponent,
     AddClientComponent,
-    UpdateClientComponent
+    UpdateClientComponent,
+    AskDontShowComponent,
+    EditProjectComponent
   ],
   imports: [
     BrowserModule,

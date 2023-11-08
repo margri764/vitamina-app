@@ -67,7 +67,6 @@ export class AppComponent implements OnInit {
   
     this.store.select('auth')
     .pipe(
-      // tap(()=>this.isLoading = true),
       filter( ({user})=>  user != null && user != undefined),
       distinctUntilChanged((prev, curr) => prev.user === curr.user)
     ).subscribe(
@@ -89,7 +88,6 @@ export class AppComponent implements OnInit {
   }
 
   getReviewedProjects(){
-    console.log('aa');
     this.projectService.getReviewedProjects().subscribe( 
       ( {success, projects})=>{
           if(success){

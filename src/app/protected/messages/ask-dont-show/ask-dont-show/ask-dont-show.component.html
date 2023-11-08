@@ -1,0 +1,25 @@
+<div fxLayout="row wrap" fxLayoutAlign="center center" fxFlex="100" class="pd-20 ">
+
+  
+    <button  mat-mini-fab  style="height: 80px; width: 80px; background-color:red">
+      <mat-icon class="material-symbols-outlined notranslate" style="transform: scale(1.5);"> warning </mat-icon>
+    </button>
+  
+    <div fxLayout="row wrap" fxLayoutAlign="center" fxFlex="100" class="mt-20" >
+      <span class="font " fxFlex="100" style="line-height: 25px; text-align: center; font-size: 1.3em;"> <b> This message won´t appear again! </b> </span>     
+      <span class="font " fxFlex="100" style="line-height: 25px; text-align: center; font-size: 1.3em;"> <b> Are you sure you want to continue? </b> </span>      
+        
+    </div>
+  
+    <div  fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="90" style="margin-top: 30px;">
+        <button mat-raised-button  [ngClass]="!confirm ? 'btnMenuClicked':'btnMenu'"  fxFlex="48" (click)="closeComponent()">
+             No
+            </button>
+        <button mat-raised-button  [ngClass]="confirm ? 'btnMenuClicked':'btnMenu'" fxFlex="48" (click)="continue()">
+        <i class="material-symbols-outlined notranslate">login</i> 
+        &nbsp; Continue
+        </button>
+    </div>
+  
+
+</div>
