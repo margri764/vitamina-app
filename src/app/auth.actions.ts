@@ -26,6 +26,10 @@ export const setProjectSkills = createAction( '[Auth] setProjectSkills',
     props<{ projectSkills: any [] }>()
 );
 
+export const setRevProjectSkills = createAction( '[Auth] setRevProjectSkills',
+    props<{ revProjectSkills: any [] }>()
+);
+
 export const setReviewedProject = createAction( '[Auth] setReviewedProject',
     props<{ reviewedProjects: any [] }>()
 );
@@ -51,6 +55,7 @@ export const editEmployeeProjectTime = createAction( '[Auth] EditEmployeeProject
 export const unSetUser = createAction('[Auth] unSetUser');
 export const unSetTempEmployee = createAction('[Auth] unSetTempEmployee');
 export const unSetProjectSkills = createAction('[Auth] unSetProjectSkills');
+export const unSetRevProjectSkills = createAction('[Auth] unSetRevProjectSkills');
 export const unSetEmployeeProjectTime = createAction( '[Auth] unSetEmployeeProjectTime');
 export const unSetClient = createAction( '[Auth] unSetClient');
 export const unSetReviewedProject = createAction( '[Auth] unSetReviewedProject');

@@ -1,5 +1,5 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { deleteAssignedEmployee, editEmployeeProjectTime, setClient, setEmployeeProjectTime, setProjectSkills, setReviewedProject, setTempEmployee, setUser,  unSetClient,  unSetEmployeeProjectTime,  unSetProjectSkills,  unSetReviewedProject,  unSetTempEmployee, unSetUser } from './auth.actions';
+import { deleteAssignedEmployee, editEmployeeProjectTime, setClient, setEmployeeProjectTime, setProjectSkills, setRevProjectSkills, setReviewedProject, setTempEmployee, setUser,  unSetClient,  unSetEmployeeProjectTime,  unSetProjectSkills,  unSetRevProjectSkills,  unSetReviewedProject,  unSetTempEmployee, unSetUser } from './auth.actions';
 import { User } from './protected/models/user.models';
 
 type ProjectTime = {
@@ -17,6 +17,7 @@ export interface Auth {
     client: any | null; 
     projectSkills: any [] ,
     reviewedProjects: any [] ,
+    revProjectSkills: any [] ,
     projectTime: ProjectTime[];
 }
 
@@ -26,7 +27,8 @@ export const initialState: Auth = {
      client: null,
      projectSkills:  [],
      projectTime: [],
-     reviewedProjects: []
+     reviewedProjects: [],
+     revProjectSkills: []
 }
 
 const _authReducer = createReducer(initialState,
@@ -42,6 +44,9 @@ const _authReducer = createReducer(initialState,
 
     on( setProjectSkills, (state, { projectSkills }) => ({ ...state, projectSkills: [ ...projectSkills ]  })),
     on( unSetProjectSkills, state => ({ ...state, projectSkills: []  })),
+    
+    on( setRevProjectSkills, (state, { revProjectSkills }) => ({ ...state, revProjectSkills: [ ...revProjectSkills ]  })),
+    on( unSetRevProjectSkills, state => ({ ...state, revProjectSkills: []  })),
 
     on( setReviewedProject, (state, { reviewedProjects }) => ({ ...state, reviewedProjects: [ ...reviewedProjects ]  })),
     on( unSetReviewedProject, state => ({ ...state, reviewedProjects: []  })),

@@ -1,20 +1,21 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Subscription, filter } from 'rxjs';
 import { AppState } from 'src/app/app.reducer';
+import { saveDataSS } from 'src/app/protected/Storage';
 import { EmployeeService } from 'src/app/protected/services/employee/employee.service';
 import { ErrorService } from 'src/app/protected/services/error/error.service';
 import * as authActions from 'src/app/auth.actions';
 import { ProjectService } from 'src/app/protected/services/project/project.service';
 
 @Component({
-  selector: 'app-project-skills',
-  templateUrl: './project-skills.component.html',
-  styleUrls: ['./project-skills.component.scss']
+  selector: 'app-reviewed-projects-skills',
+  templateUrl: './reviewed-projects-skills.component.html',
+  styleUrls: ['./reviewed-projects-skills.component.scss']
 })
-export class ProjectSkillsComponent implements OnInit,OnDestroy {
-
+export class ReviewedProjectsSkillsComponent implements OnInit {
 
   confirm : boolean = false;
   isLoading : boolean = true;
@@ -40,7 +41,7 @@ export class ProjectSkillsComponent implements OnInit,OnDestroy {
 
 
   constructor(
-              private dialogRef : MatDialogRef<ProjectSkillsComponent>,
+              private dialogRef : MatDialogRef<ReviewedProjectsSkillsComponent>,
               private employeeService : EmployeeService,
               private errorService : ErrorService,
               private dialog : MatDialog,
@@ -63,11 +64,11 @@ export class ProjectSkillsComponent implements OnInit,OnDestroy {
 
     this.store.select('auth')
     .pipe(
-      filter( ({projectSkills})=>  projectSkills != null && projectSkills.length != 0),
+      filter( ({revProjectSkills})=>  revProjectSkills != null && revProjectSkills.length != 0),
     ).subscribe(
-      ({projectSkills})=>{
-        this.selectedSkills = projectSkills;
-        this.arrSkills = projectSkills;
+      ({revProjectSkills})=>{
+        this.selectedSkills = revProjectSkills;
+        this.arrSkills = revProjectSkills;
       })
 
 
@@ -194,9 +195,10 @@ export class ProjectSkillsComponent implements OnInit,OnDestroy {
 
     this.confirm = true;
     console.log(this.selectedSkills);
-    this.store.dispatch(authActions.setProjectSkills({projectSkills : this.selectedSkills}))
+    this.store.dispatch(authActions.setRevProjectSkills({revProjectSkills : this.selectedSkills}))
     setTimeout(()=>{ this.close() },300);
 
+    this.projectService.projectSkillsRevProj$.emit(this.selectedSkills);
    
   }
 

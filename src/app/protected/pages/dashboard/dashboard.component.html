@@ -89,8 +89,8 @@
 
                 <div fxLayout="row wrap"  fxLayoutAlign="end center"  fxFlex="100" >
 
-                    <button  mat-mini-fab color="custom-color" aria-label="Example icon button with a delete icon" (click)="accordion.openAll(); visibility()" style="margin-right: 10px;">
-                        <mat-icon class="material-symbols-outlined notranslate" [matBadge]="alert" matBadgeColor="warn" [matBadgeHidden]="hidden">notifications</mat-icon>
+                    <button  mat-mini-fab color="custom-color" aria-label="Example icon button with a delete icon"  style="margin-right: 10px;">
+                        <mat-icon class="material-symbols-outlined notranslate" [matBadge]="alert" matBadgeColor="warn" [matBadgeHidden]="hidden" [matMenuTriggerFor]="menu">notifications</mat-icon>
                     </button>
 
                     <span class="font" style="font-size: 0.8em;">{{user?.userName}}</span>
@@ -102,43 +102,50 @@
 
     </mat-toolbar>
 
-    <mat-accordion class="example-headers-align" multi [ngStyle]="(toogle) ? {'visibility':'visible'}:{'visibility':'hidden'}" style="z-index: 999; ">
-        <mat-expansion-panel >
-                        
-            <div fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex="100"    style="margin-top: 20px; z-index: 999; " [ngStyle]="(toogle) ? {'display':'flex' } : {'display':'none'}" >
+    <!-- <mat-accordion class="example-headers-align" multi [ngStyle]="(toogle) ? {'visibility':'visible'}:{'visibility':'hidden'}" style="z-index: 999; ">
+        <mat-expansion-panel > -->
 
-                <div fxLayout="row wrap"  fxLayoutAlign="end center" fxFlex="60"  style="margin-top: 20px; "  >
+            <mat-menu #menu="matMenu" xPosition="after"   >
+        
+                        
+            <div fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex.xs="90"    style="margin-top: 20px; z-index: 999;  margin: auto;"  >
+
+                <!-- <div fxLayout="row wrap"  fxLayoutAlign="end center" fxFlex="60"  style="margin-top: 20px; "  >
                    <span class="material-symbols-outlined notranslate cursor" (click)="accordion.openAll(); visibility()" style="transform: scale(1.3);  ">close</span> 
                 </div>
-              
-                    <div fxLayout="row wrap"  fxLayoutAlign="center start"  style="width: 300px;" class="mt-5 boxSelection mt-40 mb-40" *ngIf="reviewedProjects.length === 0" >
+               -->
+                    <div fxLayout="row wrap"  fxLayoutAlign="center start"  fxFlex="100" class="mt-5 boxSelection mt-40 mb-40" *ngIf="reviewedProjects.length === 0" >
                             <span class="material-icons no-translate fc-green">done</span> &nbsp;
                             <span class="font  ml-20" fxFlex="80"> No notifications </span>
                     </div>  
         
-                    <div fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex.xs="100" fxFlex="50" class="mt-40 mb-40" *ngIf="reviewedProjects.length !== 0">
+                    <div fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex.xs="100" fxFlex="100" class="" *ngIf="reviewedProjects.length !== 0">
+
                         <div fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="100"  class="boxSelection" *ngFor="let revProj of reviewedProjects"  >
 
-                            <i class="material-symbols-outlined notranslate fc-red" style="font-size: 38px;" *ngIf="revProj.state === 'Reviewed'" >error</i> &nbsp;
+                            <i class="material-symbols-outlined notranslate fc-red" style="font-size: 28px;" *ngIf="revProj.state === 'Reviewed'" >error</i> &nbsp;
                             <i class="material-symbols-outlined notranslate" style="font-size: 38px; color: green;" *ngIf="revProj.state === 'Accepted' && !revProj.notification ">done</i> &nbsp;
-                            <span class="font ml-10"  style="line-height: 25px;"> {{revProj.client.company_name}} </span> &nbsp;
-                            <span class="font"  style="line-height: 25px;"> has asked for a review  </span>
+                            <span class="font "  style="line-height: 25px; font-size: 0.9em;"> {{revProj.client.company_name}} </span> &nbsp;
+                            <span class="font"  style="line-height: 25px; font-size: 0.9em;"> has asked for a review  </span>
                             
                             <div fxLayout="row wrap"  fxFlex="100" >
-                                <span class="font  mt-5" style="color: blue; cursor: pointer; margin-left: 59px;"  > <b (click)="accordion.openAll(); visibility()" *ngIf="revProj.state === 'Reviewed'"  >Manage</b></span>
+                                <span class="font  mt-5" style="color: blue; cursor: pointer; margin-left: 59px;"  > <b  *ngIf="revProj.state === 'Reviewed'" [routerLink]="['../edit-project/', revProj._id]"  >Manage</b></span>
 
-                                <span class="font  mt-5" style="color: blue; cursor: pointer; margin-left: 79px;"  > <b (click)="accordion.openAll(); visibility(); notification(revProj, 'dontShow')"  *ngIf="revProj.state === 'Reviewed' && !revProj.notification"  >Don´t show again</b></span>
+                                <span class="font  mt-5" style="color: blue; cursor: pointer; margin-left: 79px;"  > <b (click)="notification(revProj, 'dontShow')"  *ngIf="revProj.state === 'Reviewed' && !revProj.notification"  >Don´t show again</b></span>
 
-                                <span class="font ml-10 mt-5" style="color: blue; cursor: pointer; margin-left: 59px;" fxFlex="100" > <b (click)="accordion.openAll(); visibility(); notification(revProj, '')"  *ngIf="revProj.state === 'Accepted' && !revProj.notification " >Done</b></span>
+                                <span class="font ml-10 mt-5" style="color: blue; cursor: pointer; margin-left: 59px;" fxFlex="100" > <b (click)="notification(revProj, '')"  *ngIf="revProj.state === 'Accepted' && !revProj.notification"  >Done</b></span>
                             </div>
                         </div>   
                     </div>   
             </div>
+
+        </mat-menu>
+
        
 
-        </mat-expansion-panel>
+        <!-- </mat-expansion-panel>
       
-    </mat-accordion>
+    </mat-accordion> -->
 
     <div fxLayout="row wrap"  fxLayoutAlign="center space-between" fxFlex="100" style="margin-top: 30px; padding: 10px;">
 

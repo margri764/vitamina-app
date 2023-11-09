@@ -5,9 +5,14 @@ import { map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Project } from '../../interfaces/project';
 
+type StringArray = string[];
+
+
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class ProjectService {
 
 
@@ -19,6 +24,7 @@ export class ProjectService {
   authSendProposal$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   authDontShowAgain$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   closeClientFeedback$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  projectSkillsRevProj$ : EventEmitter<StringArray> = new EventEmitter<StringArray>; 
   
       private baseUrl = environment.baseUrl;
     

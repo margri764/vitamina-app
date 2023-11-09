@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit,  } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Subscription, filter } from 'rxjs';
@@ -16,6 +16,10 @@ import { ProjectService } from 'src/app/protected/services/project/project.servi
 import { log } from 'console';
 import { AskSendProposalComponent } from 'src/app/protected/messages/ask-send-proposal/ask-send-proposal/ask-send-proposal.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { getDataSS } from 'src/app/protected/Storage';
+import { ReviewedProjectsSkillsComponent } from 'src/app/protected/messages/reviewed-projects-skills/reviewed-projects-skills/reviewed-projects-skills.component';
+
+type StringArray = string[];
 
 @Component({
   selector: 'app-edit-project',
@@ -47,10 +51,12 @@ export class EditProjectComponent implements OnInit {
   client : any;
   isSetClient: boolean = false;
   isProjectScope: boolean = false;
+  myFormInput!: FormGroup;
+  projectId : string = '';
+  reviewedProject : any;
 
 
 
-  
   constructor(
               private fb : FormBuilder,
               private employeeService : EmployeeService,
@@ -65,11 +71,9 @@ export class EditProjectComponent implements OnInit {
   ) {
 
     this.activatedRoute.params.subscribe( 
-      ( {id} )=>{ this.projectId = id})
-   
-   }
+      ( {id} )=>{ this.projectId = id});
 
-   projectId : string = '';
+  }
 
   ngOnInit(): void {
 
@@ -77,37 +81,81 @@ export class EditProjectComponent implements OnInit {
 
     this.store.select('auth')
     .pipe(
-      filter( ({client})=>  client != null && client.length != 0),
+      filter( ({reviewedProjects})=>  reviewedProjects != null && reviewedProjects.length != 0),
     ).subscribe(
-      ({projectSkills, projectTime, client })=>{
-        this.projectSkills = projectSkills;
-        this.getProjectTime(projectTime);
-        this.client = client;
-        this.getTotal();
+      ({revProjectSkills, projectTime, client, reviewedProjects })=>{
+        this.projectSkills = revProjectSkills;
+        // this.getProjectTime(projectTime);
+        // this.client = client;
+        // this.getTotal();
+        this.getProjectById(reviewedProjects);
 
       })
 
-      this.myForm = this.fb.group({
-   
-      });
+      this.projectService.projectSkillsRevProj$.subscribe((skills: StringArray) => { this.projectSkills = skills;   });
+    // this.projectSkills = getDataSS('projectSkills');
+    
 
+ 
       this.firstFormGroup = this.fb.group({
         // date1: [''],
 
       });
-
+      
       this.secondFormGroup = this.fb.group({
-        name: ['', ],
-        features: [''],
+        name: ['' ],
+        features: this.fb.array([]),
+        addFeature: [''],
         date: [''],
         description: [''],
-        duration:  [ '', [this.validatorService.positiveNumberWithDecimals()] ]
+        duration:  [ '' ]
       });
+
 
   }
 
-  getProjectById(){
+  getProjectById( reviewedProjects:any ){
 
+    const project = reviewedProjects.filter( (item:any) => item._id === this.projectId);
+    this.reviewedProject = project[0];
+
+    
+    this.projectSkills = this.reviewedProject.relatedSkills;
+
+    setTimeout(()=>{this.store.dispatch(authActions.setRevProjectSkills( {revProjectSkills: this.reviewedProject.relatedSkills} ));},500)
+
+    
+
+    
+      this.secondFormGroup = this.fb.group({
+        name: [this.reviewedProject.project_scope.name, ],
+        features: this.fb.array([]),
+        addFeature: [],
+        date: [this.reviewedProject.project_scope.estimatedDeliveryDate],
+        description: [this.reviewedProject.project_scope.description],
+        duration:  [ '', [this.validatorService.positiveNumberWithDecimals()] ]
+      });
+
+      this.populateForm(this.reviewedProject.project_scope.main_features)
+
+
+  }
+
+  populateForm(data: any) {
+
+    const detalleItemsArray = this.secondFormGroup.get('features') as FormArray;
+    detalleItemsArray.clear();
+
+    data.forEach((feature: any) => {
+      detalleItemsArray.push(this.fb.group({
+        descripcion: feature,
+        
+      }));
+    });
+  }
+
+  getDetalleItemsControls() {
+    return (this.secondFormGroup.get('features') as FormArray).controls;
   }
 
 
@@ -158,7 +206,8 @@ export class EditProjectComponent implements OnInit {
                             client,
                             employee,
                             project_scope,
-                            duration
+                            duration,
+                            relatedSkills : this.projectSkills
                            }
 
     this.projectService.createProject(body, 'create').subscribe(
@@ -218,18 +267,60 @@ export class EditProjectComponent implements OnInit {
 
   onEnterKey(event: Event) {
     event.stopPropagation();
-
-    const newFeature = this.secondFormGroup.get('features')?.value;
-    
+  
+    const data = [...this.reviewedProject.project_scope.main_features];
+  
+    const newFeature = this.secondFormGroup.get('addFeature')?.value;
+  
     if (event instanceof KeyboardEvent && event.key === 'Enter') {
+      const updatedProjectScope = {
+        ...this.reviewedProject.project_scope,
+        main_features: [...data, newFeature],
+      };
+  
+      this.reviewedProject = {
+        ...this.reviewedProject,
+        project_scope: updatedProjectScope,
+      };
+
+      const detalleItemsArray = this.secondFormGroup.get('features') as FormArray;
+      detalleItemsArray.clear();
       
-      this.arrFeatures.push(newFeature);
-      this.secondFormGroup.controls['features'].setValue('');
+      updatedProjectScope.main_features.forEach((feature: any) => {
+        detalleItemsArray.push(this.fb.group({
+          descripcion: feature,
+        }));
+      });
+  
+      this.secondFormGroup.controls['addFeature'].setValue('');
     }
   }
+  
 
   delFeature( feature:any ){
-    this.arrFeatures= this.arrFeatures.filter( (item:any)=> item !== feature);
+
+    console.log(feature);
+    const data = [...this.reviewedProject.project_scope.main_features];
+
+    const updatedProjectScope = {
+      ...this.reviewedProject.project_scope,
+      main_features: data.filter((item: any) => item !== feature),
+    };
+
+    this.reviewedProject = {
+      ...this.reviewedProject,
+      project_scope: updatedProjectScope,
+    };
+
+
+    const detalleItemsArray = this.secondFormGroup.get('features') as FormArray;
+    detalleItemsArray.clear();
+    
+    updatedProjectScope.main_features.forEach((feature: any) => {
+      detalleItemsArray.push(this.fb.group({
+        descripcion: feature,
+      }));
+    });
   }
 
   suggestEmployeeBySkill(){
@@ -295,7 +386,7 @@ openDialogSkills(){
 
     this.selection = true;
 
-    this.dialog.open(ProjectSkillsComponent, {
+    this.dialog.open(ReviewedProjectsSkillsComponent, {
 
       panelClass:"custom-modalbox-responsive", 
     });
@@ -356,6 +447,7 @@ openDialogSendProject( body:any ){
 }
 
 ngOnDestroy(): void {
+  this.store.dispatch(authActions.unSetRevProjectSkills())
   if (this.projectSubscription) {
     this.projectSubscription.unsubscribe();
   }

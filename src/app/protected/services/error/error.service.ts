@@ -144,6 +144,7 @@ export class ErrorService {
           this.store.dispatch(authActions.unSetUser());
           this.store.dispatch(authActions.unSetClient());
           this.store.dispatch(authActions.unSetProjectSkills());
+          this.store.dispatch(authActions.unSetRevProjectSkills());
           this.store.dispatch(authActions.unSetEmployeeProjectTime());
           this.store.dispatch(authActions.unSetReviewedProject());
           this.router.navigateByUrl('login'); 

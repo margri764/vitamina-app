@@ -9,6 +9,7 @@ export interface Project {
       main_features: string[];
       estimatedDeliveryTime?: string[];
     };
+    relatedSkills: string[],
     duration: {
       employee: string;
       assigned_hours: number;

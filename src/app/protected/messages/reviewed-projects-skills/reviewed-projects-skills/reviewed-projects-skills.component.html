@@ -1,0 +1,85 @@
+
+
+<div fxLayout="row wrap" fxLayoutAlign="center start" style="padding: 20px; background-color: rgb(253, 253, 253); height: 100%;" *ngIf="!isLoading">
+
+    <div fxLayout="row wrap"  fxLayoutAlign="end center" fxFlex="100"  class="mt-10">
+      <span class="material-symbols-outlined notranslate cursor" (click)="close()" style="transform: scale(1.3); ">close</span> 
+    </div>  
+  
+    <div fxLayout="row wrap"  fxLayoutAlign="center start" fxFlex="100"  [ngClass]="(!isCategorySelected)? 'whiteframe':'frameSelected'"style="padding: 20px; margin-top: 10px; background-color: white;" >
+
+      <span class="font" fxFlex="100" style="font-size: 1.3em; text-align: start; font-weight: bold; line-height:30px;"> Select IT Area</span>    
+
+            <!-- start categories -->
+            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 20px; " >
+                <button mat-raised-button class="category font" *ngFor="let cat of categories" (click)="selectCategory(cat, $event)">{{cat.name}}</button>
+           </div>    
+        <!-- end categories  -->
+    </div>    
+    
+    <div fxLayout="row wrap"  fxLayoutAlign="center start" fxFlex="100"  [ngClass]="(!isSkillSelected)? 'whiteframe':'frameSelected'"  style="padding: 20px; margin-top: 10px;" >
+    
+        <span class="font" fxFlex="100" style="font-size: 1.3em; text-align: start; font-weight: bold; line-height:30px;" > Select skills related</span>    
+
+        <!-- start skills -->
+       <div fxLayout="row wrap"  fxLayoutAlign="start center"  fxFlex="100" style="margin-top: 25px; margin-bottom: 20px;" *ngIf="skills.length !== 0" >
+
+            <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex.xs="50" *ngFor="let skill of skills">
+
+                <div fxLayout="row wrap"  fxLayoutAlign="start center"  fxFlex="100" style="margin-top: 9px; margin-left: 5px;" >
+                    <button  class="skill font" (click)="onSelect(skill, $event)" [title]="skill"> {{ skill }} </button>
+                </div>    
+                        
+              </div>
+              
+               
+       </div>    
+
+    </div>    
+
+    <div fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="100"  class="whiteframe" style="padding: 20px; margin-top: 10px;" *ngIf="selectedSkills.length !== 0" [ngClass]="(!isSelectedSkill)? 'whiteframe':'frameSelected'" >
+
+      <div fxLayout="row wrap"  fxLayoutAlign="space-between start" fxFlex="100" >
+
+          <span class="font" fxFlex="80" style="font-size: 1.3em; text-align: start; font-weight: bold;" > Selected skills </span>
+
+          <div class="icon" >
+              <span class="material-symbols-outlined notranslate cursor" style="color: red;" (click)="delSkill()"> delete </span>
+          </div>
+
+      </div>
+        <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex.xs="50" *ngFor="let arrSk of selectedSkills">
+   
+          <div fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex="100">
+              <span class="font"  style=" font-size: 1em; text-align: start; font-weight: bold; line-height:30px; margin-left: 20px;" > {{arrSk}} </span> &nbsp;
+              <span class="material-symbols-outlined notranslate cursor" style="color: red;" *ngIf="showDelSkill"  (click)="deleteSkill(arrSk)"> highlight_off </span>
+          </div>
+        </div>
+        
+    </div>
+
+
+        <!-- save button -->
+        <div  fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="95" style="margin-top: 20px; " >
+          <button mat-raised-button  [ngClass]="!confirm ? 'btnMenuClicked':'btnMenu'" fxFlex="48" (click)="close()" >
+              <i class="material-symbols-outlined notranslate"  >close</i> 
+              &nbsp; No
+          </button>
+          <button mat-raised-button  [ngClass]="confirm ? 'btnMenuClicked':'btnMenu'" fxFlex="48" (click)="onSaveForm()">
+              <i class="material-symbols-outlined notranslate">login</i> 
+              &nbsp; Continue
+          </button>
+      </div>
+      <!-- end save button -->
+
+      <div style="visibility: hidden; height: 20px;"> only space</div>
+
+</div>
+  
+<div *ngIf="isLoading" style="margin-top: 30px;" class="loading-overlay">
+  <mat-spinner diameter="80"></mat-spinner>
+</div>
+  
+    
+  
+

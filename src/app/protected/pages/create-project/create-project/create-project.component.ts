@@ -150,7 +150,8 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
                             client,
                             employee,
                             project_scope,
-                            duration
+                            duration,
+                            relatedSkills: this.projectSkills
                            }
     console.log(body);
 
@@ -204,44 +205,43 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
 
   }
 
-  deleteSkill( skill:any){
-    this.projectSkills= this.projectSkills.filter( (item:any)=> item !== skill);
-    this.store.dispatch(authActions.setProjectSkills({projectSkills : this.projectSkills}))
-  }
+deleteSkill( skill:any){
+  this.projectSkills= this.projectSkills.filter( (item:any)=> item !== skill);
+  this.store.dispatch(authActions.setProjectSkills({projectSkills : this.projectSkills}))
+}
 
+onEnterKey(event: Event) {
+  event.stopPropagation();
 
-  onEnterKey(event: Event) {
-    event.stopPropagation();
-
-    const newFeature = this.secondFormGroup.get('features')?.value;
+  const newFeature = this.secondFormGroup.get('features')?.value;
+  
+  if (event instanceof KeyboardEvent && event.key === 'Enter') {
     
-    if (event instanceof KeyboardEvent && event.key === 'Enter') {
-      
-      this.arrFeatures.push(newFeature);
-      this.secondFormGroup.controls['features'].setValue('');
-    }
+    this.arrFeatures.push(newFeature);
+    this.secondFormGroup.controls['features'].setValue('');
   }
+}
 
-  delFeature( feature:any ){
-    this.arrFeatures= this.arrFeatures.filter( (item:any)=> item !== feature);
-  }
+delFeature( feature:any ){
+  this.arrFeatures= this.arrFeatures.filter( (item:any)=> item !== feature);
+}
 
-  suggestEmployeeBySkill(){
+suggestEmployeeBySkill(){
 
-      this.isLoading = true;
+    this.isLoading = true;
 
-      this.employeeService.suggestEmployeeBySkill(this.projectSkills).subscribe( 
-        ( {success, employees})=>{
-          this.checkProjectScope();
-          if(success){
-            this.employees = employees;
-            this.dataTableActive = employees;
-            this.isLoading = false;
-          }else if(employees.length === 0){
-            this.noSuggestedEmployees = true;
-          }
-        });
-  }
+    this.employeeService.suggestEmployeeBySkill(this.projectSkills).subscribe( 
+      ( {success, employees})=>{
+        this.checkProjectScope();
+        if(success){
+          this.employees = employees;
+          this.dataTableActive = employees;
+          this.isLoading = false;
+        }else if(employees.length === 0){
+          this.noSuggestedEmployees = true;
+        }
+      });
+}
 
 validField( field: string ) {
     return this.secondFormGroup.controls[field].errors && this.secondFormGroup.controls[field].touched;
