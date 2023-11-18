@@ -67,13 +67,14 @@ export class ReviewedProjectsSkillsComponent implements OnInit {
       filter( ({revProjectSkills})=>  revProjectSkills != null && revProjectSkills.length != 0),
     ).subscribe(
       ({revProjectSkills})=>{
-        this.selectedSkills = revProjectSkills;
+        // this.selectedSkills = revProjectSkills;
         this.arrSkills = revProjectSkills;
       })
 
 
-
-    this.body = this.data;
+    this.selectedSkills = this.data;
+    this.arrSkills = this.selectedSkills;
+    console.log(this.data);
     this.errorService.closeIsLoading$.subscribe( (emmited)=>{ if(emmited){this.isLoading = false}});
     this.getAllSkillCategories();
   }
@@ -195,7 +196,8 @@ export class ReviewedProjectsSkillsComponent implements OnInit {
 
     this.confirm = true;
     console.log(this.selectedSkills);
-    this.store.dispatch(authActions.setRevProjectSkills({revProjectSkills : this.selectedSkills}))
+    // this.store.dispatch(authActions.setRevProjectSkills({revProjectSkills : this.selectedSkills}))
+    this.projectService.setRevProjectSkills(this.selectedSkills);
     setTimeout(()=>{ this.close() },300);
 
     this.projectService.projectSkillsRevProj$.emit(this.selectedSkills);

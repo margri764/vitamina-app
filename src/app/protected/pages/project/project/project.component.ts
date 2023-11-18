@@ -10,6 +10,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { CookieService } from 'ngx-cookie-service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ProjectService } from 'src/app/protected/services/project/project.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -93,6 +94,7 @@ export class ProjectComponent implements OnInit {
               private store : Store <AppState>,
               private cookieService : CookieService,
               private fb : FormBuilder,
+              private router : Router
 
 
   ) { 
@@ -228,20 +230,8 @@ deleteClient(client : any){
   
 }
 
-editClient(client: any){
-
-  if(screen.width >= 800) {
-    this.width = "600px";
-    this.height ="720px";
-  }
-
-  // this.dialog.open(EditcustomerComponent, {
-  //   data: customer,
-  //   width: `${this.width}`|| "",
-  //   height:`${this.height}`|| "",
-  //   panelClass:"custom-modalbox-NoMoreComponent", 
-  // });
-
+editProject(project: any) {
+  this.router.navigateByUrl(`/edit-project/${project._id}`);
 }
 
 

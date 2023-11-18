@@ -191,12 +191,13 @@ export class ErrorService {
     let height : string = '';
 
     if(screen.width >= 800) {
-      width = "350px"
-      height ="450px";
+      width = "400px";
+      height ="320px";
     }
     this.dialog.open(ErrorBackendDownComponent,{
-      width: `${this.width}`|| "",
-      height:`${this.height}`|| "",
+      width: `${width}`|| "",
+      height:`${height}`|| "",
+      disableClose: true,
       panelClass:"custom-modalbox-message",
     });
   }

@@ -15,6 +15,8 @@ type StringArray = string[];
 
 export class ProjectService {
 
+  revProjectSkills : any[]=[];
+
 
   @Injectable({
     providedIn: 'root'
@@ -86,6 +88,8 @@ export class ProjectService {
 
     setProjectState( projectId:any, state:string ){
 
+      console.log(projectId, state);
+
       return this.http.patch<any>(`${this.baseUrl}api/project/projectState/${projectId}?state=${state}`, null)
     .pipe(
       map( res =>{ 
@@ -123,6 +127,14 @@ export class ProjectService {
             console.log('from service getReviewedProjects', res)
               return res} )
       );
+    }
+
+    setRevProjectSkills( revProjectSkills:any){
+        this.revProjectSkills = revProjectSkills;
+    }
+
+    getRevProjectSkills(){
+      return this.revProjectSkills;
     }
 
 

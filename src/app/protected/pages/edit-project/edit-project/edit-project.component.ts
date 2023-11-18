@@ -54,6 +54,8 @@ export class EditProjectComponent implements OnInit {
   myFormInput!: FormGroup;
   projectId : string = '';
   reviewedProject : any;
+  total: number = 0;
+
 
 
 
@@ -84,7 +86,7 @@ export class EditProjectComponent implements OnInit {
       filter( ({reviewedProjects})=>  reviewedProjects != null && reviewedProjects.length != 0),
     ).subscribe(
       ({revProjectSkills, projectTime, client, reviewedProjects })=>{
-        this.projectSkills = revProjectSkills;
+        // this.projectSkills = revProjectSkills;
         // this.getProjectTime(projectTime);
         // this.client = client;
         // this.getTotal();
@@ -115,16 +117,15 @@ export class EditProjectComponent implements OnInit {
   }
 
   getProjectById( reviewedProjects:any ){
-
+    
     const project = reviewedProjects.filter( (item:any) => item._id === this.projectId);
     this.reviewedProject = project[0];
 
     
     this.projectSkills = this.reviewedProject.relatedSkills;
+    const duration = this.getDuration();
 
-    setTimeout(()=>{this.store.dispatch(authActions.setRevProjectSkills( {revProjectSkills: this.reviewedProject.relatedSkills} ));},500)
-
-    
+    // setTimeout(()=>{this.store.dispatch(authActions.setRevProjectSkills( {revProjectSkills: this.reviewedProject.relatedSkills} ));},5200)
 
     
       this.secondFormGroup = this.fb.group({
@@ -133,7 +134,7 @@ export class EditProjectComponent implements OnInit {
         addFeature: [],
         date: [this.reviewedProject.project_scope.estimatedDeliveryDate],
         description: [this.reviewedProject.project_scope.description],
-        duration:  [ '', [this.validatorService.positiveNumberWithDecimals()] ]
+        duration:  [ duration, [this.validatorService.positiveNumberWithDecimals()] ]
       });
 
       this.populateForm(this.reviewedProject.project_scope.main_features)
@@ -154,8 +155,16 @@ export class EditProjectComponent implements OnInit {
     });
   }
 
+
   getDetalleItemsControls() {
     return (this.secondFormGroup.get('features') as FormArray).controls;
+  }
+
+  getDuration(){
+ 
+    return this.reviewedProject.duration.reduce((total: any, employee: any ) => total + employee.assigned_hours, 0);
+  
+    // this.total = this.project.duration.reduce((total: any, employee: any ) => total + (employee.assigned_hours * employee.hourly_rate), 0);
   }
 
 
@@ -262,7 +271,6 @@ export class EditProjectComponent implements OnInit {
 
   deleteSkill( skill:any){
     this.projectSkills= this.projectSkills.filter( (item:any)=> item !== skill);
-    this.store.dispatch(authActions.setProjectSkills({projectSkills : this.projectSkills}))
   }
 
   onEnterKey(event: Event) {
@@ -271,8 +279,11 @@ export class EditProjectComponent implements OnInit {
     const data = [...this.reviewedProject.project_scope.main_features];
   
     const newFeature = this.secondFormGroup.get('addFeature')?.value;
+
   
     if (event instanceof KeyboardEvent && event.key === 'Enter') {
+    console.log(newFeature);
+
       const updatedProjectScope = {
         ...this.reviewedProject.project_scope,
         main_features: [...data, newFeature],
@@ -363,8 +374,6 @@ getTotalHs(){
 
 }
 
-total: number = 0;
-
 getTotal(){
 
   if(this.arrProjectTime.length === 0){
@@ -385,9 +394,20 @@ getProjectTime( projectTime:any){
 openDialogSkills(){
 
     this.selection = true;
+    let projectSkills : any[]=[];
+
+    const projectSkillsString = JSON.stringify(this.projectSkills);
+    const relatedSkillsString = JSON.stringify(this.reviewedProject.relatedSkills);
+
+    if(projectSkillsString === relatedSkillsString){
+      projectSkills = this.reviewedProject.relatedSkills
+    }else{
+      projectSkills = this.projectSkills
+    }
 
     this.dialog.open(ReviewedProjectsSkillsComponent, {
-
+      data: projectSkills,
+      disableClose: true,
       panelClass:"custom-modalbox-responsive", 
     });
 }

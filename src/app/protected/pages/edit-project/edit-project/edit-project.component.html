@@ -24,11 +24,11 @@
                           
                          <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="100" class="mt-10 font">
                          
-                            <mat-form-field appearance="outline"  fxFlex="49"class=font  >		
+                            <mat-form-field appearance="outline"  fxFlex="49" class=font  >		
                                 <mat-label>Duration /hs</mat-label>
                                 <input matInput type="text" required formControlName="duration">
+                                <mat-error *ngIf="validField('duration')" class="font" fxFlex="100" style="font-size: 1.2em;"> Please enter a positive value with up to two decimal places. </mat-error>
                             </mat-form-field> 
-                            <mat-error *ngIf="validField('duration')" class="font" fxFlex="100"> Please enter a positive value with up to two decimal places. </mat-error>
 
                             <mat-form-field  appearance="outline" fxFlex="49">
                                 <mat-label class="font">Select delivery time</mat-label>
