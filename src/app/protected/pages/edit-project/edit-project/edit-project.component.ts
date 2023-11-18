@@ -18,6 +18,7 @@ import { AskSendProposalComponent } from 'src/app/protected/messages/ask-send-pr
 import { ActivatedRoute, Router } from '@angular/router';
 import { getDataSS } from 'src/app/protected/Storage';
 import { ReviewedProjectsSkillsComponent } from 'src/app/protected/messages/reviewed-projects-skills/reviewed-projects-skills/reviewed-projects-skills.component';
+import { EditionAssignTimeComponent } from '../../edition-assign-time/edition-assign-time.component';
 
 type StringArray = string[];
 
@@ -34,7 +35,6 @@ export class EditProjectComponent implements OnInit {
   isLinear = false;
    myForm!: FormGroup;
    firstFormGroup!: FormGroup;
-   secondFormGroup!: FormGroup;
    private projectSubscription!: Subscription; 
   isLoading: boolean = false;
   confirm: boolean = false;
@@ -81,30 +81,26 @@ export class EditProjectComponent implements OnInit {
 
     this.errorService.closeIsLoading$.subscribe( emmited => {if(emmited)this.isLoading = false})
 
+    const projectTime = getDataSS('projectTime');
+
+    this.getProjectTime(projectTime);
+
     this.store.select('auth')
     .pipe(
       filter( ({reviewedProjects})=>  reviewedProjects != null && reviewedProjects.length != 0),
     ).subscribe(
-      ({revProjectSkills, projectTime, client, reviewedProjects })=>{
-        // this.projectSkills = revProjectSkills;
-        // this.getProjectTime(projectTime);
-        // this.client = client;
-        // this.getTotal();
+      ({ reviewedProjects })=>{
         this.getProjectById(reviewedProjects);
 
       })
 
       this.projectService.projectSkillsRevProj$.subscribe((skills: StringArray) => { this.projectSkills = skills;   });
+      this.projectService.projectTimeRevProj$.subscribe((projectTime: StringArray) => {  this.getProjectTime(projectTime);console.log(projectTime);   });
+
     // this.projectSkills = getDataSS('projectSkills');
     
-
- 
-      this.firstFormGroup = this.fb.group({
-        // date1: [''],
-
-      });
       
-      this.secondFormGroup = this.fb.group({
+      this.firstFormGroup = this.fb.group({
         name: ['' ],
         features: this.fb.array([]),
         addFeature: [''],
@@ -128,7 +124,7 @@ export class EditProjectComponent implements OnInit {
     // setTimeout(()=>{this.store.dispatch(authActions.setRevProjectSkills( {revProjectSkills: this.reviewedProject.relatedSkills} ));},5200)
 
     
-      this.secondFormGroup = this.fb.group({
+      this.firstFormGroup = this.fb.group({
         name: [this.reviewedProject.project_scope.name, ],
         features: this.fb.array([]),
         addFeature: [],
@@ -142,9 +138,10 @@ export class EditProjectComponent implements OnInit {
 
   }
 
+
   populateForm(data: any) {
 
-    const detalleItemsArray = this.secondFormGroup.get('features') as FormArray;
+    const detalleItemsArray = this.firstFormGroup.get('features') as FormArray;
     detalleItemsArray.clear();
 
     data.forEach((feature: any) => {
@@ -157,7 +154,7 @@ export class EditProjectComponent implements OnInit {
 
 
   getDetalleItemsControls() {
-    return (this.secondFormGroup.get('features') as FormArray).controls;
+    return (this.firstFormGroup.get('features') as FormArray).controls;
   }
 
   getDuration(){
@@ -170,10 +167,10 @@ export class EditProjectComponent implements OnInit {
 
   checkProjectScope(){
 
-    const name = this.secondFormGroup.get('name')?.value
-    const duration = this.secondFormGroup.get('duration')?.value
+    const name = this.firstFormGroup.get('name')?.value
+    const duration = this.firstFormGroup.get('duration')?.value
 
-    if( name === ''|| duration === '' || this.secondFormGroup.invalid || this.projectSkills.length === 0){
+    if( name === ''|| duration === '' || this.firstFormGroup.invalid || this.projectSkills.length === 0){
       this.isProjectScope = false;
     }else{
       this.isProjectScope = true;
@@ -196,15 +193,15 @@ export class EditProjectComponent implements OnInit {
     }));
 
     let estimatedDeliveryDate : any;
-    const selectedDate = this.secondFormGroup.get('date')?.value;
+    const selectedDate = this.firstFormGroup.get('date')?.value;
     
     if (selectedDate) {
       estimatedDeliveryDate = selectedDate.toISOString();
     }
     
     const project_scope = {
-                            name: this.secondFormGroup.get('name')?.value,
-                            description: this.secondFormGroup.get('description')?.value,
+                            name: this.firstFormGroup.get('name')?.value,
+                            description: this.firstFormGroup.get('description')?.value,
                             main_features: this.arrFeatures,
                             estimatedDeliveryDate
                           }
@@ -247,9 +244,9 @@ export class EditProjectComponent implements OnInit {
 
   resetProject(){
 
-    this.secondFormGroup.get('name')?.setValue('');
-    this.secondFormGroup.get('duration')?.setValue('');
-    this.secondFormGroup.get('description')?.setValue('');
+    this.firstFormGroup.get('name')?.setValue('');
+    this.firstFormGroup.get('duration')?.setValue('');
+    this.firstFormGroup.get('description')?.setValue('');
     this.arrProjectTime = [];
     this.projectSkills = [];
     this.employees = [];
@@ -278,7 +275,7 @@ export class EditProjectComponent implements OnInit {
   
     const data = [...this.reviewedProject.project_scope.main_features];
   
-    const newFeature = this.secondFormGroup.get('addFeature')?.value;
+    const newFeature = this.firstFormGroup.get('addFeature')?.value;
 
   
     if (event instanceof KeyboardEvent && event.key === 'Enter') {
@@ -294,7 +291,7 @@ export class EditProjectComponent implements OnInit {
         project_scope: updatedProjectScope,
       };
 
-      const detalleItemsArray = this.secondFormGroup.get('features') as FormArray;
+      const detalleItemsArray = this.firstFormGroup.get('features') as FormArray;
       detalleItemsArray.clear();
       
       updatedProjectScope.main_features.forEach((feature: any) => {
@@ -303,7 +300,7 @@ export class EditProjectComponent implements OnInit {
         }));
       });
   
-      this.secondFormGroup.controls['addFeature'].setValue('');
+      this.firstFormGroup.controls['addFeature'].setValue('');
     }
   }
   
@@ -324,7 +321,7 @@ export class EditProjectComponent implements OnInit {
     };
 
 
-    const detalleItemsArray = this.secondFormGroup.get('features') as FormArray;
+    const detalleItemsArray = this.firstFormGroup.get('features') as FormArray;
     detalleItemsArray.clear();
     
     updatedProjectScope.main_features.forEach((feature: any) => {
@@ -352,7 +349,7 @@ export class EditProjectComponent implements OnInit {
   }
 
 validField( field: string ) {
-    return this.secondFormGroup.controls[field].errors && this.secondFormGroup.controls[field].touched;
+    return this.firstFormGroup.controls[field].errors && this.firstFormGroup.controls[field].touched;
 }
 
 closeNotMatching(){
@@ -361,16 +358,18 @@ closeNotMatching(){
 
 getTotalHs(){
 
-  // if (!this.arrProjectTime || this.arrProjectTime.length === 0) {
-  //   return ;
-  // }
- let total = 0;
-  const duration = this.secondFormGroup.get('duration')?.value;
-  this.accumProjectTime = this.arrProjectTime.reduce((total, time) => total + time.time, 0);
+  if (!this.arrProjectTime || this.arrProjectTime.length === 0) {
+    return ;
+  }
+//  let total = 0;
+  const duration = this.firstFormGroup.get('duration')?.value;
+  console.log(duration);
+
+//   this.accumProjectTime = this.arrProjectTime.reduce((total, time) => total + time.time, 0);
   
-   total = duration - this.accumProjectTime; 
+//    total = duration - this.accumProjectTime; 
   
-  return total 
+//   return total 
 
 }
 
@@ -385,6 +384,9 @@ getTotal(){
 }
 
 getProjectTime( projectTime:any){
+
+  console.log(projectTime);
+
   if(!projectTime) return;
   this.arrProjectTime = projectTime;
   this.getTotalHs();
@@ -412,7 +414,7 @@ openDialogSkills(){
     });
 }
 
-openDialogAssignTime( employee:any ){
+openDialogEditionAssignTime( employee:any ){
 
   let width : string = '';
   let height : string = '';
@@ -421,7 +423,7 @@ openDialogAssignTime( employee:any ){
     width = "600px";
     height = "310px";
   }
-    this.dialog.open(AssignTimeComponent, {
+    this.dialog.open(EditionAssignTimeComponent, {
       data: employee,
       width: `${width}`|| "",
       height:`${height}`|| "",

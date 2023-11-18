@@ -28,10 +28,10 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
   dataTableActive : any ;
 
   isLinear = false;
-   myForm!: FormGroup;
-   firstFormGroup!: FormGroup;
-   secondFormGroup!: FormGroup;
-   private projectSubscription!: Subscription; 
+  myForm!: FormGroup;
+  firstFormGroup!: FormGroup;
+  secondFormGroup!: FormGroup;
+  private projectSubscription!: Subscription; 
   isLoading: boolean = false;
   confirm: boolean = false;
   selection: boolean = false;

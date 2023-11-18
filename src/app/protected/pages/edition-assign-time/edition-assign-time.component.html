@@ -1,0 +1,30 @@
+
+<div fxLayout="row wrap" fxLayoutAlign="center start" fxFlex="100" style="padding: 20px;">
+
+
+
+    <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" style="">
+     <span class="font" fxFlex="80" style=" font-size: 1.5em; text-align: start; font-weight: bold; "> Assign employee hours</span>        
+     <span class="material-symbols-outlined notranslate cursor" (click)="close()" style="transform: scale(1.3); margin-right: 20px;">close</span> 
+     <span class="font" fxFlex="100" style=" font-size: 1em; text-align: start; margin-top: 10px; color: rgb(181, 181, 181);"> {{employee.name}}</span>        
+   </div>
+
+   <form  [formGroup]="myForm"  fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" style="margin-top: 30px;">     
+       <mat-form-field  appearance="outline" class="font " fxFlex="100"  >
+         <input type="text" matInput  placeholder="Assign time"  formControlName="time" autocomplete="off" >
+         <mat-icon matSuffix class="material-symbols-outlined notranslate" style="transform:scale(1); cursor: pointer; margin-right: 10px;color: gray;"  >timer</mat-icon>
+       </mat-form-field>
+       <mat-error *ngIf="validField('time')" class="font"> Please enter a positive value with up to two decimal places. </mat-error>
+       
+   </form>
+
+   <div fxLayout="row wrap" fxLayoutAlign="end start" fxFlex="100" style="padding: 20px;" >
+         <button type="button"  [ngClass]="confirm ? 'btnMenuClicked':'btnMenu'" style="min-width: 80px; height: 40px !important ;" (click)="onSaveForm()">  Save
+         </button>
+     </div>    
+
+         
+</div>
+
+
+ 

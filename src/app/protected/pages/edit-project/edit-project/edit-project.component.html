@@ -7,11 +7,12 @@
           <mat-stepper [linear]="isLinear" #stepper style=" margin-top: 40px; margin-bottom: 40px; width: 100%;">
 
               <mat-step [stepControl]="firstFormGroup">
+
                 <ng-template matStepLabel > <span class="font" >Project Scope</span></ng-template>
 
                 <div fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex="100">
 
-                 <form [formGroup]="secondFormGroup" fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" style="margin-top: 30px; border: 1px solid rgb(230, 230, 230); border-radius: 10px; padding: 40px;" class="whiteframe">
+                 <form [formGroup]="firstFormGroup" fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" style="margin-top: 30px; border: 1px solid rgb(230, 230, 230); border-radius: 10px; padding: 40px;" class="whiteframe">
               
                       <span class="font" fxFlex="100" style="margin-top: 20px; font-size: 1.7em; text-align: start; font-weight: bold; line-height:30px;"> Project Scope</span>        
                         
@@ -75,20 +76,7 @@
                       </div>
                     </div>
                   </div>
-                    
-                    <!-- <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" class="font boxSelection" *ngFor="let feature of arrFeatures; let i = index" style="margin-top: 6px;" (mouseenter)="showDeleteIconFeature[i] = true"
-                    (mouseleave)="showDeleteIconFeature[i] = false">
-
-                    
-                      <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="90" >
-                        <span class="material-symbols-outlined notranslate cursor" style="color: green;"> done </span> &nbsp;
-                        <span class="feature-text">{{ feature }}</span>
-                      </div>
-                      <div fxLayout="row wrap" fxLayoutAlign="end center" fxFlex="10">
-                        <span class="material-symbols-outlined notranslate cursor" style="color: red;" *ngIf="showDeleteIconFeature[i]" (click)="delFeature(feature)"> delete </span>
-                      </div>
-                    </div> -->
-
+            
                     <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 20px; margin-bottom: 30px;" >
 
                         <span class="font" style=" font-size: 1.5em; text-align: start; font-weight: bold; line-height:30px;" > Select Related skills</span>   
@@ -111,9 +99,6 @@
                     </div>   
                 </div> 
 
-
-
-                 
                   </form>
                   
                   
@@ -132,11 +117,6 @@
                 
               </mat-step>
               
-              <mat-step [stepControl]="secondFormGroup"   >
-
-             
-              </mat-step>
-
               <mat-step >
                 <ng-template matStepLabel > 
                     <span class="font" (click)="suggestEmployeeBySkill(); getTotalHs();" >Assign Employees</span>
@@ -169,14 +149,14 @@
                             <span class="font" style="font-size: 1.3em; text-align: start;  font-weight: bold;"> Suggested Employees with the Best Matching Skills</span>
                         </div>
 
-
+                    <!-- label duration assigned hours Remaining -->
                         <div  style="margin-top: 40px; display: flex; justify-content: space-between; width: 100%;" >
 
                             <div class="font whiteframe duration" style="background-color: rgb(226, 165, 43, 0.3);">
                                 <div class="squareIcon" style="background-color: rgb(226, 165, 43);">
                                     <span class="material-symbols-outlined notranslate" >schedule</span>
                                 </div>
-                                <span class="font hours" >{{secondFormGroup.get('duration')?.value}}</span>
+                                <span class="font hours" >{{firstFormGroup.get('duration')?.value}}</span>
                                 <span class="font hoursText" >Project duration</span>
                             </div>
 
@@ -196,12 +176,6 @@
                             <span class="font hoursText">Remaining hours</span>
                             </div>
                         </div>
-
-                
-
-                    
-
-                        
                     
                         </div>
             
@@ -237,7 +211,7 @@
                                                         <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57);"> edit </span>
                                                     </div>
                                                 
-                                                    <div class="icon" (click)="openDialogAssignTime(element)" style="margin-left: 3px;">
+                                                    <div class="icon" (click)="openDialogEditionAssignTime(element)" style="margin-left: 3px;">
                                                     <span class="material-symbols-outlined notranslate cursor" style="color: green;"> settings </span>
                                                 </div>
                                             </div>
@@ -273,7 +247,7 @@
 
                             <div fxLayout="row wrap" fxLayoutAlign="end center" fxFlex="20" *ngIf="showDelIconAssigEmployee[i]" >
                                 <div class="icon">
-                                    <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57)" (click)="openDialogAssignTime(time)"> edit </span>
+                                    <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57)" (click)="openDialogEditionAssignTime(time)"> edit </span>
                                 </div>
 
                                 <div class="icon" style="margin-left: 7px;">

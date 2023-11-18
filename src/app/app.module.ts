@@ -77,6 +77,7 @@ import { UpdateClientComponent } from './protected/pages/update-client/update-cl
 import { AskDontShowComponent } from './protected/messages/ask-dont-show/ask-dont-show/ask-dont-show.component';
 import { EditProjectComponent } from './protected/pages/edit-project/edit-project/edit-project.component';
 import { ReviewedProjectsSkillsComponent } from './protected/messages/reviewed-projects-skills/reviewed-projects-skills/reviewed-projects-skills.component';
+import { EditionAssignTimeComponent } from './protected/pages/edition-assign-time/edition-assign-time.component';
 
 
 
@@ -132,7 +133,8 @@ import { ReviewedProjectsSkillsComponent } from './protected/messages/reviewed-p
     UpdateClientComponent,
     AskDontShowComponent,
     EditProjectComponent,
-    ReviewedProjectsSkillsComponent
+    ReviewedProjectsSkillsComponent,
+    EditionAssignTimeComponent
   ],
   imports: [
     BrowserModule,
