@@ -16,11 +16,21 @@ import { ProjectService } from 'src/app/protected/services/project/project.servi
 import { log } from 'console';
 import { AskSendProposalComponent } from 'src/app/protected/messages/ask-send-proposal/ask-send-proposal/ask-send-proposal.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { getDataSS } from 'src/app/protected/Storage';
+import { getDataSS, saveDataSS } from 'src/app/protected/Storage';
 import { ReviewedProjectsSkillsComponent } from 'src/app/protected/messages/reviewed-projects-skills/reviewed-projects-skills/reviewed-projects-skills.component';
 import { EditionAssignTimeComponent } from '../../edition-assign-time/edition-assign-time.component';
+import { WrongActionMessageComponent } from 'src/app/protected/messages/wrong-action-message/wrong-action-message/wrong-action-message.component';
 
 type StringArray = string[];
+
+
+interface projectTime {
+  _id: string;
+  name: string,
+  hourly_rate: number,
+  time: number;
+  availability: boolean
+}
 
 @Component({
   selector: 'app-edit-project',
@@ -33,15 +43,15 @@ export class EditProjectComponent implements OnInit {
   dataTableActive : any ;
 
   isLinear = false;
-   myForm!: FormGroup;
-   firstFormGroup!: FormGroup;
-   private projectSubscription!: Subscription; 
+  myForm!: FormGroup;
+  firstFormGroup!: FormGroup;
+  private projectSubscription!: Subscription; 
   isLoading: boolean = false;
   confirm: boolean = false;
   selection: boolean = false;
   projectSkills: any []=[];
   arrFeatures : any [] = [];
-  arrProjectTime : any [] =[];
+  arrProjectTime : projectTime [] =[];
   showDeleteIcon: boolean[] = new Array(this.projectSkills.length).fill(false);
   showDeleteIconFeature: boolean[] = new Array(this.arrFeatures.length).fill(false);
   showDelIconAssigEmployee: boolean[] = new Array(this.arrProjectTime.length).fill(false);
@@ -55,9 +65,7 @@ export class EditProjectComponent implements OnInit {
   projectId : string = '';
   reviewedProject : any;
   total: number = 0;
-
-
-
+  showSuggestedEmployees : boolean = false;
 
   constructor(
               private fb : FormBuilder,
@@ -79,11 +87,7 @@ export class EditProjectComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.errorService.closeIsLoading$.subscribe( emmited => {if(emmited)this.isLoading = false})
-
-    const projectTime = getDataSS('projectTime');
-
-    this.getProjectTime(projectTime);
+    this.errorService.closeIsLoading$.subscribe( emmited => {if(emmited)this.isLoading = false});
 
     this.store.select('auth')
     .pipe(
@@ -91,11 +95,13 @@ export class EditProjectComponent implements OnInit {
     ).subscribe(
       ({ reviewedProjects })=>{
         this.getProjectById(reviewedProjects);
+        const projectTime = getDataSS('projectTime');
+        this.getProjectTime(projectTime);
 
       })
 
       this.projectService.projectSkillsRevProj$.subscribe((skills: StringArray) => { this.projectSkills = skills;   });
-      this.projectService.projectTimeRevProj$.subscribe((projectTime: StringArray) => {  this.getProjectTime(projectTime);console.log(projectTime);   });
+      this.projectService.projectTimeRevProj$.subscribe((projectTime: projectTime) => {  this.getProjectTime(projectTime) });
 
     // this.projectSkills = getDataSS('projectSkills');
     
@@ -117,11 +123,8 @@ export class EditProjectComponent implements OnInit {
     const project = reviewedProjects.filter( (item:any) => item._id === this.projectId);
     this.reviewedProject = project[0];
 
-    
     this.projectSkills = this.reviewedProject.relatedSkills;
     const duration = this.getDuration();
-
-    // setTimeout(()=>{this.store.dispatch(authActions.setRevProjectSkills( {revProjectSkills: this.reviewedProject.relatedSkills} ));},5200)
 
     
       this.firstFormGroup = this.fb.group({
@@ -158,12 +161,27 @@ export class EditProjectComponent implements OnInit {
   }
 
   getDuration(){
+
+    console.log(this.reviewedProject.duration);
+
+    let projectTime : projectTime []=[];
+
+    this.reviewedProject.duration.forEach((item:any)=>{
+
+      projectTime.push( {_id:item.employee._id,  name: item.employee.name,  hourly_rate: item.hourly_rate, time: item.assigned_hours, availability: item.employee.availability})
+      })
+
+      saveDataSS("projectTime", projectTime);
  
-    return this.reviewedProject.duration.reduce((total: any, employee: any ) => total + employee.assigned_hours, 0);
-  
-    // this.total = this.project.duration.reduce((total: any, employee: any ) => total + (employee.assigned_hours * employee.hourly_rate), 0);
+      
+      this.total = this.reviewedProject.duration.reduce((total: any, employee: any ) => total + (employee.assigned_hours * employee.hourly_rate), 0);
+      return this.reviewedProject.duration.reduce((total: any, employee: any ) => total + employee.assigned_hours, 0);
   }
 
+  suggestEmployees(){
+
+    this.showSuggestedEmployees = true;
+  }  
 
   checkProjectScope(){
 
@@ -180,6 +198,8 @@ export class EditProjectComponent implements OnInit {
   }
 
   onSaveForm(){
+
+  
 
     let employee: any [] = [];
     
@@ -356,21 +376,17 @@ closeNotMatching(){
   this.noSuggestedEmployees = false;
 }
 
+remainingTime: any;
 getTotalHs(){
 
   if (!this.arrProjectTime || this.arrProjectTime.length === 0) {
     return ;
   }
-//  let total = 0;
   const duration = this.firstFormGroup.get('duration')?.value;
-  console.log(duration);
 
-//   this.accumProjectTime = this.arrProjectTime.reduce((total, time) => total + time.time, 0);
-  
-//    total = duration - this.accumProjectTime; 
-  
-//   return total 
-
+  this.accumProjectTime = this.arrProjectTime.reduce((total, time) => total + time.time, 0);
+  this.remainingTime = duration - this.accumProjectTime; 
+  return  this.remainingTime
 }
 
 getTotal(){
@@ -385,7 +401,7 @@ getTotal(){
 
 getProjectTime( projectTime:any){
 
-  console.log(projectTime);
+
 
   if(!projectTime) return;
   this.arrProjectTime = projectTime;
@@ -415,6 +431,7 @@ openDialogSkills(){
 }
 
 openDialogEditionAssignTime( employee:any ){
+  const duration = this.firstFormGroup.get('duration')?.value
 
   let width : string = '';
   let height : string = '';
@@ -424,7 +441,7 @@ openDialogEditionAssignTime( employee:any ){
     height = "310px";
   }
     this.dialog.open(EditionAssignTimeComponent, {
-      data: employee,
+      data: {employee, duration: duration},
       width: `${width}`|| "",
       height:`${height}`|| "",
       panelClass:"custom-modalbox-edit",
@@ -466,6 +483,26 @@ openDialogSendProject( body:any ){
       height:`${height}`|| "",
       panelClass:"custom-modalbox-NoMoreComponent", 
     });
+}
+
+openGenericMsgAlert(msg : string){
+
+  let width : string = '';
+  let height : string = '';
+
+  if(screen.width >= 800) {
+    width = "350px"
+    height ="350px";
+  }
+
+  this.dialog.open(WrongActionMessageComponent, {
+    data: msg,
+    width: `${width}`|| "",
+    height:`${height}`|| "",
+    disableClose: true,
+    panelClass:"custom-modalbox-NoMoreComponent", 
+  });
+
 }
 
 ngOnDestroy(): void {

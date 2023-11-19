@@ -11,11 +11,20 @@ import { EmployeeService } from 'src/app/protected/services/employee/employee.se
 import { getDataSS, saveDataSS } from '../../Storage';
 import { ProjectService } from '../../services/project/project.service';
 
+
+interface projectTime {
+  _id: string;
+  name: string,
+  hourly_rate: number,
+  time: number;
+  availability: boolean
+}
 @Component({
   selector: 'app-edition-assign-time',
   templateUrl: './edition-assign-time.component.html',
   styleUrls: ['./edition-assign-time.component.scss']
 })
+
 export class EditionAssignTimeComponent implements OnInit {
   myForm!: FormGroup;
   confirm: boolean = false;
@@ -23,7 +32,7 @@ export class EditionAssignTimeComponent implements OnInit {
   authSubscription! : Subscription;
   foundEmployee: any;
   editing: boolean = false;
-  projectTime: any []=[];
+  projectTime: projectTime []=[];
 
   constructor(
               private fb: FormBuilder,
@@ -42,12 +51,16 @@ export class EditionAssignTimeComponent implements OnInit {
     });
 
   }
-  
+  duration : any;
+
   // en el SS deberia guardar el tiempo del proyecto
 
   ngOnInit(): void {
 
-    this.employee = this.data;
+    this.employee = this.data.employee;
+    this.duration = this.data.duration;
+
+    
 
     let isProjectTime = getDataSS('projectTime')
 
@@ -115,7 +128,6 @@ export class EditionAssignTimeComponent implements OnInit {
   onSaveForm(){
 
     const numeroDecimal = this.myForm.get('time')?.value;
-    
     if ( this.myForm.invalid || numeroDecimal == '') {
       this.myForm.markAllAsTouched();
       return;
@@ -129,11 +141,26 @@ export class EditionAssignTimeComponent implements OnInit {
     const availability = this.employee.availability
     const projectTime = { _id, name, hourly_rate, time, availability };
 
-    this.projectTime.push(projectTime);
+    const hoursToAssing =  this.projectTime.reduce((total: any, employee: any ) => total + employee.time, 0);
+   
 
     if(!this.editing){
 
-      saveDataSS("projectTime", projectTime);
+     this.projectTime.push(projectTime);
+
+    let tempRemainingHours = this.projectTime.reduce((total: any, employee: any ) => total + employee.time, 0);
+    // console.log(tempRemainingHours, this.duration  );
+
+   if(this.duration < tempRemainingHours){
+    // const excededHours = tempRemainingHours - this.duration ;
+    const remainingHoursToAssign = this.duration - hoursToAssing ;
+     this.openGenericMsgAlert(`You have just ${remainingHoursToAssign} hours to assign.` );
+     this.projectTime = this.projectTime.filter( item => projectTime._id !== item._id);
+     return;
+   }
+
+
+      saveDataSS("projectTime", this.projectTime);
       
       // this.store.dispatch(authActions.setEmployeeProjectTime({ projectTime: [projectTime] }));
       this.projectService.projectTimeRevProj$.emit(this.projectTime);
@@ -143,16 +170,35 @@ export class EditionAssignTimeComponent implements OnInit {
       // editing
 
       const updatedProjectTime = { _id, name, hourly_rate, time, availability };
-      this.projectTime.push(updatedProjectTime);
-      
-      saveDataSS("projectTime", updatedProjectTime);
-      this.projectService.projectTimeRevProj$.emit(this.projectTime);
 
-      // this.store.dispatch( authActions.editEmployeeProjectTime({ updatedProjectTime }) );
-          
-          setTimeout(() =>{ this.close() }, 300);
+      // Buscar el índice del elemento que estás editando en this.projectTime
+      const indexOfUpdatedProjectTime = this.projectTime.findIndex(projectTime => projectTime._id === updatedProjectTime._id);
+      if (indexOfUpdatedProjectTime !== -1) {
+        // Si se encontró el elemento, actualizarlo en el array
+        this.projectTime[indexOfUpdatedProjectTime] = updatedProjectTime;
+
+        //para q no seasignen mas horas de las necesarias
+        let tempRemainingHours = this.projectTime.reduce((total: any, employee: any ) => total + employee.time, 0);
+    
+       if(this.duration < tempRemainingHours){
+         this.openGenericMsgAlert('se paso')
+         return;
+       }
+    
+      
+        // Actualizar en sessionStorage
+        saveDataSS("projectTime", this.projectTime);
+      
+        // Emitir el evento con los datos actualizados
+        this.projectService.projectTimeRevProj$.emit(this.projectTime);
+      
+        // Cerrar el formulario de edición después de un cierto tiempo (300 ms en tu ejemplo)
+        setTimeout(() => { this.close() }, 300);
+
 
         }
+      }
+        
   }
 
   get numberErrorMsg(): string {

@@ -124,33 +124,8 @@
 
                 <div fxLayout="row wrap" fxLayoutAlign="center center" fxFlex="100" *ngIf="isProjectScope">
 
-                        <div  style="width: 100%; " >
-                        <app-search-employee fxFlex="100" ></app-search-employee>
-                        </div>
-
-
-                        <div  fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 40px;" >
-
-                            <!-- start no items -->
-                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" *ngIf="noSuggestedEmployees"  >
-                                
-                                <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" class="whiteframe notFound"  >
-                                <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="90"   >
-                                    <span class="material-icons" style="color: white;"> error </span>
-                                    <span class="font " style="color: white; text-align: center; margin-left: 20px; font-size: 0.8em;"> No employees found with the required skills.
-                                    </span>
-                                    </div>
-                                    <span class="material-icons" style="color: white; text-align: end; transform: scale(0.8); cursor: pointer;" (click)="closeNotMatching()"> close </span>
-                                </div>
-                            </div>
-                            <!-- end no items -->
-
-                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 50px; " >
-                            <span class="font" style="font-size: 1.3em; text-align: start;  font-weight: bold;"> Suggested Employees with the Best Matching Skills</span>
-                        </div>
-
-                    <!-- label duration assigned hours Remaining -->
-                        <div  style="margin-top: 40px; display: flex; justify-content: space-between; width: 100%;" >
+                         <!-- label duration assigned hours Remaining -->
+                         <div  style="margin-top: 60px; display: flex; justify-content: space-between; width: 100%;" >
 
                             <div class="font whiteframe duration" style="background-color: rgb(226, 165, 43, 0.3);">
                                 <div class="squareIcon" style="background-color: rgb(226, 165, 43);">
@@ -177,10 +152,70 @@
                             </div>
                         </div>
                     
+
+                    <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" style="margin-top: 50px;" *ngIf="arrProjectTime.length !== 0" >
+                        <span class="font" style="font-size: 1.3em; text-align: start;  font-weight: bold;"> Assigned Employees </span>
+                        <div class="icon">
+                            <span class="material-symbols-outlined notranslate cursor" style="color: green" (click)="suggestEmployees()" > add </span>
+                        </div>
+
+                   </div>
+
+                   <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100">
+
+                       <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" class="font boxSelection "*ngFor="let time of arrProjectTime; let i = index" style="margin-top: 40px; padding: 20px; z-index: 999;"    (mouseleave)="showDelIconAssigEmployee[i] = false" (mouseenter)="showDelIconAssigEmployee[i] = true">
+
+                       <div fxLayout="row wrap" fxLayoutAlign="center center" fxFlex="80" >
+                           <span style="text-align: start; width: 100%; margin-top: 10px; color: blue;"><b ></b> &nbsp; {{time.name}} </span>
+                           <span style="text-align: start; width: 100%; margin-top: 10px;"><b >Assigned hours:</b> &nbsp; {{time.time}} </span>
+                           <span style="text-align: start; width: 100%; margin-top: 10px;"><b >Hourly rate:</b> &nbsp; {{time.hourly_rate}} </span>
+                           <span style="text-align: start; width: 100%; margin-top: 10px;"><b >Total U$S:</b> &nbsp; {{time.hourly_rate * time.time}} </span>
+                       </div>  
+
+                       <div fxLayout="row wrap" fxLayoutAlign="end center" fxFlex="20" *ngIf="showDelIconAssigEmployee[i]" >
+                           <div class="icon">
+                               <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57)" (click)="openDialogEditionAssignTime(time)"> edit </span>
+                           </div>
+
+                           <div class="icon" style="margin-left: 7px;">
+                               <span class="material-symbols-outlined notranslate cursor" style="color: red; " (click)="deleteAssignedEmployee(time)"> delete </span>
+                           </div>
+                       </div>
+                   </div>
+
+                   </div>
+
+
+                        <!-- <div  style="width: 100%; " >
+                        <app-search-employee fxFlex="100" ></app-search-employee>
+                        </div> -->
+
+
+                        <div  fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 40px;" >
+
+                            <!-- start no items -->
+                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" *ngIf="noSuggestedEmployees"  >
+                                
+                                <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100" class="whiteframe notFound"  >
+                                <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="90"   >
+                                    <span class="material-icons" style="color: white;"> error </span>
+                                    <span class="font " style="color: white; text-align: center; margin-left: 20px; font-size: 0.8em;"> No employees found with the required skills.
+                                    </span>
+                                    </div>
+                                    <span class="material-icons" style="color: white; text-align: end; transform: scale(0.8); cursor: pointer;" (click)="closeNotMatching()"> close </span>
+                                </div>
+                            </div>
+                            <!-- end no items -->
+
+                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 50px; " >
+                            <span class="font" style="font-size: 1.3em; text-align: start;  font-weight: bold;"> Suggested Employees with the Best Matching Skills</span>
+                        </div>
+
+               
                         </div>
             
                         <!-- start table -->
-                        <div class="example-container mat-elevation-z8 font" style="background-color: white; border-radius: 10px; margin-top: 18px;">
+                        <div class="example-container mat-elevation-z8 font" style="background-color: white; border-radius: 10px; margin-top: 18px;" *ngIf="showSuggestedEmployees">
                 
                             <table mat-table [dataSource]="dataTableActive"  >
                             
@@ -207,10 +242,10 @@
                                         <th mat-header-cell *matHeaderCellDef >Action</th>
                                         <td mat-cell *matCellDef="let element" > 
                                             <div style="display: flex; justify-content:center; " >
-                                                    <div class="icon" [routerLink]="['../view-employee/',element._id, ]">
+                                                    <!-- <div class="icon" [routerLink]="['../view-employee/',element._id, ]">
                                                         <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57);"> edit </span>
                                                     </div>
-                                                
+                                                 -->
                                                     <div class="icon" (click)="openDialogEditionAssignTime(element)" style="margin-left: 3px;">
                                                     <span class="material-symbols-outlined notranslate cursor" style="color: green;"> settings </span>
                                                 </div>
@@ -230,34 +265,7 @@
                         <!-- end table -->
 
 
-                        <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="margin-top: 50px;" *ngIf="arrProjectTime.length !== 0" >
-                             <span class="font" style="font-size: 1.3em; text-align: start;  font-weight: bold;"> Assigned Employees </span>
-                        </div>
-
-                        <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxFlex="100">
-
-                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" class="font boxSelection "*ngFor="let time of arrProjectTime; let i = index" style="margin-top: 40px; padding: 20px; z-index: 999;"    (mouseleave)="showDelIconAssigEmployee[i] = false" (mouseenter)="showDelIconAssigEmployee[i] = true">
-
-                            <div fxLayout="row wrap" fxLayoutAlign="center center" fxFlex="80" >
-                                <span style="text-align: start; width: 100%; margin-top: 10px;"><b >Employee:</b> &nbsp; {{time.name}} </span>
-                                <span style="text-align: start; width: 100%; margin-top: 10px;"><b >Assigned hours:</b> &nbsp; {{time.time}} </span>
-                                <span style="text-align: start; width: 100%; margin-top: 10px;"><b >Hourly rate:</b> &nbsp; {{time.hourly_rate}} </span>
-                                <span style="text-align: start; width: 100%; margin-top: 10px;"><b >Total U$S:</b> &nbsp; {{time.hourly_rate * time.time}} </span>
-                            </div>  
-
-                            <div fxLayout="row wrap" fxLayoutAlign="end center" fxFlex="20" *ngIf="showDelIconAssigEmployee[i]" >
-                                <div class="icon">
-                                    <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57)" (click)="openDialogEditionAssignTime(time)"> edit </span>
-                                </div>
-
-                                <div class="icon" style="margin-left: 7px;">
-                                    <span class="material-symbols-outlined notranslate cursor" style="color: red; " (click)="deleteAssignedEmployee(time)"> delete </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        </div>
-
+                       
                         <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100"  style="margin-top: 50px;" *ngIf="this.arrProjectTime.length !== 0">
 
                             <div class="font whiteframe duration" style=" background-color: rgb(1, 140, 1, 0.3);" >

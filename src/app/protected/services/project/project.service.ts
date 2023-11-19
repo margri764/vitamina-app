@@ -7,6 +7,14 @@ import { Project } from '../../interfaces/project';
 
 type StringArray = string[];
 
+interface projectTime {
+  _id: string;
+  name: string,
+  hourly_rate: number,
+  time: number;
+  availability: boolean
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -26,8 +34,9 @@ export class ProjectService {
   authSendProposal$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   authDontShowAgain$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   closeClientFeedback$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  negativeRemainigHours$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   projectSkillsRevProj$ : EventEmitter<StringArray> = new EventEmitter<StringArray>; 
-  projectTimeRevProj$ : EventEmitter<StringArray> = new EventEmitter<StringArray>; 
+  projectTimeRevProj$ : EventEmitter<projectTime[]> = new EventEmitter<projectTime[]>; 
   
       private baseUrl = environment.baseUrl;
     
