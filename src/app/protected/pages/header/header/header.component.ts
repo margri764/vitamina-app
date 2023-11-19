@@ -3,11 +3,18 @@ import { Location } from '@angular/common';
 import { MatAccordion } from '@angular/material/expansion';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Subscription, filter } from 'rxjs';
+import { Subscription, filter, take } from 'rxjs';
 import { AppState } from 'src/app/app.reducer';
 import { ErrorService } from 'src/app/protected/services/error/error.service';
 import { OrderService } from 'src/app/protected/services/order/order.service';
 import { AuthService } from 'src/app/protected/services/auth/auth.service';
+import { MantainMessageComponent } from 'src/app/protected/messages/maintain-message/mantain-message/mantain-message.component';
+import { AskDontShowComponent } from 'src/app/protected/messages/ask-dont-show/ask-dont-show/ask-dont-show.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ProjectService } from 'src/app/protected/services/project/project.service';
+import * as authActions from 'src/app/auth.actions';
+import { GenericMessageComponent } from 'src/app/protected/messages/generic-message/generic-message/generic-message.component';
+
 
 @Component({
   selector: 'app-header',
@@ -35,6 +42,7 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
  path : string = '/home';
  user: any | undefined;
  donShowNotifications:boolean = false;
+ reviewedProjects : any[]=[];
 
   constructor(
                private store : Store <AppState>,
@@ -43,7 +51,9 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
                private location : Location,
                private router : Router,
                private authService : AuthService,
-               private orderService : OrderService
+               private orderService : OrderService,
+               private dialog : MatDialog,
+               private projectService : ProjectService,
   ) { 
         
           
@@ -61,18 +71,71 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
 
 
 
+
  this.store.select('auth')
   .pipe(
     filter( ({user})=>  user != null && user != undefined),
   ).subscribe(
-    ({user})=>{
+    ({user,reviewedProjects})=>{
       this.user = user;
       this.login = true;
+      this.reviewedProjects = reviewedProjects;
+      if(reviewedProjects.length === 0){
+        this.alert;
+      }else{
+        this.alert = reviewedProjects.length;
+
+      }
     })
 
 
     
  }
+
+ notification( project:any, action:string){
+
+  if(action === 'dontShow'){
+   
+      this.openAskDonShow();
+  
+      this.projectService.authDontShowAgain$.pipe(
+        take(1)
+      ).subscribe( (auth: any)=> {
+
+        if(auth){
+          this.projectService.sendAdminNotification(project._id, "acceptNotification").subscribe( 
+            ( {success} )=>{
+              if(success){
+                this.getReviewedProjects();
+              }
+            });
+        }
+
+      })
+ }else{
+
+  this.projectService.sendAdminNotification(project._id, "acceptNotification").subscribe( 
+    ( {success} )=>{
+      if(success){
+        this.getReviewedProjects();
+      }
+    });
+
+ }
+
+ 
+}
+
+getReviewedProjects(){
+  this.projectService.getReviewedProjects().subscribe( 
+    ( {success, projects})=>{
+        if(success){
+            this.store.dispatch(authActions.setReviewedProject( {reviewedProjects:projects} ))
+        }
+    })
+}
+
+
 
  updateLabelHeader( url : string){
   this.donShowNotifications = false;
@@ -87,6 +150,8 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
   }else if(url.startsWith('/review-proposal')){
     this.url = '/review-proposal';
     this.donShowNotifications = true;
+  }else if(url.startsWith('/edit-project')){
+    this.url = '/edit-project';
 
   }
 
@@ -103,6 +168,10 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
     case '/view-project':
       this.labelHeader = "Project";
     break;  
+
+    case '/edit-project':
+      this.labelHeader = "Edit Project";
+    break; 
 
     case '/employee-list':
             this.labelHeader = "Employees";
@@ -170,5 +239,59 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
 logout(){
   this.errorService.logout();
 }
+
+openGenericMessage(msg:string){
+  let width : string = '';
+  let height : string = '';
+
+  if(screen.width >= 800) {
+    width = "400px"
+    height ="450px";
+  }
+
+
+  this.dialog.open(GenericMessageComponent, {
+    width: `${width}`|| "",
+    height:`${height}`|| "",
+    data: msg,
+    panelClass:"custom-modalbox-NoMoreComponent", 
+  });
+}
+
+openMantainMessage(){
+  let width : string = '';
+  let height : string = '';
+
+  if(screen.width >= 800) {
+    width = "400px"
+    height ="450px";
+  }
+
+  this.dialog.open(MantainMessageComponent, {
+    width: `${width}`|| "",
+    height:`${height}`|| "",
+    panelClass:"custom-modalbox-NoMoreComponent", 
+  });
+
+}
+
+openAskDonShow(){
+  let width : string = '';
+  let height : string = '';
+
+   if(screen.width >= 800) {
+      width = "400px";
+      height = "280px";
+  
+    }
+      this.dialog.open(AskDontShowComponent, {
+        disableClose: true,
+        width: `${width}`|| "",
+        height:`${height}`|| "",
+        panelClass:"custom-modalbox-edit",
+      });
+
+}
+
 
 }

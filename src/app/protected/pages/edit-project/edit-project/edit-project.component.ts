@@ -20,6 +20,7 @@ import { getDataSS, saveDataSS } from 'src/app/protected/Storage';
 import { ReviewedProjectsSkillsComponent } from 'src/app/protected/messages/reviewed-projects-skills/reviewed-projects-skills/reviewed-projects-skills.component';
 import { EditionAssignTimeComponent } from '../../edition-assign-time/edition-assign-time.component';
 import { WrongActionMessageComponent } from 'src/app/protected/messages/wrong-action-message/wrong-action-message/wrong-action-message.component';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 type StringArray = string[];
 
@@ -67,6 +68,13 @@ export class EditProjectComponent implements OnInit {
   total: number = 0;
   showSuggestedEmployees : boolean = false;
 
+  durationInSeconds = 60;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'end';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom'
+  remainingTime: any;
+
+quiero probar el en point de review project
+
   constructor(
               private fb : FormBuilder,
               private employeeService : EmployeeService,
@@ -76,12 +84,22 @@ export class EditProjectComponent implements OnInit {
               private errorService : ErrorService,
               private projectService : ProjectService,
               private router : Router,
-              private activatedRoute : ActivatedRoute
+              private activatedRoute : ActivatedRoute,
+              private _snackBar: MatSnackBar
               // private authService : AuthService,
   ) {
 
     this.activatedRoute.params.subscribe( 
-      ( {id} )=>{ this.projectId = id});
+      ( {id} )=>{ this.isLoading = true; this.projectId = id});
+
+      this.firstFormGroup = this.fb.group({
+        name: ['' ],
+        features: this.fb.array([]),
+        addFeature: [''],
+        date: [''],
+        description: [''],
+        duration:  [ '' ]
+      });
 
   }
 
@@ -106,14 +124,7 @@ export class EditProjectComponent implements OnInit {
     // this.projectSkills = getDataSS('projectSkills');
     
       
-      this.firstFormGroup = this.fb.group({
-        name: ['' ],
-        features: this.fb.array([]),
-        addFeature: [''],
-        date: [''],
-        description: [''],
-        duration:  [ '' ]
-      });
+   
 
 
   }
@@ -122,21 +133,30 @@ export class EditProjectComponent implements OnInit {
     
     const project = reviewedProjects.filter( (item:any) => item._id === this.projectId);
     this.reviewedProject = project[0];
+   
+    if( project){
 
-    this.projectSkills = this.reviewedProject.relatedSkills;
-    const duration = this.getDuration();
+      console.log(project);
+      this.projectSkills = this.reviewedProject.relatedSkills;
+      const duration = this.getDuration();
+  
+      
+        this.firstFormGroup = this.fb.group({
+          name: [this.reviewedProject.project_scope.name, ],
+          features: this.fb.array([]),
+          addFeature: [],
+          date: [this.reviewedProject.project_scope.estimatedDeliveryDate],
+          description: [this.reviewedProject.project_scope.description],
+          duration:  [ duration, [this.validatorService.positiveNumberWithDecimals()] ]
+        });
+  
+        console.log(this.firstFormGroup.value);
+  
+        this.populateForm(this.reviewedProject.project_scope.main_features)
 
-    
-      this.firstFormGroup = this.fb.group({
-        name: [this.reviewedProject.project_scope.name, ],
-        features: this.fb.array([]),
-        addFeature: [],
-        date: [this.reviewedProject.project_scope.estimatedDeliveryDate],
-        description: [this.reviewedProject.project_scope.description],
-        duration:  [ duration, [this.validatorService.positiveNumberWithDecimals()] ]
-      });
+    }
 
-      this.populateForm(this.reviewedProject.project_scope.main_features)
+   
 
 
   }
@@ -153,6 +173,8 @@ export class EditProjectComponent implements OnInit {
         
       }));
     });
+
+    this.isLoading = false;
   }
 
 
@@ -185,8 +207,10 @@ export class EditProjectComponent implements OnInit {
 
   checkProjectScope(){
 
-    const name = this.firstFormGroup.get('name')?.value
-    const duration = this.firstFormGroup.get('duration')?.value
+    const name = this.firstFormGroup.get('name')?.value;
+    const duration = this.firstFormGroup.get('duration')?.value;
+   
+
 
     if( name === ''|| duration === '' || this.firstFormGroup.invalid || this.projectSkills.length === 0){
       this.isProjectScope = false;
@@ -199,7 +223,12 @@ export class EditProjectComponent implements OnInit {
 
   onSaveForm(){
 
-  
+    if( this.remainingTime !== 0){
+      this.openSnackBar();
+      return;
+    }
+
+
 
     let employee: any [] = [];
     
@@ -212,21 +241,33 @@ export class EditProjectComponent implements OnInit {
       hourly_rate: item.hourly_rate
     }));
 
-    let estimatedDeliveryDate : any;
-    const selectedDate = this.firstFormGroup.get('date')?.value;
+
     
+    let estimatedDeliveryDate: any;
+    const selectedDate = this.firstFormGroup.get('date')?.value;
+
     if (selectedDate) {
-      estimatedDeliveryDate = selectedDate.toISOString();
+      const dateObject = new Date(selectedDate);
+    
+      if (!isNaN(dateObject.getTime())) {
+        // La conversión a Date fue exitosa
+        estimatedDeliveryDate = dateObject.toISOString();
+      } else {
+        // No se pudo convertir a Date, manejar según sea necesario
+        console.error('Fecha no válida:', selectedDate);
+      }
     }
+
+    const main_features = this.firstFormGroup.get('features')?.value;
     
     const project_scope = {
                             name: this.firstFormGroup.get('name')?.value,
                             description: this.firstFormGroup.get('description')?.value,
-                            main_features: this.arrFeatures,
+                            main_features,
                             estimatedDeliveryDate
                           }
 
-    const client = this.client._id;
+    const client =  this.reviewedProject.client._id;
     
     const body : Project = {
                             client,
@@ -236,29 +277,31 @@ export class EditProjectComponent implements OnInit {
                             relatedSkills : this.projectSkills
                            }
 
-    this.projectService.createProject(body, 'create').subscribe(
-      ( {success, project} )=>{
-        if(success){
-          this.openDialogSuccesss("Project created successfully!");
-          this.resetProject();
+                           console.log(body);
 
-          this.projectSubscription = this.projectService.emitSuccessProject$.subscribe( 
-            (auth)=>{
-              if(auth){
-                setTimeout(()=>{ this.openDialogSendProject("Do you want send the proposal?") },400)
-              }
-            })
+    // this.projectService.createProject(body, 'create').subscribe(
+    //   ( {success, project} )=>{
+    //     if(success){
+    //       this.openDialogSuccesss("Project created successfully!");
+    //       this.resetProject();
 
-          this.projectService.authSendProposal$.subscribe( (emmited)=>{ 
-            if(emmited){
-            this.router.navigateByUrl(`/view-project/${project._id}`)
-            }else if(!emmited){
-              location.reload();
-            }
-          } )
+    //       this.projectSubscription = this.projectService.emitSuccessProject$.subscribe( 
+    //         (auth)=>{
+    //           if(auth){
+    //             setTimeout(()=>{ this.openDialogSendProject("Do you want send the proposal?") },400)
+    //           }
+    //         })
 
-        }
-      })
+    //       this.projectService.authSendProposal$.subscribe( (emmited)=>{ 
+    //         if(emmited){
+    //         this.router.navigateByUrl(`/view-project/${project._id}`)
+    //         }else if(!emmited){
+    //           location.reload();
+    //         }
+    //       } )
+
+    //     }
+    //   })
 
   }
 
@@ -376,7 +419,6 @@ closeNotMatching(){
   this.noSuggestedEmployees = false;
 }
 
-remainingTime: any;
 getTotalHs(){
 
   if (!this.arrProjectTime || this.arrProjectTime.length === 0) {
@@ -505,8 +547,27 @@ openGenericMsgAlert(msg : string){
 
 }
 
+
+openSnackBar() {
+let msg : any;
+
+ if(this.remainingTime > 0){
+   msg = `You still have time to allocate. Please assign ${this.remainingTime} more hours to the project.`
+ }else{
+  msg = `Please review the allocated hours for the employee. A reduction of ${this.remainingTime * -1} hours is required.`;
+   
+ }
+
+  this._snackBar.open( msg, 'close', {
+    duration: this.durationInSeconds * 1000,
+    horizontalPosition: this.horizontalPosition,
+    verticalPosition: this.verticalPosition,
+  })
+}
+
 ngOnDestroy(): void {
   this.store.dispatch(authActions.unSetRevProjectSkills())
+  sessionStorage.removeItem('projectTime')
   if (this.projectSubscription) {
     this.projectSubscription.unsubscribe();
   }

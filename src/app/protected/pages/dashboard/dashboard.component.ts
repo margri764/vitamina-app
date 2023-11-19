@@ -4,11 +4,9 @@ import { AppState } from 'src/app/app.reducer';
 import { Router } from '@angular/router';
 import { filter, Subscription, take } from 'rxjs';
 import { MatAccordion } from '@angular/material/expansion';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import * as authActions from 'src/app/auth.actions';
 import { AuthService } from '../../services/auth/auth.service';
-import { User } from '../../models/user.models';
-import { getDataLS, getDataSS } from '../../Storage';
+import { getDataLS } from '../../Storage';
 import { CookieService } from 'ngx-cookie-service';
 import { ErrorService } from '../../services/error/error.service';
 import { OrderService } from '../../services/order/order.service';
@@ -78,7 +76,6 @@ visibility(){
 
 
 ngOnInit(): void {
-  this.checkSessionStorage();
   this.userSubscription = this.store.select('auth')
   .pipe(
     filter( ({user})=>  user != null && user != undefined),
@@ -99,16 +96,7 @@ ngOnInit(): void {
   
 }
 
-checkSessionStorage(){
 
-//   this.orderService.cancelOrNextOpenOrder$.subscribe(
-//     (emmited)=>{
-//       if(emmited){
-
-//       }
-//     })
-
-}
 
 getReviewedProjects(){
   this.projectService.getReviewedProjects().subscribe( 
@@ -150,10 +138,8 @@ notification( project:any, action:string){
 
  }
 
-
  
 }
-
 
 
 

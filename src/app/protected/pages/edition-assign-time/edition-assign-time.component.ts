@@ -10,6 +10,7 @@ import { WrongActionMessageComponent } from 'src/app/protected/messages/wrong-ac
 import { EmployeeService } from 'src/app/protected/services/employee/employee.service';
 import { getDataSS, saveDataSS } from '../../Storage';
 import { ProjectService } from '../../services/project/project.service';
+import { getMatAutocompleteMissingPanelError } from '@angular/material/autocomplete';
 
 
 interface projectTime {
@@ -142,7 +143,13 @@ export class EditionAssignTimeComponent implements OnInit {
     const projectTime = { _id, name, hourly_rate, time, availability };
 
     const hoursToAssing =  this.projectTime.reduce((total: any, employee: any ) => total + employee.time, 0);
-   
+    
+    // * estaba con el remining time, funciona si es un agregado, sabe si se pasa de la cant de hs a asignar , tengo q ver en el "edit"
+    // y q no se pueda hacer un review del proyecto si faltan hs para getMatAutocompleteMissingPanelError
+    
+    // *RECORDAR AGREGAR ESTE CODIDO AL CREATE PROJECT TAMBIEN
+
+    // *REFORMAR LAS CARDS DE LOS ASSIGNED EMPLOYESS POR LOS DEL ADMIN LTE
 
     if(!this.editing){
 
