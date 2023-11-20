@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { Router } from '@angular/router';
@@ -23,7 +23,7 @@ import { AskDontShowComponent } from '../../messages/ask-dont-show/ask-dont-show
   styleUrls: ['./dashboard.component.scss']
 })
 
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnInit {
 
 @ViewChild(MatAccordion)  accordion!: MatAccordion;
 
@@ -76,6 +76,9 @@ visibility(){
 
 
 ngOnInit(): void {
+
+  this.projectService.getReviewedProjects$.subscribe((emmited)=>{ if(emmited){this.getReviewedProjects()} })
+
   this.userSubscription = this.store.select('auth')
   .pipe(
     filter( ({user})=>  user != null && user != undefined),
@@ -83,19 +86,23 @@ ngOnInit(): void {
     ({user, reviewedProjects})=>{
       this.user = user;
       this.login = true;
-      this.isLoading = false;
       this.reviewedProjects = reviewedProjects;
       if(reviewedProjects.length === 0){
-        this.alert;
+        this.alert=null;
       }else{
-        this.alert = reviewedProjects.length;
+        this.alert = reviewedProjects.reduce((total: any, item: any ) => total + (item.notification === true), 0);
+        
+        if(this.alert === 0){
+          this.alert = '';
+        }else{
+          this.alert
+        }
 
       }
     })
 
   
 }
-
 
 
 getReviewedProjects(){
@@ -200,9 +207,6 @@ logout() {
     this.errorService.logout();
 }
 
-ngOnDestroy(): void {
-
-}
 
 
 }

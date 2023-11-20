@@ -281,13 +281,12 @@
 
                         <div fxLayout="row wrap" fxLayoutAlign="center center" fxFlex="100" style="margin-top: 30px;" *ngIf="this.arrProjectTime.length !== 0">
 
-                            <div fxLayout="row wrap" fxLayoutAlign="center center"lass="font whiteframe" style="font-size: 1.2em; padding: 10px; width: 180px; height: 60px;" (click)="onSaveForm()"  [ngClass]="confirm ? 'btnMenuClicked':'btnMenu'">Create project</div>
+                            <div fxLayout="row wrap" fxLayoutAlign="center center"lass="font whiteframe" style="font-size: 1.2em; padding: 10px; width: 180px; height: 60px;" (click)="onSaveForm()"  [ngClass]="confirm ? 'btnMenuClicked':'btnMenu'"> Edit project</div>
 
                         </div>
 
                         <div style="margin-top: 40px;">
                         <button mat-button matStepperPrevious > <span class="font"> Back  </span></button>
-                        <button mat-button matStepperNext>  <span class="font" (click)="suggestEmployeeBySkill(); getTotalHs();" > Next  </span></button>
                         </div>
                 </div>       
                 

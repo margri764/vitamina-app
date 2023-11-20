@@ -70,6 +70,7 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
   ngOnInit(): void {
 
 
+ this.projectService.getReviewedProjects$.subscribe((emmited)=>{ if(emmited){this.getReviewedProjects()} })
 
 
  this.store.select('auth')
@@ -80,8 +81,9 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
       this.user = user;
       this.login = true;
       this.reviewedProjects = reviewedProjects;
+
       if(reviewedProjects.length === 0){
-        this.alert;
+        this.alert = null;
       }else{
         this.alert = reviewedProjects.reduce((total: any, item: any ) => total + (item.notification === true), 0);
         

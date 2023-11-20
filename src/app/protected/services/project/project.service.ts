@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { map } from 'rxjs';
+import { map, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Project } from '../../interfaces/project';
 
@@ -37,6 +37,7 @@ export class ProjectService {
   negativeRemainigHours$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   projectSkillsRevProj$ : EventEmitter<StringArray> = new EventEmitter<StringArray>; 
   projectTimeRevProj$ : EventEmitter<projectTime[]> = new EventEmitter<projectTime[]>; 
+  getReviewedProjects$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   
       private baseUrl = environment.baseUrl;
     
@@ -89,6 +90,7 @@ export class ProjectService {
 
       return this.http.post<any>(`${this.baseUrl}api/proposal/createProposal/${id}?action=${action}`, null)
     .pipe(
+      tap(()=>{ this.getReviewedProjects$.emit(true)}),
       map( res =>{ 
             console.log('from service sendProposal', res)
               return res} )

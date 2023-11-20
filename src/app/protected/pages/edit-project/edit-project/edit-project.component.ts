@@ -135,7 +135,6 @@ export class EditProjectComponent implements OnInit {
    
     if( project){
 
-      console.log(project);
       this.projectSkills = this.reviewedProject.relatedSkills;
       const duration = this.getDuration();
   
@@ -208,6 +207,8 @@ export class EditProjectComponent implements OnInit {
 
     const name = this.firstFormGroup.get('name')?.value;
     const duration = this.firstFormGroup.get('duration')?.value;
+
+    console.log(name, duration, this.projectSkills );
    
 
 
@@ -227,8 +228,6 @@ export class EditProjectComponent implements OnInit {
       return;
     }
 
-
-
     let employee: any [] = [];
     
     this.confirm = true;
@@ -240,8 +239,6 @@ export class EditProjectComponent implements OnInit {
       hourly_rate: item.hourly_rate
     }));
 
-
-    
     let estimatedDeliveryDate: any;
     const selectedDate = this.firstFormGroup.get('date')?.value;
 
@@ -253,11 +250,15 @@ export class EditProjectComponent implements OnInit {
         estimatedDeliveryDate = dateObject.toISOString();
       } else {
         // No se pudo convertir a Date, manejar según sea necesario
-        console.error('Fecha no válida:', selectedDate);
+        console.error('no date:', selectedDate);
       }
     }
 
-    const main_features = this.firstFormGroup.get('features')?.value;
+    let main_features : any[] = [];
+    const tempFeatures = this.firstFormGroup.get('features')?.value;
+     tempFeatures.forEach((item:any)=>{
+        main_features.push(item.descripcion)
+    })
     
     const project_scope = {
                             name: this.firstFormGroup.get('name')?.value,
@@ -279,29 +280,29 @@ export class EditProjectComponent implements OnInit {
 
                            console.log(body);
 
-    // this.projectService.createProject(body, 'create').subscribe(
-    //   ( {success, project} )=>{
-    //     if(success){
-    //       this.openDialogSuccesss("Project created successfully!");
-    //       this.resetProject();
+    this.projectService.createProject(body, 'review').subscribe(
+      ( {success, project} )=>{
+        if(success){
+          this.openDialogSuccesss("Project created successfully!");
+          this.resetProject();
 
-    //       this.projectSubscription = this.projectService.emitSuccessProject$.subscribe( 
-    //         (auth)=>{
-    //           if(auth){
-    //             setTimeout(()=>{ this.openDialogSendProject("Do you want send the proposal?") },400)
-    //           }
-    //         })
+          this.projectSubscription = this.projectService.emitSuccessProject$.subscribe( 
+            (auth)=>{
+              if(auth){
+                setTimeout(()=>{ this.openDialogSendProject("Do you want send the proposal?") },400)
+              }
+            })
 
-    //       this.projectService.authSendProposal$.subscribe( (emmited)=>{ 
-    //         if(emmited){
-    //         this.router.navigateByUrl(`/view-project/${project._id}`)
-    //         }else if(!emmited){
-    //           location.reload();
-    //         }
-    //       } )
+          this.projectService.authSendProposal$.subscribe( (emmited)=>{ 
+            if(emmited){
+            this.router.navigateByUrl(`/view-project/${project._id}`)
+            }else if(!emmited){
+              location.reload();
+            }
+          } )
 
-    //     }
-    //   })
+        }
+      })
 
   }
 

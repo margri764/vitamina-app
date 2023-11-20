@@ -39,6 +39,7 @@ setProjectState( projectId:string, state:string ){
       ({success})=>{
         if(success){
           this.openDialogAcceptProposal();
+          this.projectService.sendAdminNotification(projectId, "accept").subscribe();
         }
       })
 

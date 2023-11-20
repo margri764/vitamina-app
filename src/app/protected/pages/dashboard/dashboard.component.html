@@ -101,61 +101,74 @@
 
     </mat-toolbar>
 
-    <mat-menu #menu="matMenu" xPosition="after"   >
+    <mat-menu #menu="matMenu" xPosition="after"  >
     
                     
-        <div fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex.xs="90" style="margin-top: 20px; z-index: 999; "  >
+        <div fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex.xs="90" fxFlex="100" style="margin-top: 20px; z-index: 999; "  >
 
         
-                <div fxLayout="row wrap"  fxLayoutAlign="center start"  fxFlex="100" class="mt-5 boxSelection mt-40 mb-40" *ngIf="reviewedProjects.length === 0" >
-                        <span class="material-icons no-translate fc-green">done</span> &nbsp;
-                        <span class="font  ml-20" fxFlex="80"> No notifications </span>
-                </div>  
     
-                <div fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="100"  class="boxSelection" *ngFor="let revProj of reviewedProjects"  style="margin-top: 10px;">
+                <div fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex.xs="90"   >
 
-                    <div fxLayout="column wrap" fxLayoutAlign="start center" fxFlex="20" *ngIf="revProj.notification === true" >
-                        
-                        <i class="material-symbols-outlined notranslate" style="font-size: 35px; color: rgb(255, 204, 0);" *ngIf="revProj.state === 'Reviewed' " >warning</i> &nbsp;
-
-                        <i class="material-symbols-outlined notranslate" style="font-size: 38px; color: green;" *ngIf="revProj.state === 'Accepted'">check_circle_outline</i> &nbsp;
-                    </div>
-            
-                    <div fxLayout="column wrap"  fxFlex="80" *ngIf="revProj.state === 'Reviewed' && revProj.notification"  >
-                        <span class="font"  style=" font-size: 0.9em;"> {{revProj.client.company_name}}  </span> 
-                        <span class="font"  style=" font-size: 0.9em;"> Has asked for a review  </span> 
-
-                        <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100">
-
-                            <span class="font" style="color: blue; cursor: pointer; font-size: 0.85em; " *ngIf="revProj.state === 'Reviewed' && revProj.notification" [routerLink]="['../edit-project/', revProj._id]">Manage</span>
-                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <span class="font" style="color: blue; cursor: pointer; font-size: 0.85em; "  (click)="notification(revProj, 'dontShow')"  *ngIf="revProj.state === 'Reviewed' && revProj.notification"> Do not show again </span>
+        
+                    <div fxLayout="row wrap"  fxLayoutAlign="center center"  fxFlex="100" class="mt-5 boxSelection mt-40 mb-40" *ngIf="reviewedProjects.length === 0" >
+                            <span class="material-icons no-translate fc-green">done</span> &nbsp;
+                            <span class="font  ml-20" fxFlex="80"> No notifications </span>
+                    </div>  
+        
+                    <div fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="100"  class="boxSelection" *ngFor="let revProj of reviewedProjects"  style="margin-top: 10px;">
+    
+                        <div fxLayout="column wrap" fxLayoutAlign="start center" fxFlex="20" *ngIf="revProj.notification === true" >
+                            
+                            <i class="material-symbols-outlined notranslate" style="font-size: 35px; color: rgb(255, 204, 0);" *ngIf="revProj.state === 'Reviewed' || revProj.state === 'Created' " >warning</i> &nbsp;
+    
+                            <i class="material-symbols-outlined notranslate" style="font-size: 35px; color: green;" *ngIf="revProj.state === 'Accepted'">check_circle_outline</i> &nbsp;
+                        </div>
+                
+                        <div fxLayout="column wrap"  fxFlex="80" *ngIf="revProj.state === 'Reviewed' && revProj.notification"  >
+                            <span class="font"  style="font-size: 0.9em;"> {{revProj.client.company_name}} </span> 
+                            <span class="font"  style="font-size: 0.9em;"> Has asked for a review </span> 
+    
+                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100">
+                                <span class="font" style="color: blue; cursor: pointer; font-size: 0.9em; " *ngIf="revProj.state === 'Reviewed' && revProj.notification" [routerLink]="['../edit-project/', revProj._id]">Manage</span>
+                                 &nbsp;&nbsp;&nbsp;&nbsp;
+                                <span class="font" style="color: blue; cursor: pointer; font-size: 0.9em; "  (click)="notification(revProj, 'dontShow')"  *ngIf="revProj.state === 'Reviewed' && revProj.notification"> Do not show again </span>
+                            </div>
+    
+                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="color: rgb(169, 168, 168);  margin-right: auto;">
+                                    <span class="material-symbols-outlined notranslate"  >schedule</span> &nbsp; &nbsp;
+                                    <span style=" font-size: 0.8em;" class="font" >{{revProj.updatedAt | date:'medium'}} </span> 
+                            </div>
                         </div>
 
-
-                        <span class="font ml-10 mt-5" style="color: blue; cursor: pointer; margin-left: 59px;" fxFlex="100" > <b (click)="notification(revProj, 'dontShow')"  *ngIf="revProj.state === 'Accepted' && revProj.notification"  >Done</b></span>
-
-                        <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="color: rgb(169, 168, 168);  margin-right: auto;">
-                                <span class="material-symbols-outlined notranslate"  >schedule</span> &nbsp; &nbsp;
-                                <span style=" font-size: 0.8em;" class="font" >{{revProj.updatedAt | date:'medium'}} </span> 
+                        <div fxLayout="column wrap"  fxFlex="80" *ngIf="revProj.state === 'Created' && revProj.notification"  >
+                            <span class="font"  style="font-size: 0.9em;"> {{revProj.client.company_name}} </span> 
+                            <span class="font"  style="font-size: 0.9em;"> You have created one project, but it has not been sent </span> 
+    
+                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100">
+                            
+                                <span class="font" style="color: blue; cursor: pointer; font-size: 0.9em; "    *ngIf="revProj.state === 'Created' && revProj.notification"  [routerLink]="['../view-project/', revProj._id]"> Do you want send it? </span>
+                            </div>
+    
+                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="color: rgb(169, 168, 168);  margin-right: auto;">
+                                    <span class="material-symbols-outlined notranslate"  >schedule</span> &nbsp; &nbsp;
+                                    <span style=" font-size: 0.8em;" class="font" >{{revProj.updatedAt | date:'medium'}} </span> 
+                            </div>
                         </div>
-
-                    </div>
-
-                    <div fxLayout="column wrap"  fxFlex="80" *ngIf="revProj.state === 'Accepted'" >
-                        <span class="font"  style=" font-size: 0.9em;"> {{revProj.client.company_name}}  </span> 
-                        <span class="font"  style=" font-size: 0.9em;"> Has accepted the proposal </span> 
-
-                        <span class="font" style="color: blue; cursor: pointer; font-size: 0.9em;" fxFlex="100" (click)="notification(revProj, '')"  *ngIf="revProj.state === 'Accepted' && revProj.notification"  >Done</span>
-
-                        <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="color: rgb(169, 168, 168);  margin-right: auto;">
-                                <span class="material-symbols-outlined notranslate"  >schedule</span> &nbsp; &nbsp;
-                                <span style=" font-size: 0.8em;" class="font" >{{revProj.updatedAt | date:'medium'}} </span> 
+    
+                        <div fxLayout="column wrap"  fxFlex="80" *ngIf="revProj.state === 'Accepted'" >
+                            <span class="font"  style="font-size: 0.9em;"> {{revProj.client.company_name}} </span> 
+                            <span class="font"  style="font-size: 0.9em;"> Has accepted the proposal </span> 
+    
+                            <span class="font" style="color: blue; cursor: pointer; font-size: 0.9em;" fxFlex="100" (click)="notification(revProj, '')"  *ngIf="revProj.state === 'Accepted' && revProj.notification"  >Done</span>
+    
+                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100" style="color: rgb(169, 168, 168);  margin-right: auto;">
+                                    <span class="material-symbols-outlined notranslate"  >schedule</span> &nbsp; &nbsp;
+                                    <span style="font-size: 0.8em;" class="font" >{{revProj.updatedAt | date:'medium'}} </span> 
+                            </div>
                         </div>
-
-                    </div>
-
-                </div>   
+                    </div>   
+              </div>
         </div>
 
     </mat-menu>
