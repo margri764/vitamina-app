@@ -76,14 +76,20 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
   .pipe(
     filter( ({user})=>  user != null && user != undefined),
   ).subscribe(
-    ({user,reviewedProjects})=>{
+    ({user, reviewedProjects})=>{
       this.user = user;
       this.login = true;
       this.reviewedProjects = reviewedProjects;
       if(reviewedProjects.length === 0){
         this.alert;
       }else{
-        this.alert = reviewedProjects.length;
+        this.alert = reviewedProjects.reduce((total: any, item: any ) => total + (item.notification === true), 0);
+        
+        if(this.alert === 0){
+          this.alert = '';
+        }else{
+          this.alert
+        }
 
       }
     })
@@ -103,7 +109,7 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
       ).subscribe( (auth: any)=> {
 
         if(auth){
-          this.projectService.sendAdminNotification(project._id, "acceptNotification").subscribe( 
+          this.projectService.sendAdminNotification(project._id, "doNotShowNotification").subscribe( 
             ( {success} )=>{
               if(success){
                 this.getReviewedProjects();
@@ -114,7 +120,7 @@ export class HeaderComponent implements OnInit, AfterViewChecked{
       })
  }else{
 
-  this.projectService.sendAdminNotification(project._id, "acceptNotification").subscribe( 
+  this.projectService.sendAdminNotification(project._id, "doNotShowNotification").subscribe( 
     ( {success} )=>{
       if(success){
         this.getReviewedProjects();

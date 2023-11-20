@@ -73,7 +73,6 @@ export class EditProjectComponent implements OnInit {
   verticalPosition: MatSnackBarVerticalPosition = 'bottom'
   remainingTime: any;
 
-quiero probar el en point de review project
 
   constructor(
               private fb : FormBuilder,
@@ -274,7 +273,8 @@ quiero probar el en point de review project
                             employee,
                             project_scope,
                             duration,
-                            relatedSkills : this.projectSkills
+                            relatedSkills : this.projectSkills,
+                            project:  this.reviewedProject._id
                            }
 
                            console.log(body);

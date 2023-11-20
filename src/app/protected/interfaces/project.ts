@@ -15,5 +15,6 @@ export interface Project {
       assigned_hours: number;
     }[];
     other_details?: string;
+    project?: string
 
 }

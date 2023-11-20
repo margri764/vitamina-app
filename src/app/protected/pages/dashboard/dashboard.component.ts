@@ -118,7 +118,7 @@ notification( project:any, action:string){
       ).subscribe( (auth: any)=> {
 
         if(auth){
-          this.projectService.sendAdminNotification(project._id, "acceptNotification").subscribe( 
+          this.projectService.sendAdminNotification(project._id, "doNotShowNotification").subscribe( 
             ( {success} )=>{
               if(success){
                 this.getReviewedProjects();
@@ -129,7 +129,7 @@ notification( project:any, action:string){
       })
  }else{
 
-  this.projectService.sendAdminNotification(project._id, "acceptNotification").subscribe( 
+  this.projectService.sendAdminNotification(project._id, "doNotShowNotification").subscribe( 
     ( {success} )=>{
       if(success){
         this.getReviewedProjects();
