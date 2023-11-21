@@ -175,10 +175,14 @@ getReviewedProjects(){
 
     case '/view-project':
       this.labelHeader = "Project";
-    break;  
+      break;  
 
-    case '/edit-project':
-      this.labelHeader = "Edit Project";
+    case '/view-project':
+      this.labelHeader = "Project";
+      break;  
+
+    case '/proposal-managment':
+      this.labelHeader = "Proposal Managment";
     break; 
 
     case '/employee-list':

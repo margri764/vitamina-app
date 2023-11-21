@@ -80,6 +80,7 @@ import { ReviewedProjectsSkillsComponent } from './protected/messages/reviewed-p
 import { EditionAssignTimeComponent } from './protected/pages/edition-assign-time/edition-assign-time.component';
 import { ReviewProjectComponent } from './protected/pages/review-project/review-project.component';
 import { AskDelProjectComponent } from './protected/messages/ask-del-project/ask-del-project.component';
+import { ProposalComponent } from './protected/pages/proposal/proposal.component';
 
 
 
@@ -138,7 +139,8 @@ import { AskDelProjectComponent } from './protected/messages/ask-del-project/ask
     ReviewedProjectsSkillsComponent,
     EditionAssignTimeComponent,
     ReviewProjectComponent,
-    AskDelProjectComponent
+    AskDelProjectComponent,
+    ProposalComponent
   ],
   imports: [
     BrowserModule,

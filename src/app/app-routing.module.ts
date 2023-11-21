@@ -15,6 +15,7 @@ import { ConfirmProposalComponent } from './protected/pages/confirm-proposal/con
 import { ReviewProposalComponent } from './protected/pages/review-proposal/review-proposal/review-proposal.component';
 import { EditProjectComponent } from './protected/pages/edit-project/edit-project/edit-project.component';
 import { ReviewProjectComponent } from './protected/pages/review-project/review-project.component';
+import { ProposalComponent } from './protected/pages/proposal/proposal.component';
 
 
 const routes: Routes = [
@@ -37,6 +38,9 @@ const routes: Routes = [
 
   {
     path: 'edit-project/:id',  component: EditProjectComponent
+  },
+  {
+    path: 'proposal-managment',  component: ProposalComponent
   },
 
   {

@@ -1,0 +1,123 @@
+
+
+<div  fxLayout="row wrap"  fxLayoutAlign="center start" fxFlex="100" (scroll)="onScroll($event)" class="scroll" style="background-color: rgb(233, 233, 233)">
+    
+    <div  fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex.xs="98" fxFlex.sm="95" fxFlex="75" >
+  
+        <div  style=" align-items: center; display: flex; justify-content: start center; height: 50px; width: 100%; margin-top: 40px;" >
+  
+  
+                <form  [formGroup]="myForm" autocomplete="off" style="height: 50px;" > 
+                    <mat-form-field  appearance="outline" class="font "  >
+                        <input type="text" matInput  placeholder="Search proposal"  name="itemSearch" formControlName="itemSearch"  >
+                        <mat-icon matSuffix style="transform:scale(1.5); color: rgb(37, 150, 190); margin-right: 10px;" >search</mat-icon>
+                    </mat-form-field>
+                </form>
+  
+<!--   
+            <div fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="40" style="margin-left: 20px;">
+                <div fxLayout="row wrap"  fxLayoutAlign="center center"  style="background-color: rgb(37, 150, 190); border-radius: 7px; height: 50px; padding: 15px; margin-top: 9px; cursor: pointer;"  class="whiteframe" routerLink="../create-proposal" >
+                    <span class="material-symbols-outlined notranslate" style="color: white; transform: scale(1);" > add </span> &nbsp;  &nbsp;
+                    <span class="font" style="color: white;"> Create proposal</span>
+                </div>
+            </div>   -->
+        </div>  
+  
+        <!-- start no items -->
+        <div fxLayout="row wrap"  fxLayoutAlign.xs="center center"  fxLayoutAlign="start center" fxFlex="100" *ngIf="noMatches" style="margin-top: 40px;">
+            
+            <div fxLayout="row wrap" fxLayoutAlign="space-betweencenter"  class="fs-4 whiteframe notFound" >
+               <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="90"   >
+                  <span class="material-icons" style="color: white;"> error </span>
+                  <span class="font " style="color: white; text-align: center; margin-left: 20px; font-size: 1em;">proposal not found...</span>
+                </div>
+                <span class="material-icons" style="color: white; text-align: end; transform: scale(0.8); cursor: pointer;" (click)="closeNoMatch()"> close </span>
+            </div>
+        </div>
+        <!-- end no items -->
+  
+        <!-- start suggested    -->
+        <div fxLayout="row wrap"  fxLayoutAlign.xs="start center" fxLayoutAlign="center center"  fxFlex="100" *ngIf="mostrarSugerencias" style="margin-top: 20px;" >
+                
+            <div fxLayout="row wrap"  fxLayoutAlign="center center"  fxFlex="100" *ngIf="spinner" style="margin-top: 30px;">
+                <mat-spinner diameter="48"></mat-spinner>
+            </div>
+                        
+            <div fxLayout="row wrap"  fxLayoutAlign.xs="start center"  fxLayoutAlign="center center" fxFlex="100" class="font" style="margin-top: 3px;"  *ngFor="let item of suggested" >
+  
+                <div fxLayout="row wrap" fxLayoutAlign="space-between center"  fxFlex="100"  class="fs-4 boxSelection" >
+                   <div fxLayout="row wrap" fxLayoutAlign="start center"  fxFlex="90"   >
+                      <mat-radio-button class="example-margin" [routerLink]="['/view-proposal/', item._id]" ></mat-radio-button>
+                      <span  style="cursor: pointer; text-align: start; margin-left: 15px; font-size: 0.8em;" fxFlex="80">{{item.project.client.company_name | capitalizeFirstLetter}} ( {{item.project.project_scope.name}}) </span>
+                   </div>  
+                   <!-- <div fxLayout="row wrap"  fxLayoutAlign=" center"  fxFlex="100" >
+                    <div class="icon" (click)="downloadPdf(proposalFound.files)">
+                        <span class="material-symbols-outlined notranslate cursor" style="color: red;"> picture_as_pdf </span>
+                    </div>
+            </div> -->
+                   <div fxLayout="row wrap" fxLayoutAlign="end center"  fxFlex="10" >
+                       <div class="icon" (click)="downloadPdf(item.files)">
+                        <span class="material-symbols-outlined notranslate" style="transform: scale(1); color: red; margin-left: 0px; cursor: pointer;"  >picture_as_pdf</span> 
+                       </div>    
+                    </div>    
+                </div>   
+  
+            </div>
+        </div>
+        <!-- end suggested    -->
+  
+  
+        <!-- start table -->
+          <div class="example-container mat-elevation-z8 font" style="background-color: white; border-radius: 10px; margin-top: 40px;">
+            <table mat-table [dataSource]="dataTableActive"  >
+            
+                        
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="client" sticky >
+                        <th mat-header-cell *matHeaderCellDef > Client </th>
+                        <td mat-cell *matCellDef="let element" style="cursor: pointer;" class="name" [routerLink]="['../view-proposal/',element._id ]"> {{element.project?.client.company_name}} </td>
+                    </ng-container>
+  
+                    <ng-container matColumnDef="proposalName"  >
+                        <th mat-header-cell *matHeaderCellDef > Project´s Name </th>
+                        <td mat-cell *matCellDef="let element"  > <span style="text-align: start;">  {{element.project?.project_scope.name}} </span> </td>
+                    </ng-container>
+  
+            
+                    <!-- Comment Column -->
+                    <ng-container matColumnDef="state" >
+                        <th mat-header-cell *matHeaderCellDef> State</th>
+                        <td mat-cell *matCellDef="let element" > <span style="text-align: start;"> {{element.state}} </span> </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="action"  >
+                        <th mat-header-cell *matHeaderCellDef >Action</th>
+                        <td mat-cell *matCellDef="let element" > 
+                            <div style="display: flex; justify-content:center; " >
+                                    <div class="icon" (click)="downloadPdf(element.files)">
+                                        <span class="material-symbols-outlined notranslate cursor" style="color: red;"> picture_as_pdf </span>
+                                    </div>
+                            </div>
+                    </td>
+                    </ng-container>
+                    <!-- *ngIf="dataTableActive.length === 0" -->
+  
+                    <ng-container matNoDataRow *matNoDataRow >
+                      <td colspan="4" style="text-align: center; font-size: 1.3em; padding-top: 40px;" *ngIf="dataTableActive.length === 0">No proposals found</td>
+                    </ng-container>
+  
+  
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </div> 
+        <!-- end table -->
+  
+       </div> 
+    
+  
+  <div *ngIf="isLoading" class="loading-overlay">
+    <mat-spinner diameter="80"></mat-spinner>
+  </div>
+  
+  
