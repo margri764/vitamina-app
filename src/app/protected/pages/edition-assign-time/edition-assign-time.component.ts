@@ -36,13 +36,10 @@ export class EditionAssignTimeComponent implements OnInit {
   editing: boolean = false;
   projectTime: projectTime []=[];
   duration : any;
-
   
   durationInSeconds = 30;
   horizontalPosition: MatSnackBarHorizontalPosition = 'end';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom'
-
-
 
   constructor(
               private fb: FormBuilder,
@@ -54,8 +51,6 @@ export class EditionAssignTimeComponent implements OnInit {
               private employeeService : EmployeeService,
               private projectService :ProjectService,
               private _snackBar: MatSnackBar
-
-              // private errorService : ErrorService,
   ) 
   { 
     this.myForm = this.fb.group({
@@ -68,10 +63,10 @@ export class EditionAssignTimeComponent implements OnInit {
 
   ngOnInit(): void {
 
+    console.log('');
+
     this.employee = this.data.employee;
     this.duration = this.data.duration;
-
-    
 
     let isProjectTime = getDataSS('projectTime')
 
@@ -241,15 +236,15 @@ openSnackBar( remainingHoursToAssign:number) {
       let height : string = '';
   
       if(screen.width >= 800) {
-        width = "600px"
-        height ="310px";
+        width = "500px"
+        height ="280px";
       }
   
       this.dialog.open(WrongActionMessageComponent, {
         data: msg,
         width: `${width}`|| "",
         height:`${height}`|| "",
-        // disableClose: true,
+        disableClose: true,
         panelClass:"custom-modalbox-NoMoreComponent", 
       });
     

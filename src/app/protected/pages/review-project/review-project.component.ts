@@ -282,7 +282,6 @@ export class ReviewProjectComponent implements OnInit {
       ( {success, project} )=>{
         if(success){
           this.openDialogSuccesss("Project reviewed successfully!");
-          this.resetProject();
 
           this.projectSubscription = this.projectService.emitSuccessProject$.subscribe( 
             (auth)=>{
@@ -567,7 +566,8 @@ let msg : any;
 }
 
 ngOnDestroy(): void {
-  this.store.dispatch(authActions.unSetRevProjectSkills())
+  this.store.dispatch(authActions.unSetRevProjectSkills());
+  this.resetProject();
   sessionStorage.removeItem('projectTime')
   if (this.projectSubscription) {
     this.projectSubscription.unsubscribe();

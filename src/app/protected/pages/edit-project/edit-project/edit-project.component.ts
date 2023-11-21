@@ -64,7 +64,6 @@ export class EditProjectComponent implements OnInit {
   isProjectScope: boolean = false;
   myFormInput!: FormGroup;
   projectId : string = '';
-  reviewedProject : any;
   total: number = 0;
   showSuggestedEmployees : boolean = false;
 
@@ -89,7 +88,7 @@ export class EditProjectComponent implements OnInit {
   ) {
 
     this.activatedRoute.params.subscribe( 
-      ( {id} )=>{ this.isLoading = true; this.projectId = id});
+      ( {id} )=>{  this.projectId = id; this.getProjectById(id);});
 
       this.firstFormGroup = this.fb.group({
         name: ['' ],
@@ -105,17 +104,18 @@ export class EditProjectComponent implements OnInit {
   ngOnInit(): void {
 
     this.errorService.closeIsLoading$.subscribe( emmited => {if(emmited)this.isLoading = false});
+    
 
-    this.store.select('auth')
-    .pipe(
-      filter( ({reviewedProjects})=>  reviewedProjects != null && reviewedProjects.length != 0),
-    ).subscribe(
-      ({ reviewedProjects })=>{
-        this.getProjectById(reviewedProjects);
-        const projectTime = getDataSS('projectTime');
-        this.getProjectTime(projectTime);
+    // this.store.select('auth')
+    // .pipe(
+    //   filter( ({projects})=>  projects != null && projects.length != 0),
+    // ).subscribe(
+    //   ({ projects })=>{
+    //     this.getProjectById(projects);
+    //     const projectTime = getDataSS('projectTime');
+    //     this.getProjectTime(projectTime);
 
-      })
+    //   })
 
       this.projectService.projectSkillsRevProj$.subscribe((skills: StringArray) => { this.projectSkills = skills;   });
       this.projectService.projectTimeRevProj$.subscribe((projectTime: projectTime) => {  this.getProjectTime(projectTime) });
@@ -124,34 +124,35 @@ export class EditProjectComponent implements OnInit {
 
   }
 
-  getProjectById( reviewedProjects:any ){
-    
-    const project = reviewedProjects.filter( (item:any) => item._id === this.projectId);
-    this.reviewedProject = project[0];
-   
-    if( project){
+  project:any;
 
-      this.projectSkills = this.reviewedProject.relatedSkills;
-      const duration = this.getDuration();
-  
-      
-        this.firstFormGroup = this.fb.group({
-          name: [this.reviewedProject.project_scope.name, ],
-          features: this.fb.array([]),
-          addFeature: [],
-          date: [this.reviewedProject.project_scope.estimatedDeliveryDate],
-          description: [this.reviewedProject.project_scope.description],
-          duration:  [ duration, [this.validatorService.positiveNumberWithDecimals()] ]
-        });
-  
-        console.log(this.firstFormGroup.value);
-  
-        this.populateForm(this.reviewedProject.project_scope.main_features)
+  getProjectById( id:string ){
 
-    }
+    this.projectService.getProjectById(id).subscribe(
+      ({project, success})=>{
+        if(success){
+            this.project = project
 
-   
+            this.projectSkills =project.relatedSkills;
+            const duration = this.getDuration();
+            
+            this.firstFormGroup = this.fb.group({
+              name: [project.project_scope.name, ],
+              features: this.fb.array([]),
+              addFeature: [],
+              date: [project.project_scope.estimatedDeliveryDate],
+              description: [project.project_scope.description],
+              duration:  [ duration, [this.validatorService.positiveNumberWithDecimals()] ]
+            });
+        
+              console.log(project.project_scope.main_features);
 
+              const projectTime = getDataSS('projectTime');
+              this.getProjectTime(projectTime);
+        
+              this.populateForm(project.project_scope.main_features)
+      }
+      })
 
   }
 
@@ -178,11 +179,9 @@ export class EditProjectComponent implements OnInit {
 
   getDuration(){
 
-    console.log(this.reviewedProject.duration);
-
     let projectTime : projectTime []=[];
 
-    this.reviewedProject.duration.forEach((item:any)=>{
+    this.project.duration.forEach((item:any)=>{
 
       projectTime.push( {_id:item.employee._id,  name: item.employee.name,  hourly_rate: item.hourly_rate, time: item.assigned_hours, availability: item.employee.availability})
       })
@@ -190,8 +189,8 @@ export class EditProjectComponent implements OnInit {
       saveDataSS("projectTime", projectTime);
  
       
-      this.total = this.reviewedProject.duration.reduce((total: any, employee: any ) => total + (employee.assigned_hours * employee.hourly_rate), 0);
-      return this.reviewedProject.duration.reduce((total: any, employee: any ) => total + employee.assigned_hours, 0);
+      this.total = this.project.duration.reduce((total: any, employee: any ) => total + (employee.assigned_hours * employee.hourly_rate), 0);
+      return this.project.duration.reduce((total: any, employee: any ) => total + employee.assigned_hours, 0);
   }
 
   suggestEmployees(){
@@ -203,10 +202,6 @@ export class EditProjectComponent implements OnInit {
 
     const name = this.firstFormGroup.get('name')?.value;
     const duration = this.firstFormGroup.get('duration')?.value;
-
-    console.log(name, duration, this.projectSkills );
-   
-
 
     if( name === ''|| duration === '' || this.firstFormGroup.invalid || this.projectSkills.length === 0){
       this.isProjectScope = false;
@@ -263,7 +258,7 @@ export class EditProjectComponent implements OnInit {
                             estimatedDeliveryDate
                           }
 
-    const client =  this.reviewedProject.client._id;
+    const client =  this.project.client._id;
     
     const body : Project = {
                             client,
@@ -271,13 +266,13 @@ export class EditProjectComponent implements OnInit {
                             project_scope,
                             duration,
                             relatedSkills : this.projectSkills,
-                            project:  this.reviewedProject._id
+                            project:  this.project._id
                            }
 
                            console.log(body);
     this.isLoading = true;
 
-    this.projectService.clientReview(body, this.reviewedProject._id, "update").subscribe( 
+    this.projectService.clientReview(body, this.project._id, "update").subscribe( 
     ( {success} )=>{
       if(success){
         this.openDialogSuccesss('Project edited successfully!');
@@ -350,7 +345,7 @@ export class EditProjectComponent implements OnInit {
   onEnterKey(event: Event) {
     event.stopPropagation();
   
-    const data = [...this.reviewedProject.project_scope.main_features];
+    const data = [...this.project.project_scope.main_features];
   
     const newFeature = this.firstFormGroup.get('addFeature')?.value;
 
@@ -359,12 +354,12 @@ export class EditProjectComponent implements OnInit {
     console.log(newFeature);
 
       const updatedProjectScope = {
-        ...this.reviewedProject.project_scope,
+        ...this.project.project_scope,
         main_features: [...data, newFeature],
       };
   
-      this.reviewedProject = {
-        ...this.reviewedProject,
+      this.project = {
+        ...this.project,
         project_scope: updatedProjectScope,
       };
 
@@ -385,15 +380,15 @@ export class EditProjectComponent implements OnInit {
   delFeature( feature:any ){
 
     console.log(feature);
-    const data = [...this.reviewedProject.project_scope.main_features];
+    const data = [...this.project.project_scope.main_features];
 
     const updatedProjectScope = {
-      ...this.reviewedProject.project_scope,
+      ...this.project.project_scope,
       main_features: data.filter((item: any) => item !== feature),
     };
 
-    this.reviewedProject = {
-      ...this.reviewedProject,
+    this.project = {
+      ...this.project,
       project_scope: updatedProjectScope,
     };
 
@@ -467,10 +462,10 @@ openDialogSkills(){
     let projectSkills : any[]=[];
 
     const projectSkillsString = JSON.stringify(this.projectSkills);
-    const relatedSkillsString = JSON.stringify(this.reviewedProject.relatedSkills);
+    const relatedSkillsString = JSON.stringify(this.project.relatedSkills);
 
     if(projectSkillsString === relatedSkillsString){
-      projectSkills = this.reviewedProject.relatedSkills
+      projectSkills = this.project.relatedSkills
     }else{
       projectSkills = this.projectSkills
     }
@@ -483,17 +478,19 @@ openDialogSkills(){
 }
 
 openDialogEditionAssignTime( employee:any ){
-  const duration = this.firstFormGroup.get('duration')?.value
+  const duration = this.firstFormGroup.get('duration')?.value;
+  console.log(employee);
 
   let width : string = '';
   let height : string = '';
 
   if(screen.width >= 800) {
-    width = "600px";
-    height = "310px";
+    width = "500px";
+    height = "280px";
   }
     this.dialog.open(EditionAssignTimeComponent, {
       data: {employee, duration: duration},
+      disableClose: true,
       width: `${width}`|| "",
       height:`${height}`|| "",
       panelClass:"custom-modalbox-edit",

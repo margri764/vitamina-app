@@ -133,7 +133,6 @@ export class SearchClientComponent implements OnInit, OnDestroy {
         if(client.length !== 0){
           // this.arrArticlesSugested = articulos;
           this.suggested = client.splice(0,10);
-          console.log(this.suggested);
             this.spinner = false;
           }else{
             this.spinner = false;

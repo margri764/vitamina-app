@@ -47,8 +47,8 @@
 
               <div fxLayout="row wrap" fxLayoutAlign="space-between center"  fxFlex="100"  class="fs-4 boxSelection" >
                  <div fxLayout="row wrap" fxLayoutAlign="start center"  fxFlex="90"   >
-                    <mat-radio-button class="example-margin" (click)="Search(item)"></mat-radio-button>
-                    <span  style="cursor: pointer; text-align: start; margin-left: 15px; font-size: 0.8em;" fxFlex="80">{{ item.client.company_name | capitalizeFirstLetter}}</span>
+                    <mat-radio-button class="example-margin" [routerLink]="['/view-project/', item._id]" ></mat-radio-button>
+                    <span  style="cursor: pointer; text-align: start; margin-left: 15px; font-size: 0.8em;" fxFlex="80">{{ item.client.company_name | capitalizeFirstLetter}} ( {{item.project_scope.name}} ) </span>
                  </div>  
                  <div fxLayout="row wrap" fxLayoutAlign="end center"  fxFlex="10" >
                       <span class="material-symbols-outlined notranslate" style="transform: scale(1); color: rgb(37, 150, 190); margin-left: 0px;" [ngClass]="item.client.previous_projects.length != 0 ? 'material-icons' : 'material-symbols-outlined notranslate'" >work</span> 

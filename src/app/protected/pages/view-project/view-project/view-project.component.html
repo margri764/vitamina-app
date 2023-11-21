@@ -115,7 +115,7 @@
                     <button mat-raised-button  [ngClass]="confirm ? 'btnMenuClicked':'btnMenu'" style="min-width: 80px; height: 40px !important ;" (click)="sendProject('create')">  Send
                     </button>
 
-                    <button mat-raised-button  [ngClass]="!confirm ? 'btnMenuClicked':'btnMenu'" style="min-width: 80px; height: 40px !important; margin-left: 20px;" [routerLink]="['/edit-project/', '655bcf8060256e548cdf1913']">  Edit
+                    <button mat-raised-button  [ngClass]="!confirm ? 'btnMenuClicked':'btnMenu'" style="min-width: 80px; height: 40px !important; margin-left: 20px;" [routerLink]="['/edit-project/', project._id]">  Edit
                     </button>
                 </div>   
                 
@@ -124,7 +124,7 @@
 
             <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="100" *ngIf="project?.state === 'Sent'">
              
-                <span class="font" style="font-size: 1em; text-align: start; margin-top: 30px;  width: 100%;" > <b>This project has been sent to the client at {{project.proposal.submittedDate | date}}, and we are awaiting for his review. Do you want to resend it?</b></span>
+                <span class="font" style="font-size: 1em; text-align: start; margin-top: 30px;  width: 100%;" > <b>This project has been sent to the client on {{project.proposal.submittedDate | date}}, and we are currently awaiting his review. Would you like to resend it?</b></span>
                 <div fxLayout="row wrap" fxLayoutAlign="start " fxFlex="100" style="padding: 20px;" >
                     <button mat-raised-button  [ngClass]="confirm ? 'btnMenuClicked':'btnMenu'" style="min-width: 80px; height: 40px !important ;" (click)="sendProject('resend')"> 
                         <i class="material-symbols-outlined notranslate" style="font-size: 1.3em;">refresh</i> 
@@ -136,12 +136,18 @@
             <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="100" *ngIf="project?.state === 'Accepted'">
              
                 <span class="font" style="font-size: 1em; text-align: start; margin-top: 30px;  width: 100%;" > <b>This project has been accepted by the client</b></span>
-                <!-- <div fxLayout="row wrap" fxLayoutAlign="start " fxFlex="100" style="padding: 20px;" >
-                    <button mat-raised-button  [ngClass]="confirm ? 'btnMenuClicked':'btnMenu'" style="min-width: 80px; height: 40px !important ;" (click)="sendProject('resend')"> 
+              
+            </div>
+
+            <div fxLayout="row wrap"  fxLayoutAlign="space-between center" fxFlex="100" *ngIf="project?.state === 'Reviewed'">
+             
+                <span class="font" style="font-size: 1em; text-align: start; margin-top: 30px;  width: 100%;" > <b>The client has requested a review on {{project.proposal.receivedFeedback | date}}. Do you want to review it?</b></span>
+                <div fxLayout="row wrap" fxLayoutAlign="start " fxFlex="100" style="padding: 20px;" >
+                    <button mat-raised-button  [ngClass]="confirm ? 'btnMenuClicked':'btnMenu'" style="min-width: 80px; height: 40px !important ;" [routerLink]="['/review-project/', project._id]"> 
                         <i class="material-symbols-outlined notranslate" style="font-size: 1.3em;">refresh</i> 
-                        Re-Send
+                        Review
                     </button>
-                </div>     -->
+                </div>    
             </div>
         
 

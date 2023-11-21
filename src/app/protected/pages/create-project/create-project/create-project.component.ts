@@ -195,7 +195,7 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
       ( {success, project} )=>{
         if(success){
           this.openDialogSuccesss("Project created successfully!");
-          this.resetProject();
+          // this.resetProject();
 
           this.projectSubscription = this.projectService.emitSuccessProject$.subscribe( 
             (auth)=>{
@@ -207,8 +207,8 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
           this.projectService.authSendProposal$.subscribe( (emmited)=>{ 
             if(emmited){
             this.router.navigateByUrl(`/view-project/${project._id}`)
-            }else if(!emmited){
-              location.reload();
+            }else{
+              this.router.navigateByUrl(`/home`)
             }
           } )
 
@@ -390,6 +390,7 @@ openDialogSendProject( body:any ){
 }
 
 ngOnDestroy(): void {
+  this.resetProject();
   if (this.projectSubscription) {
     this.projectSubscription.unsubscribe();
   }

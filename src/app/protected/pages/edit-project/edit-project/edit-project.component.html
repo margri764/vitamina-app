@@ -109,11 +109,6 @@
                   </div>
                 </div>
 
-                <!-- <div *ngIf="client ===null || client === undefined" fxLayout="row wrap" fxLayoutAlign="center center" fxFlex="100" style="margin-top: 100px; margin-bottom: 100px; padding: 20px;" class="whiteframe">
-                    <span class="font" style="font-size: 1.7em; text-align: center; display: flex; line-height: 30px;"> Please select a client in step number one first!</span>
-               </div>
- -->
-
                 
               </mat-step>
               
@@ -215,7 +210,7 @@
                         </div>
             
                         <!-- start table -->
-                        <div class="example-container mat-elevation-z8 font" style="background-color: white; border-radius: 10px; margin-top: 18px;" *ngIf="showSuggestedEmployees">
+                        <div class="example-container mat-elevation-z8 font" style="background-color: white; border-radius: 10px; margin-top: 18px;">
                 
                             <table mat-table [dataSource]="dataTableActive"  >
                             
@@ -263,7 +258,6 @@
                 
                         </div> 
                         <!-- end table -->
-
 
                        
                         <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100"  style="margin-top: 50px;" *ngIf="this.arrProjectTime.length !== 0">
