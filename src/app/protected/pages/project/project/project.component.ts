@@ -11,6 +11,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ProjectService } from 'src/app/protected/services/project/project.service';
 import { Router } from '@angular/router';
+import { AskDelProjectComponent } from 'src/app/protected/messages/ask-del-project/ask-del-project.component';
 
 
 @Component({
@@ -204,29 +205,32 @@ handlePageEvent(e: PageEvent) {
       })
 }
 
-deleteClient(client : any){
+deleteProject(project : any){
+
+  console.log(project);
 
   if(screen.width >= 800) {
-    this.width = "600px";
-    this.height = "510px";
+    this.width = "400px";
+    this.height = "280px";
   }
 
-    // this.dialog.open(AskDelcustomerComponent, {
-    //   data:  customer.archivarComo,
-    //   width: `${this.width}`|| "",
-    //   height:`${this.height}`|| "",
-    //   panelClass:"custom-modalbox-edit",
-    // });
+    this.dialog.open(AskDelProjectComponent, {
+      data: project.client.company_name,
+      disableClose: true,
+      width: `${this.width}`|| "",
+      height:`${this.height}`|| "",
+      panelClass:"custom-modalbox-edit",
+    });
 
-    // this.errorService.authDelCustomer$.pipe(
-    //   take(1)
-    // ).subscribe( (auth)=> { // el ask-edit dispara ui boolean si se elige CONTINUAR con la acción
+    this.projectService.authDelProject$.pipe(
+      take(1)
+    ).subscribe( (auth)=> { // el ask-edit dispara ui boolean si se elige CONTINUAR con la acción
       
-    //   if(auth){
-    //     this.authService.deletecustomerById(customer.id).subscribe( 
-    //       ()=>{})
-    //   }
-    // })
+      if(auth){
+        this.projectService.deleteProject(project._id).subscribe( 
+          ()=>{ this.getInitialProject()})
+      }
+    })
   
 }
 

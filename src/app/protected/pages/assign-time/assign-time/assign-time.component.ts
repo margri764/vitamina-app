@@ -8,6 +8,8 @@ import * as authActions from 'src/app/auth.actions';
 import { Subscription, filter, take } from 'rxjs';
 import { WrongActionMessageComponent } from 'src/app/protected/messages/wrong-action-message/wrong-action-message/wrong-action-message.component';
 import { EmployeeService } from 'src/app/protected/services/employee/employee.service';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-assign-time',
@@ -23,6 +25,12 @@ export class AssignTimeComponent implements OnInit, OnDestroy {
   foundEmployee: any;
   editing: boolean = false;
   projectTime: any;
+  duration:any;
+
+  durationInSeconds = 30;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'end';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom'
+
 
   constructor(
               private fb: FormBuilder,
@@ -32,6 +40,7 @@ export class AssignTimeComponent implements OnInit, OnDestroy {
               private store : Store<AppState>,
               private dialog : MatDialog,
               private employeeService : EmployeeService,
+              private _snackBar: MatSnackBar
               // private errorService : ErrorService,
   ) 
   { 
@@ -44,8 +53,9 @@ export class AssignTimeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.employee = this.data;
-    console.log(this.employee);
+    this.employee = this.data.employee;
+    this.duration = this.data.duration;
+
 
 
     this.authSubscription =this.store.select('auth')
@@ -98,6 +108,16 @@ export class AssignTimeComponent implements OnInit, OnDestroy {
     }
    }
 }
+
+openSnackBar( remainingHoursToAssign:number) {
+  let msg : any;
+    msg = `You have just ${remainingHoursToAssign} hours to assign.` 
+    this._snackBar.open( msg, 'close', {
+      duration: this.durationInSeconds * 1000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    })
+  }
   
 
   onSaveForm(){
@@ -117,17 +137,42 @@ export class AssignTimeComponent implements OnInit, OnDestroy {
     const availability = this.employee.availability
     const projectTime = { _id, name, hourly_rate, time, availability };
 
+    
+    const hoursToAssing =  this.projectTime.reduce((total: any, employee: any ) => total + employee.time, 0);
+
     if(!this.editing){
       
       this.store.dispatch(authActions.setEmployeeProjectTime({ projectTime: [projectTime] }));
-      setTimeout(()=>{ this.close() },300)
+
+      let tempRemainingHours = this.projectTime.reduce((total: any, employee: any ) => total + employee.time, 0);
+
+      if(this.duration < tempRemainingHours){
+        const remainingHoursToAssign = this.duration - hoursToAssing ;
+
+        this.openSnackBar(remainingHoursToAssign);
+
+        this.store.dispatch(authActions.deleteEmployeeProjectTime( {id:_id} ));
+
+
+         return;
+       }
+      setTimeout(()=>{ this.close() },300);
 
     }else{
       // editing
       const updatedProjectTime = { _id, name, hourly_rate, time, availability };
-
-
       this.store.dispatch( authActions.editEmployeeProjectTime({ updatedProjectTime }) );
+      let tempRemainingHours = this.projectTime.reduce((total: any, employee: any ) => total + employee.time, 0);
+
+      if(this.duration < tempRemainingHours){
+        const remainingHoursToAssign = this.duration - hoursToAssing ;
+        this.openSnackBar(remainingHoursToAssign);
+        this.store.dispatch(authActions.deleteEmployeeProjectTime( {id:_id} ));
+
+      return;
+      }
+
+
           
           setTimeout(() => {
             this.close();

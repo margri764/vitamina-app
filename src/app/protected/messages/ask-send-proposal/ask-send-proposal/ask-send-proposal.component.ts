@@ -25,6 +25,7 @@ export class AskSendProposalComponent implements OnInit {
   closeComponent(){
     this.projectService.authSendProposal$.emit(false),
     this.dialogRef.close();
+    
   }
 
   continue(){

@@ -42,6 +42,11 @@ export const editEmployeeProjectTime = createAction( '[Auth] EditEmployeeProject
     props<{ updatedProjectTime: ProjectTime }>()
   );
 
+
+  export const deleteEmployeeProjectTime = createAction( '[Auth] deleteEmployeeProjectTime',
+    props<{ id:any }>()
+  );
+
   export const deleteAssignedEmployee = createAction( '[Auth] deleteAssignedEmployee',
     props<{ id: string }>()
   );

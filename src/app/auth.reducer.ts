@@ -1,5 +1,5 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { deleteAssignedEmployee, editEmployeeProjectTime, setClient, setEmployeeProjectTime, setProjectSkills, setRevProjectSkills, setReviewedProject, setTempEmployee, setUser,  unSetClient,  unSetEmployeeProjectTime,  unSetProjectSkills,  unSetRevProjectSkills,  unSetReviewedProject,  unSetTempEmployee, unSetUser } from './auth.actions';
+import { deleteAssignedEmployee, deleteEmployeeProjectTime, editEmployeeProjectTime, setClient, setEmployeeProjectTime, setProjectSkills, setRevProjectSkills, setReviewedProject, setTempEmployee, setUser,  unSetClient,  unSetEmployeeProjectTime,  unSetProjectSkills,  unSetRevProjectSkills,  unSetReviewedProject,  unSetTempEmployee, unSetUser } from './auth.actions';
 import { User } from './protected/models/user.models';
 
 type ProjectTime = {
@@ -72,6 +72,16 @@ const _authReducer = createReducer(initialState,
         return employee;
       });
     
+      return { ...state, projectTime: updatedProjectTimeArray };
+    }),
+
+    on(deleteEmployeeProjectTime, (state, { id }) => {
+
+    
+      const updatedProjectTimeArray = state.projectTime.filter(employee => employee._id !== id);
+      console.log(updatedProjectTimeArray);
+
+  
       return { ...state, projectTime: updatedProjectTimeArray };
     }),
     

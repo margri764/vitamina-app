@@ -78,6 +78,8 @@ import { AskDontShowComponent } from './protected/messages/ask-dont-show/ask-don
 import { EditProjectComponent } from './protected/pages/edit-project/edit-project/edit-project.component';
 import { ReviewedProjectsSkillsComponent } from './protected/messages/reviewed-projects-skills/reviewed-projects-skills/reviewed-projects-skills.component';
 import { EditionAssignTimeComponent } from './protected/pages/edition-assign-time/edition-assign-time.component';
+import { ReviewProjectComponent } from './protected/pages/review-project/review-project.component';
+import { AskDelProjectComponent } from './protected/messages/ask-del-project/ask-del-project.component';
 
 
 
@@ -134,7 +136,9 @@ import { EditionAssignTimeComponent } from './protected/pages/edition-assign-tim
     AskDontShowComponent,
     EditProjectComponent,
     ReviewedProjectsSkillsComponent,
-    EditionAssignTimeComponent
+    EditionAssignTimeComponent,
+    ReviewProjectComponent,
+    AskDelProjectComponent
   ],
   imports: [
     BrowserModule,

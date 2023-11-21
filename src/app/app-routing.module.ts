@@ -14,6 +14,7 @@ import { ViewProjectComponent } from './protected/pages/view-project/view-projec
 import { ConfirmProposalComponent } from './protected/pages/confirm-proposal/confirm-proposal/confirm-proposal.component';
 import { ReviewProposalComponent } from './protected/pages/review-proposal/review-proposal/review-proposal.component';
 import { EditProjectComponent } from './protected/pages/edit-project/edit-project/edit-project.component';
+import { ReviewProjectComponent } from './protected/pages/review-project/review-project.component';
 
 
 const routes: Routes = [
@@ -36,6 +37,10 @@ const routes: Routes = [
 
   {
     path: 'edit-project/:id',  component: EditProjectComponent
+  },
+
+  {
+    path: 'review-project/:id',  component: ReviewProjectComponent
   },
 
   {

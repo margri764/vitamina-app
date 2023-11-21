@@ -130,7 +130,7 @@
                             <span class="font"  style="font-size: 0.9em;"> Has asked for a review </span> 
     
                             <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100">
-                                <span class="font" style="color: blue; cursor: pointer; font-size: 0.9em; " *ngIf="revProj.state === 'Reviewed' && revProj.notification" [routerLink]="['../edit-project/', revProj._id]">Manage</span>
+                                <span class="font" style="color: blue; cursor: pointer; font-size: 0.9em; " *ngIf="revProj.state === 'Reviewed' && revProj.notification" [routerLink]="['../review-project/', revProj._id]">Manage</span>
                                  &nbsp;&nbsp;&nbsp;&nbsp;
                                 <span class="font" style="color: blue; cursor: pointer; font-size: 0.9em; "  (click)="notification(revProj, 'dontShow')"  *ngIf="revProj.state === 'Reviewed' && revProj.notification"> Do not show again </span>
                             </div>

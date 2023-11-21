@@ -16,6 +16,16 @@ import { ProjectService } from 'src/app/protected/services/project/project.servi
 import { log } from 'console';
 import { AskSendProposalComponent } from 'src/app/protected/messages/ask-send-proposal/ask-send-proposal/ask-send-proposal.component';
 import { Router } from '@angular/router';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+
+interface projectTime {
+  _id: string;
+  name: string,
+  hourly_rate: number,
+  time: number;
+  availability: boolean
+}
+
 
 @Component({
   selector: 'app-create-project',
@@ -47,7 +57,10 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
   client : any;
   isSetClient: boolean = false;
   isProjectScope: boolean = false;
-
+  remainingTime: any;
+  durationInSeconds = 30;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'end';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom'
 
 
   
@@ -59,7 +72,8 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
               private validatorService : ValidatorService,
               private errorService : ErrorService,
               private projectService : ProjectService,
-              private router : Router
+              private router : Router,
+              private _snackBar: MatSnackBar
               // private authService : AuthService,
   ) {
    
@@ -117,9 +131,31 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
 
   }
 
+  openSnackBar() {
+    let msg : any;
+    
+     if(this.remainingTime > 0){
+       msg = `You still have time to allocate. Please assign ${this.remainingTime} more hours to the project.`
+     }else{
+      msg = `Please review the allocated hours for the employee. A reduction of ${this.remainingTime * -1} hours is required.`;
+       
+     }
+    
+      this._snackBar.open( msg, 'close', {
+        duration: this.durationInSeconds * 1000,
+        horizontalPosition: this.horizontalPosition,
+        verticalPosition: this.verticalPosition,
+      })
+    }
+
   onSaveForm(){
 
     let employee: any [] = [];
+    if( this.remainingTime !== 0){
+      this.openSnackBar();
+      return;
+    }
+
     
     this.confirm = true;
 
@@ -259,7 +295,7 @@ getTotalHs(){
  let total = 0;
   const duration = this.secondFormGroup.get('duration')?.value;
   this.accumProjectTime = this.arrProjectTime.reduce((total, time) => total + time.time, 0);
-  
+  this.remainingTime = duration - this.accumProjectTime; 
    total = duration - this.accumProjectTime; 
   
   return total 
@@ -297,6 +333,9 @@ openDialogSkills(){
 
 openDialogAssignTime( employee:any ){
 
+  const duration = this.secondFormGroup.get('duration')?.value;
+  console.log(duration);
+
   let width : string = '';
   let height : string = '';
 
@@ -305,7 +344,8 @@ openDialogAssignTime( employee:any ){
     height = "310px";
   }
     this.dialog.open(AssignTimeComponent, {
-      data: employee,
+      data: {employee, duration},
+      disableClose: true,
       width: `${width}`|| "",
       height:`${height}`|| "",
       panelClass:"custom-modalbox-edit",

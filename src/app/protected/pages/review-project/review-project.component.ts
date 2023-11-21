@@ -6,8 +6,6 @@ import { Subscription, filter } from 'rxjs';
 import { AppState } from 'src/app/app.reducer';
 import { ErrorService } from 'src/app/protected/services/error/error.service';
 import { EmployeeService } from 'src/app/protected/services/employee/employee.service';
-import { ProjectSkillsComponent } from 'src/app/protected/messages/project-skills/project-skills/project-skills.component';
-import { AssignTimeComponent } from '../../assign-time/assign-time/assign-time.component';
 import { ValidatorService } from 'src/app/protected/services/validator/validator.service';
 import * as authActions from 'src/app/auth.actions';
 import { Project } from 'src/app/protected/interfaces/project';
@@ -18,9 +16,9 @@ import { AskSendProposalComponent } from 'src/app/protected/messages/ask-send-pr
 import { ActivatedRoute, Router } from '@angular/router';
 import { getDataSS, saveDataSS } from 'src/app/protected/Storage';
 import { ReviewedProjectsSkillsComponent } from 'src/app/protected/messages/reviewed-projects-skills/reviewed-projects-skills/reviewed-projects-skills.component';
-import { EditionAssignTimeComponent } from '../../edition-assign-time/edition-assign-time.component';
 import { WrongActionMessageComponent } from 'src/app/protected/messages/wrong-action-message/wrong-action-message/wrong-action-message.component';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { EditionAssignTimeComponent } from '../edition-assign-time/edition-assign-time.component';
 
 type StringArray = string[];
 
@@ -34,11 +32,11 @@ interface projectTime {
 }
 
 @Component({
-  selector: 'app-edit-project',
-  templateUrl: './edit-project.component.html',
-  styleUrls: ['./edit-project.component.scss']
+  selector: 'app-review-project',
+  templateUrl: './review-project.component.html',
+  styleUrls: ['./review-project.component.scss']
 })
-export class EditProjectComponent implements OnInit {
+export class ReviewProjectComponent implements OnInit {
 
   displayedColumns: string[] = ['name', 'state','rate','action'];
   dataTableActive : any ;
@@ -68,7 +66,7 @@ export class EditProjectComponent implements OnInit {
   total: number = 0;
   showSuggestedEmployees : boolean = false;
 
-  durationInSeconds = 30;
+  durationInSeconds = 60;
   horizontalPosition: MatSnackBarHorizontalPosition = 'end';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom'
   remainingTime: any;
@@ -121,6 +119,10 @@ export class EditProjectComponent implements OnInit {
       this.projectService.projectTimeRevProj$.subscribe((projectTime: projectTime) => {  this.getProjectTime(projectTime) });
 
     // this.projectSkills = getDataSS('projectSkills');
+    
+      
+   
+
 
   }
 
@@ -275,47 +277,32 @@ export class EditProjectComponent implements OnInit {
                            }
 
                            console.log(body);
-    this.isLoading = true;
 
-    this.projectService.clientReview(body, this.reviewedProject._id, "update").subscribe( 
-    ( {success} )=>{
-      if(success){
-        this.openDialogSuccesss('Project edited successfully!');
-        this.isLoading = false;
-        this.projectService.emitSuccessProject$.subscribe((emmited)=>{
-          if(emmited){
-            setTimeout(()=>{
+    this.projectService.createProject(body, 'review').subscribe(
+      ( {success, project} )=>{
+        if(success){
+          this.openDialogSuccesss("Project reviewed successfully!");
+          this.resetProject();
+
+          this.projectSubscription = this.projectService.emitSuccessProject$.subscribe( 
+            (auth)=>{
+              if(auth){
+                setTimeout(()=>{ this.openDialogSendProject("Do you want send the proposal?") },400)
+              }
+            })
+
+          this.projectService.authSendProposal$.subscribe( (emmited)=>{ 
+            console.log(emmited);
+            if(emmited){
+             this.router.navigateByUrl(`/view-project/${project._id}`)
+            }else{
+              console.log('aquio');
               this.router.navigateByUrl('/home')
-            },400)
-          }
-        });
-    
-      }
-    })
+            }
+          } )
 
-    // this.projectService.up(body, 'review').subscribe(
-    //   ( {success, project} )=>{
-    //     if(success){
-    //       this.openDialogSuccesss("Project edited successfully!");
-    //       this.resetProject();
-
-    //       this.projectSubscription = this.projectService.emitSuccessProject$.subscribe( 
-    //         (auth)=>{
-    //           if(auth){
-    //             setTimeout(()=>{ this.openDialogSendProject("Do you want send the proposal?") },400)
-    //           }
-    //         })
-
-    //       this.projectService.authSendProposal$.subscribe( (emmited)=>{ 
-    //         if(emmited){
-    //         this.router.navigateByUrl(`/view-project/${project._id}`)
-    //         }else if(!emmited){
-    //           location.reload();
-    //         }
-    //       } )
-
-    //     }
-    //   })
+        }
+      })
 
   }
 
@@ -456,9 +443,13 @@ getTotal(){
 }
 
 getProjectTime( projectTime:any){
+
+
+
   if(!projectTime) return;
   this.arrProjectTime = projectTime;
   this.getTotalHs();
+
 }
 
 openDialogSkills(){

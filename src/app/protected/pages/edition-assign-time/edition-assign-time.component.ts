@@ -10,7 +10,8 @@ import { WrongActionMessageComponent } from 'src/app/protected/messages/wrong-ac
 import { EmployeeService } from 'src/app/protected/services/employee/employee.service';
 import { getDataSS, saveDataSS } from '../../Storage';
 import { ProjectService } from '../../services/project/project.service';
-import { getMatAutocompleteMissingPanelError } from '@angular/material/autocomplete';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+
 
 
 interface projectTime {
@@ -34,6 +35,14 @@ export class EditionAssignTimeComponent implements OnInit {
   foundEmployee: any;
   editing: boolean = false;
   projectTime: projectTime []=[];
+  duration : any;
+
+  
+  durationInSeconds = 30;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'end';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom'
+
+
 
   constructor(
               private fb: FormBuilder,
@@ -43,7 +52,9 @@ export class EditionAssignTimeComponent implements OnInit {
               private store : Store<AppState>,
               private dialog : MatDialog,
               private employeeService : EmployeeService,
-              private projectService :ProjectService
+              private projectService :ProjectService,
+              private _snackBar: MatSnackBar
+
               // private errorService : ErrorService,
   ) 
   { 
@@ -52,7 +63,6 @@ export class EditionAssignTimeComponent implements OnInit {
     });
 
   }
-  duration : any;
 
   // en el SS deberia guardar el tiempo del proyecto
 
@@ -124,6 +134,17 @@ export class EditionAssignTimeComponent implements OnInit {
     }
    }
 }
+
+openSnackBar( remainingHoursToAssign:number) {
+  let msg : any;
+    msg = `You have just ${remainingHoursToAssign} hours to assign.` 
+    this._snackBar.open( msg, 'close', {
+      duration: this.durationInSeconds * 1000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    })
+  }
+  
   
 
   onSaveForm(){
@@ -143,29 +164,18 @@ export class EditionAssignTimeComponent implements OnInit {
     const projectTime = { _id, name, hourly_rate, time, availability };
 
     const hoursToAssing =  this.projectTime.reduce((total: any, employee: any ) => total + employee.time, 0);
-    
-    // * estaba con el remining time, funciona si es un agregado, sabe si se pasa de la cant de hs a asignar , tengo q ver en el "edit"
-    // y q no se pueda hacer un review del proyecto si faltan hs para getMatAutocompleteMissingPanelError
-    
-    // *RECORDAR AGREGAR ESTE CODIDO AL CREATE PROJECT TAMBIEN
-
-    // *REFORMAR LAS CARDS DE LOS ASSIGNED EMPLOYESS POR LOS DEL ADMIN LTE
 
     if(!this.editing){
 
-     this.projectTime.push(projectTime);
-
-    let tempRemainingHours = this.projectTime.reduce((total: any, employee: any ) => total + employee.time, 0);
-    // console.log(tempRemainingHours, this.duration  );
-
-   if(this.duration < tempRemainingHours){
-    // const excededHours = tempRemainingHours - this.duration ;
-    const remainingHoursToAssign = this.duration - hoursToAssing ;
-     this.openGenericMsgAlert(`You have just ${remainingHoursToAssign} hours to assign.` );
-     this.projectTime = this.projectTime.filter( item => projectTime._id !== item._id);
-     return;
-   }
-
+      this.projectTime.push(projectTime);
+      let tempRemainingHours = this.projectTime.reduce((total: any, employee: any ) => total + employee.time, 0);
+      if(this.duration < tempRemainingHours){
+        const remainingHoursToAssign = this.duration - hoursToAssing ;
+        this.openSnackBar(remainingHoursToAssign);
+        //  this.openGenericMsgAlert(`You have just ${remainingHoursToAssign} hours to assign.` );
+        this.projectTime = this.projectTime.filter( item => projectTime._id !== item._id);
+        return;
+      }
 
       saveDataSS("projectTime", this.projectTime);
       
@@ -178,23 +188,28 @@ export class EditionAssignTimeComponent implements OnInit {
 
       const updatedProjectTime = { _id, name, hourly_rate, time, availability };
 
+     
       // Buscar el índice del elemento que estás editando en this.projectTime
       const indexOfUpdatedProjectTime = this.projectTime.findIndex(projectTime => projectTime._id === updatedProjectTime._id);
       if (indexOfUpdatedProjectTime !== -1) {
+
         // Si se encontró el elemento, actualizarlo en el array
         this.projectTime[indexOfUpdatedProjectTime] = updatedProjectTime;
 
-        //para q no seasignen mas horas de las necesarias
-        let tempRemainingHours = this.projectTime.reduce((total: any, employee: any ) => total + employee.time, 0);
-    
-       if(this.duration < tempRemainingHours){
-         this.openGenericMsgAlert('se paso')
-         return;
-       }
-    
+          //para q no reasignen mas horas de las necesarias
+          let tempRemainingHours = this.projectTime.reduce((total: any, employee: any ) => total + employee.time, 0);
+       
+          console.log(this.duration, tempRemainingHours );
+          if(this.duration < tempRemainingHours ){
+            const remainingHoursToAssign = this.duration - hoursToAssing ;
+            // this.projectTime = this.projectTime.filter( item => projectTime._id !== item._id);
+            this.openSnackBar(remainingHoursToAssign);
+            // Actualizar en sessionStorage
+            return;
+            } 
+        
+           saveDataSS("projectTime", this.projectTime);
       
-        // Actualizar en sessionStorage
-        saveDataSS("projectTime", this.projectTime);
       
         // Emitir el evento con los datos actualizados
         this.projectService.projectTimeRevProj$.emit(this.projectTime);

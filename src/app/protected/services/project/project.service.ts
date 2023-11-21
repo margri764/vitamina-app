@@ -33,6 +33,7 @@ export class ProjectService {
   emitSuccessProject$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   authSendProposal$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   authDontShowAgain$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  authDelProject$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   closeClientFeedback$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   negativeRemainigHours$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   projectSkillsRevProj$ : EventEmitter<StringArray> = new EventEmitter<StringArray>; 
@@ -120,8 +121,18 @@ export class ProjectService {
       );
     }
 
+    
+    deleteProject( id:string ){
+
+      return this.http.patch<any>(`${this.baseUrl}api/project/deleteProject/${id}`, null)
+      .pipe(
+        map( res =>{ 
+              console.log('from service deleteProject', res)
+                return res} )
+        );
+      }
+
     sendAdminNotification( projectId:any, notification:string ){
-      console.log(projectId, notification);
 
     return this.http.post<any>(`${this.baseUrl}api/project/adminNotification/${projectId}?notification=${notification}`, null)
     .pipe(

@@ -16,7 +16,7 @@
 
 
           <div fxLayout="row wrap"  fxLayoutAlign="start start" fxFlex="40" style="margin-left: 20px;">
-              <div fxLayout="row wrap"  fxLayoutAlign="center center"  style=" background-color: rgb(37, 150, 190); border-radius: 7px; height: 50px; padding: 15px; margin-top: 9px; cursor: pointer;"  class="whiteframe" routerLink="../create-project" >
+              <div fxLayout="row wrap"  fxLayoutAlign="center center"  style="background-color: rgb(37, 150, 190); border-radius: 7px; height: 50px; padding: 15px; margin-top: 9px; cursor: pointer;"  class="whiteframe" routerLink="../create-project" >
                   <span class="material-symbols-outlined notranslate" style="color: white; transform: scale(1);" > add </span> &nbsp;  &nbsp;
                   <span class="font" style="color: white;"> Create Project</span>
               </div>
@@ -24,7 +24,7 @@
       </div>  
 
       <!-- start no items -->
-      <div fxLayout="row wrap"  fxLayoutAlign="center center" fxFlex="100" *ngIf="noMatches">
+      <div fxLayout="row wrap"  fxLayoutAlign.xs="center center"  fxLayoutAlign="start center" fxFlex="100" *ngIf="noMatches" style="margin-top: 40px;">
           
           <div fxLayout="row wrap" fxLayoutAlign="space-betweencenter"  class="fs-4 whiteframe notFound" >
              <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="90"   >
@@ -35,7 +35,6 @@
           </div>
       </div>
       <!-- end no items -->
-
 
       <!-- start suggested    -->
       <div fxLayout="row wrap"  fxLayoutAlign.xs="start center" fxLayoutAlign="center center"  fxFlex="100" *ngIf="mostrarSugerencias" style="margin-top: 20px;" >
@@ -95,7 +94,7 @@
 
               
               <div fxLayout="row wrap" fxLayoutAlign="end center" fxFlex="100" style="margin-top: 18px;">
-                  <div class="icon mr-10" (click)="deleteClient(projectFound)" >
+                  <div class="icon mr-10" (click)="deleteProject(projectFound)" >
                       <span class="material-symbols-outlined notranslate cursor" style="color: red;"> delete </span>
                   </div>
                   
@@ -135,44 +134,30 @@
                       <th mat-header-cell *matHeaderCellDef> State</th>
                       <td mat-cell *matCellDef="let element" > <span style="text-align: start;"> {{element.state}} </span> </td>
                   </ng-container>
-
-                  <!-- <ng-container matColumnDef="projects" >
-                      <th mat-header-cell *matHeaderCellDef> Projects</th>
-                      <td mat-cell *matCellDef="let element"  > 
-                              <ul style="padding-left: 10px">
-                                <li *ngFor="let project of element.previous_projects" style="cursor: pointer; color: blue; margin-left: 0px !important;" (click)="viewProject(project)">
-                                  {{ project.project_scope.name }}
-                                </li>
-                              </ul>
-                       </td>
-                  </ng-container> -->
                   
-                  <!-- img Column -->
                   <ng-container matColumnDef="action"  >
                       <th mat-header-cell *matHeaderCellDef >Action</th>
                       <td mat-cell *matCellDef="let element" > 
                           <div style="display: flex; justify-content:center; " >
-                                  <div class="icon" (click)="editProject(element)">
+                                  <div class="icon" (click)="editProject(element)" *ngIf="element.state === 'Created'">
                                       <span class="material-symbols-outlined notranslate cursor" style="color: rgb(255, 176, 57);"> edit </span>
                                   </div>
-                                  <div class="icon" (click)="deleteClient(element)" style="margin-left: 3px;">
+                                  <div class="icon" (click)="deleteProject(element)" *ngIf="element.state === 'Created'"style="margin-left: 3px;">
                                       <span class="material-symbols-outlined notranslate cursor" style="color: red;"> delete </span>
                                   </div>
                           </div>
-
-                         
                   </td>
-             
+                  </ng-container>
+                  <!-- *ngIf="dataTableActive.length === 0" -->
+
+                  <ng-container matNoDataRow *matNoDataRow >
+                    <td colspan="4" style="text-align: center; font-size: 1.3em; padding-top: 40px;" *ngIf="dataTableActive.length === 0">No projects found</td>
                   </ng-container>
 
 
                   <tr mat-header-row *matHeaderRowDef="displayedColumns sticky: true"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
-
-
-
-
         </div> 
       <!-- end table -->
 
